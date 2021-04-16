@@ -1,13 +1,40 @@
 ﻿@using System.Data
-@model DataRowCollection
+@model SelectList
 
 @{
     ViewData["Title"] = "Home Page";
 }
+<center>
+    <h4 class="mb-3">
+        Настройки автообмена
+    </h4>
+</center>
+
+<div class="input-group container form-control" style="background-color:beige">
+    <label for="loginTextBox" class="form-label">Экземпляр SQLServer</label>
+    <p style="margin:10px">
+        @Html.DropDownList("sqlInstance", @Model, "Выберите SQL server Instance")
+    </p>
+    <div class="mb-3">
+        <p>
+            <label for="loginTextBox" class="form-label">Логин пользователя в системе MES</label>
+            <input type="text" class="form-control" id="loginTextBox" aria-describedby="Login MES">
+        </p>
+        <p>
+            <label for="passwordTextBox" class="form-label">Пароль пользователя в системе MES</label>
+            <input type="password" class="form-control" id="passwordTextBox" aria-describedby="Password MES">
+        </p>
+    </div>
+</div>
+<p class="pb-3">
+</p>
+<div class="input-group">
+    <div class="container">
+        <div class="row">
+            <input type="button" class="btn btn-primary" id="startButton" aria-describedby="Start Button Exchange MES" value="Start Service">
+            <input type="button" class="btn btn-warning" id="stopButton" aria-describedby="Stop Button Exchange MES" value="Stop Service">
+        </div>
+    </div>
+</div>
 
 
-@foreach (DataRow item in Model)
-{
-    <p>@item["ServerName"]</p>
-}
-В самом начале п

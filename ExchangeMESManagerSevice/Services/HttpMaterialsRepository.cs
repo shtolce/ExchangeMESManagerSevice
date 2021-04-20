@@ -23,50 +23,22 @@ namespace ExchangeMESManagerSevice.Services
             _authService = (AuthorizationMesService)authService;
         }
 
-
         public MaterialDTOResponse DeleteMaterial(MaterialDTODeleteParameter com)
         {
-            HttpWebRequest webRequest = HttpWebRequest.Create("http://localhost/sit-svc/Application/Material/odata/DeleteMaterial") as HttpWebRequest;
-            webRequest.Method = "POST";
-            webRequest.ContentType = "application/json";
-            Command<MaterialDTODeleteParameter> comTest = new Command<MaterialDTODeleteParameter>()
-            {
-                command = com
-            };
-            string parameters = JsonConvert.SerializeObject(comTest);
-            byte[] byteArray = Encoding.UTF8.GetBytes(parameters);
-            webRequest.ContentLength = byteArray.Length;
-            webRequest.Headers.Add("Authorization", "Bearer " + _authService.StateOAuth.access_token);
-            Stream postStream = webRequest.GetRequestStream();
-            postStream = webRequest.GetRequestStream();
-            postStream.Write(byteArray, 0, byteArray.Length);
-            postStream.Close();
-            WebResponse response;
-            try
-            {
-                response = webRequest.GetResponse();
-            }
-            catch (WebException ex)
-            {
-                using (var reader1 = new StreamReader(ex.Response.GetResponseStream()))
-                {
-                    var testErr = reader1.ReadToEnd();
-                    var serStatusErr = JsonConvert.DeserializeObject<MaterialDTOResponse>(testErr);
-                    return serStatusErr;
-                }
-            }
-            StreamReader reader = new StreamReader(postStream);
-            string responseFromServer = reader.ReadToEnd();
-            var serStatus2 = JsonConvert.DeserializeObject<MaterialDTOResponse>(responseFromServer);
-            return serStatus2;
+            return ExecuteCommand<MaterialDTODeleteParameter>(com, "DeleteMaterial"); ;
         }
 
         public MaterialDTOResponse CreateMaterial(MaterialDTOCreateParameter com)
         {
-            HttpWebRequest webRequest = HttpWebRequest.Create("http://localhost/sit-svc/Application/Material/odata/CreateMaterial") as HttpWebRequest;
+            return ExecuteCommand<MaterialDTOCreateParameter>(com, "CreateMaterial"); ;
+        }
+
+        private MaterialDTOResponse ExecuteCommand<T>(T com,string commandName)
+        {
+            HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/Material/odata/{commandName}") as HttpWebRequest;
             webRequest.Method = "POST";
             webRequest.ContentType = "application/json";
-            Command<MaterialDTOCreateParameter> comTest = new Command<MaterialDTOCreateParameter>()
+            Command<T> comTest = new Command<T>()
             {
                 command = com
             };
@@ -105,43 +77,7 @@ namespace ExchangeMESManagerSevice.Services
 
         public MaterialDTOResponse UpdateMaterial(MaterialDTOUpdateParameter com)
         {
-            HttpWebRequest webRequest = HttpWebRequest.Create("http://localhost/sit-svc/Application/Material/odata/UpdateMaterial") as HttpWebRequest;
-            webRequest.Method = "POST";
-            webRequest.ContentType = "application/json";
-            Command<MaterialDTOUpdateParameter> comTest = new Command<MaterialDTOUpdateParameter>()
-            {
-                command = com
-            };
-            string parameters = JsonConvert.SerializeObject(comTest);
-            byte[] byteArray = Encoding.UTF8.GetBytes(parameters);
-            webRequest.ContentLength = byteArray.Length;
-            webRequest.Headers.Add("Authorization", "Bearer " + _authService.StateOAuth.access_token);
-            Stream postStream = webRequest.GetRequestStream();
-            postStream = webRequest.GetRequestStream();
-            postStream.Write(byteArray, 0, byteArray.Length);
-            postStream.Close();
-
-            WebResponse response;
-            try
-            {
-                response = webRequest.GetResponse();
-            }
-            catch (WebException ex)
-            {
-                using (var reader1 = new StreamReader(ex.Response.GetResponseStream()))
-                {
-                    var testErr = reader1.ReadToEnd();
-                    var serStatusErr = JsonConvert.DeserializeObject<MaterialDTOResponse>(testErr);
-                    return serStatusErr;
-
-                }
-
-            }
-            postStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(postStream);
-            string responseFromServer = reader.ReadToEnd();
-            var serStatus2 = JsonConvert.DeserializeObject<MaterialDTOResponse>(responseFromServer);
-            return serStatus2;
+            return ExecuteCommand<MaterialDTOUpdateParameter>(com, "UpdateMaterial");
         }
 
 

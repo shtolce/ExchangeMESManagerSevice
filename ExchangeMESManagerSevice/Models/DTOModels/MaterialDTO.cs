@@ -16,9 +16,17 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public List<string> PropertyIds;
         public object Error;
         public object SitUafExecutionDetail;
-}
+    }
 
-    public class MaterialDTOParameter
+    public class MaterialDTOUpdateParameter
+    {
+        public string Id;
+        public string Name;
+        public string Description;
+        public string UoMNId;
+    }
+
+    public class MaterialDTOCreateParameter
     {
         public bool UseDefault;
         public string NId;
@@ -28,6 +36,10 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Description;
         public string UoMNId;
         public String TemplateNId;
+    }
+    public class MaterialDTODeleteParameter
+    {
+        public string Id;
     }
 
     public class MaterialDTO

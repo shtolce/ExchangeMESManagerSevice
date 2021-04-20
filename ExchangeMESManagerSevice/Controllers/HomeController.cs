@@ -31,16 +31,42 @@ namespace ExchangeMESManagerSevice.Controllers
     {
         ExchangeSettingsContext db;
         private AuthorizationMesService _authService;
-        public HomeController(ExchangeSettingsContext context, IHostedService authService)
+        private HttpMaterialsRepository _materialRepo;
+        public HomeController(ExchangeSettingsContext context, IHostedService authService, HttpMaterialsRepository materialRepo)
         {
             db = context;
             _authService = (AuthorizationMesService)authService;
+            _materialRepo = materialRepo;
         }
         public IActionResult Index()
         {
 
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
+            //var test = _materialRepo.getAll();
+            var command = new MaterialDTOCreateParameter
+            {
+                Description = "test21234",
+                UseDefault = false,
+                Name = "test12234",
+                NId = "test12324",
+                Revision = "A",
+                TemplateNId = null,
+                UId = "123424",
+                UoMNId = "cm"
+            };
+            var res = _materialRepo.CreateMaterial(command);
+
+            var commandDel = new MaterialDTOUpdateParameter
+            {
+                Id = "756ac014-ad22-4e45-9322-fc6a850e8064"
+                , Description =" 9123123123"
+                , Name = "91231231"
+                , UoMNId ="%"
+
+            };
+
+            res = _materialRepo.UpdateMaterial(commandDel);
 
             return View(listOptionRes);
         }

@@ -10,7 +10,11 @@ namespace ExchangeMESManagerSevice.Models.AuthenticationModels
         public string access_token { get; set; }
         public string refresh_token { get; set; }
         public string token_type { get; set; }
-        public int expiresSec { get; set; }
+        public int expiresSec
+        {
+            get { return expires_in; }
+            set { }
+        }
         public int expires_in;
 
 

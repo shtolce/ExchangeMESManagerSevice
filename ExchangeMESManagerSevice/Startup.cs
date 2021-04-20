@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeMESManagerSevice.Models;
+using ExchangeMESManagerSevice.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -36,6 +37,7 @@ namespace ExchangeMESManagerSevice
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ExchangeSettingsContext>(options => options.UseSqlServer(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddHostedService<AuthorizationMesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

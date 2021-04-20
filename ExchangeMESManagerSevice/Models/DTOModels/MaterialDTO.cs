@@ -11,7 +11,23 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         [JsonProperty(PropertyName = "@odata.context")]
         public string @ODataContext;
         public List<MaterialDTO> value;
+        public bool Succeeded;
+        public string MaterialId;
+        public List<string> PropertyIds;
+        public object Error;
+        public object SitUafExecutionDetail;
+}
 
+    public class MaterialDTOParameter
+    {
+        public bool UseDefault;
+        public string NId;
+        public string Revision;
+        public string UId;
+        public string Name;
+        public string Description;
+        public string UoMNId;
+        public String TemplateNId;
     }
 
     public class MaterialDTO

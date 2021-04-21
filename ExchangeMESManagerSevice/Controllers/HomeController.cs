@@ -35,10 +35,15 @@ namespace ExchangeMESManagerSevice.Controllers
         private HttpDMMaterialsRepository _DMMaterialRepo;
         private HttpUoMRepository _UoMRepository;
         private HttpMaterialClassRepository _MaterialClassRepository;
+        private HttpEquipmentRepository _EquipmentRepository;
+        private HttpEquipmentConfigurationRepository _EquipmentConfigurationRepository;
+        
         public HomeController(ExchangeSettingsContext context, IHostedService authService, HttpMaterialsRepository materialRepo
             , HttpDMMaterialsRepository DMMaterialRepo
             , HttpUoMRepository UoMRepository
             , HttpMaterialClassRepository MaterialClassRepository
+            , HttpEquipmentRepository EquipmentRepository
+            , HttpEquipmentConfigurationRepository EquipmentConfigurationRepository
             )
         {
             db = context;
@@ -47,22 +52,25 @@ namespace ExchangeMESManagerSevice.Controllers
             _DMMaterialRepo = DMMaterialRepo;
             _UoMRepository = UoMRepository;
             _MaterialClassRepository = MaterialClassRepository;
+            _EquipmentRepository = EquipmentRepository;
+            _EquipmentConfigurationRepository = EquipmentConfigurationRepository;
         }
         public IActionResult Index()
         {
 
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test = _MaterialClassRepository.GetAll();
+            var test = _EquipmentConfigurationRepository.GetAll();
 
-
-
-            var command = new MaterialClassDTOUpdateParameter
+            var command = new EquipmentConfigurationDTOCreateParameter
             {
-                Id= "b14a924f-b8d9-40b4-b9d4-28835f987c73",
-                Name = "844"
+                
+                NId = "888"
+                ,Description="888"
+                ,EquipmentTypeNId = "3DPrinter"
+                ,Name="888"
             };
-            var res = _MaterialClassRepository.UpdateMaterialClass(command);
+            var res = _EquipmentConfigurationRepository.CreateEquipmentConfiguration(command);
 
 
             return View(listOptionRes);

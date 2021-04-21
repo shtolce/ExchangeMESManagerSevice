@@ -44,6 +44,8 @@ namespace ExchangeMESManagerSevice
             services.AddSingleton<HttpDMMaterialsRepository>();
             services.AddSingleton<HttpUoMRepository>();
             services.AddSingleton<HttpMaterialClassRepository>();
+            services.AddSingleton<HttpEquipmentRepository>();
+            services.AddSingleton<HttpEquipmentConfigurationRepository>();
             
         }
 

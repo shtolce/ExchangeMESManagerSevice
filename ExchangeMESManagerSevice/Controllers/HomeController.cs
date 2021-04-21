@@ -37,13 +37,16 @@ namespace ExchangeMESManagerSevice.Controllers
         private HttpMaterialClassRepository _MaterialClassRepository;
         private HttpEquipmentRepository _EquipmentRepository;
         private HttpEquipmentConfigurationRepository _EquipmentConfigurationRepository;
-        
+        private HttpAsPlannedBOPRepository _AsPlannedBOPRepository;
+
+
         public HomeController(ExchangeSettingsContext context, IHostedService authService, HttpMaterialsRepository materialRepo
             , HttpDMMaterialsRepository DMMaterialRepo
             , HttpUoMRepository UoMRepository
             , HttpMaterialClassRepository MaterialClassRepository
             , HttpEquipmentRepository EquipmentRepository
             , HttpEquipmentConfigurationRepository EquipmentConfigurationRepository
+            , HttpAsPlannedBOPRepository AsPlannedBOPRepository
             )
         {
             db = context;
@@ -54,28 +57,48 @@ namespace ExchangeMESManagerSevice.Controllers
             _MaterialClassRepository = MaterialClassRepository;
             _EquipmentRepository = EquipmentRepository;
             _EquipmentConfigurationRepository = EquipmentConfigurationRepository;
+            _AsPlannedBOPRepository = AsPlannedBOPRepository;
         }
         public IActionResult Index()
         {
 
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test = _EquipmentConfigurationRepository.GetAll();
+            var test = _AsPlannedBOPRepository.GetByNId("AeroAssembly_LG.CC");
 
-            var command = new EquipmentConfigurationDTOCreateParameter
+            var command = new ProcessesDTOUpdateParameter
             {
                 
-                NId = "888"
-                ,Description="888"
-                ,EquipmentTypeNId = "3DPrinter"
+                Id = "b8421801-9d5e-4ce8-9c55-728e6b355c3c"
+                ,Description ="888"
                 ,Name="888"
+                ,FinalMaterialId= "e1e8fcae-cd05-460f-b947-570d63e26b22"
+                ,Plant="123"
+                ,Quantity = new QuantityType {QuantityValue=1,UoMNId="n/a" }
+                ,MaxQuantity = new QuantityType { QuantityValue = 1, UoMNId = "n/a" }
+
             };
-            var res = _EquipmentConfigurationRepository.CreateEquipmentConfiguration(command);
+
+            var res = _AsPlannedBOPRepository.UpdateProcess(command);
 
 
             return View(listOptionRes);
 
             /*
+            var command = new ProcessesDTOUpdateParameter
+            {
+                
+                Id = "b8421801-9d5e-4ce8-9c55-728e6b355c3c"
+                ,Description ="888"
+                ,Name="888"
+                ,FinalMaterialId= "e1e8fcae-cd05-460f-b947-570d63e26b22"
+                ,Plant="123"
+                ,Quantity = new QuantityType {QuantityValue=1,UoMNId="n/a" }
+                ,MaxQuantity = new QuantityType { QuantityValue = 1, UoMNId = "n/a" }
+
+            };
+
+
 
             var command = new UoMDTOCreateParameter
             {

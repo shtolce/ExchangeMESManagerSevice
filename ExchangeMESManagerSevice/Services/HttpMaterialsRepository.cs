@@ -82,7 +82,7 @@ namespace ExchangeMESManagerSevice.Services
 
 
 
-        public List<MaterialDTO> getAll()
+        public List<MaterialDTO> GetAll()
         {
             //Функция чтения материалов отрабтана тестово успешно
             HttpClient client = new HttpClient();
@@ -100,11 +100,26 @@ namespace ExchangeMESManagerSevice.Services
             var content = Task.Run(async () => await stream.ReadAsAsync<MaterialDTOResponse>());
             var res = content.Result;
             return res.value;
-            
-
-
         }
 
+        //Сделать фильтр через ODATA
+        public List<MaterialDTO> GetByNId(string NId)
+        {
+            HttpClient client = new HttpClient();
+            var urlProfile = $"http://localhost/sit-svc/Application/Material/odata/Material?$filter=NId eq '{NId}'";
+            if (_authService.StateOAuth == null)
+            {
+                return new List<MaterialDTO>();
+            }
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _authService.StateOAuth.access_token);
+            client.CancelPendingRequests();
+            var task = Task.Run(async () => await client.GetAsync(urlProfile));
+            HttpResponseMessage output = task.Result;
+            HttpContent stream = output.Content;
+            var content = Task.Run(async () => await stream.ReadAsAsync<MaterialDTOResponse>());
+            var res = content.Result;
+            return res.value;
+        }
 
 
 

@@ -43,7 +43,9 @@ namespace ExchangeMESManagerSevice.Controllers
 
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            //var test = _materialRepo.getAll();
+            var test = _materialRepo.GetByNId("00-00000007");
+
+            /*
             var command = new MaterialDTOCreateParameter
             {
                 Description = "test21234",
@@ -67,7 +69,7 @@ namespace ExchangeMESManagerSevice.Controllers
             };
 
             res = _materialRepo.UpdateMaterial(commandDel);
-
+            */
             return View(listOptionRes);
         }
 

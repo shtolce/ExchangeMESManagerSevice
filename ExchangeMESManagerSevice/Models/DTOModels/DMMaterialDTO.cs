@@ -6,11 +6,17 @@ using Newtonsoft.Json;
 
 namespace ExchangeMESManagerSevice.Models.DTOModels
 {
-    public class MaterialDTOResponse
+    public class QuantityType
+    {
+        public string UoMNId;
+        public float QuantityValue;
+    }
+
+    public class DMMaterialDTOResponse
     {
         [JsonProperty(PropertyName = "@odata.context")]
         public string @ODataContext;
-        public List<MaterialDTO> value;
+        public List<DMMaterialDTO> value;
         public bool Succeeded;
         public string MaterialId;
         public List<string> PropertyIds;
@@ -18,7 +24,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public object SitUafExecutionDetail;
     }
 
-    public class MaterialDTOUpdateParameter
+    public class DMMaterialDTOUpdateParameter
     {
         public string Id;
         public string Name;
@@ -26,7 +32,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string UoMNId;
     }
 
-    public class MaterialDTOCreateParameter
+    public class DMMaterialDTOCreateParameter
     {
         public bool UseDefault;
         public string NId;
@@ -37,14 +43,14 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string UoMNId;
         public String TemplateNId;
     }
-    public class MaterialDTODeleteParameter
+    public class DMMaterialDTODeleteParameter
     {
         public string Id;
     }
     /// <summary>
-    /// Класс материалов MES. Является базовым. Все его доп свойства расширены в другой модели DMMaterial
+    /// Доп свойства модели Material
     /// </summary>
-    public class MaterialDTO
+    public class DMMaterialDTO
     {
         public string Id;
         public string AId;
@@ -53,19 +59,25 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public int IsDeleted;
         public DateTime CreatedOn;
         public DateTime LastUpdatedOn;
-        public string EntityType;//"Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.Material"
+        public string EntityType;//"Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.DMMaterial"
         public string OptimisticVersion;
         public String ConcurrencyToken;
         public bool IsLocked;
         public bool ToBeCleaned;
-        public string Revision;
-        public String SourceRevision;
-        public bool IsCurrent;
-        public string UId;
-        public string NId;
-        public string Name;
-        public string Description;
-        public string UoMNId;
-        public String TemplateNId;
+        public bool SerialNumberProfile;
+        public bool FirstArticleInspection;
+        public bool IsPhantom;
+        public string LogisticClassNId;
+        public string CorrelationId;
+        public string EffectivityExpression;
+        public bool Traceable;
+        public string Material_Id;
+        public string MaterialClass_Id;
+        public string Supplier_Id;
+        public string FunctionalCode_Id;
+        public QuantityType Weight;
+        public QuantityType Volume;
+        public MaterialDTO Material;
+        string[] SegregationTags;
     }
 }

@@ -14,26 +14,26 @@ using Newtonsoft.Json;
 
 namespace ExchangeMESManagerSevice.Services
 {
-    public class HttpMaterialsRepository
+    public class HttpMaterialClassRepository
     {
         private AuthorizationMesService _authService;
 
-        public HttpMaterialsRepository(IHostedService authService)
+        public HttpMaterialClassRepository(IHostedService authService)
         {
             _authService = (AuthorizationMesService)authService;
         }
 
-        public MaterialDTOResponse DeleteMaterial(MaterialDTODeleteParameter com)
+        public MaterialClassDTOResponse DeleteMaterialClass(MaterialClassDTODeleteParameter com)
         {
-            return ExecuteCommand<MaterialDTODeleteParameter>(com, "DeleteMaterial"); ;
+            return ExecuteCommand<MaterialClassDTODeleteParameter>(com, "DSMaterial_DeleteMaterialClassList"); ;
         }
 
-        public MaterialDTOResponse CreateMaterial(MaterialDTOCreateParameter com)
+        public MaterialClassDTOResponse CreateMaterialClass(MaterialClassDTOCreateParameter com)
         {
-            return ExecuteCommand<MaterialDTOCreateParameter>(com, "CreateMaterial"); ;
+            return ExecuteCommand<MaterialClassDTOCreateParameter>(com, "DSMaterial_CreateMaterialClass"); ;
         }
 
-        private MaterialDTOResponse ExecuteCommand<T>(T com,string commandName)
+        private MaterialClassDTOResponse ExecuteCommand<T>(T com,string commandName)
         {
             HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/Material/odata/{commandName}") as HttpWebRequest;
             webRequest.Method = "POST";
@@ -61,7 +61,7 @@ namespace ExchangeMESManagerSevice.Services
                 using (var reader1 = new StreamReader(ex.Response.GetResponseStream()))
                 {
                     var testErr = reader1.ReadToEnd();
-                    var serStatusErr = JsonConvert.DeserializeObject<MaterialDTOResponse>(testErr);
+                    var serStatusErr = JsonConvert.DeserializeObject<MaterialClassDTOResponse>(testErr);
                     return serStatusErr;
 
                 }
@@ -70,46 +70,46 @@ namespace ExchangeMESManagerSevice.Services
             postStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(postStream);
             string responseFromServer = reader.ReadToEnd();
-            var serStatus2 = JsonConvert.DeserializeObject<MaterialDTOResponse>(responseFromServer);
+            var serStatus2 = JsonConvert.DeserializeObject<MaterialClassDTOResponse>(responseFromServer);
             return serStatus2;
         }
 
 
-        public MaterialDTOResponse UpdateMaterial(MaterialDTOUpdateParameter com)
+        public MaterialClassDTOResponse UpdateMaterialClass(MaterialClassDTOUpdateParameter com)
         {
-            return ExecuteCommand<MaterialDTOUpdateParameter>(com, "UpdateMaterial");
+            return ExecuteCommand<MaterialClassDTOUpdateParameter>(com, "UpdateMaterialGroup");
         }
 
-        public List<MaterialDTO> Get(string urlProfile)
+        public List<MaterialClassDTO> Get(string urlProfile)
         {
             HttpClient client = new HttpClient();
 
             if (_authService.StateOAuth == null)
             {
-                return new List<MaterialDTO>();
+                return new List<MaterialClassDTO>();
             }
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _authService.StateOAuth.access_token);
             client.CancelPendingRequests();
             var task = Task.Run(async () => await client.GetAsync(urlProfile));
             HttpResponseMessage output = task.Result;
             HttpContent stream = output.Content;
-            var content = Task.Run(async () => await stream.ReadAsAsync<MaterialDTOResponse>());
+            var content = Task.Run(async () => await stream.ReadAsAsync<MaterialClassDTOResponse>());
             var res = content.Result;
             return res.value;
 
         }
 
-
-        public List<MaterialDTO> GetAll()
+        //
+        public List<MaterialClassDTO> GetAll()
         {
-            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/Material";
+            var urlProfile = "http://localhost/sit-svc/Application/Material/odata/DSMaterial_MaterialClass";
             return Get(urlProfile);
         }
 
         //Сделать фильтр через ODATA
-        public List<MaterialDTO> GetByNId(string NId)
+        public List<MaterialClassDTO> GetByNId(string NId)
         {
-            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/Material?$filter=NId eq '{NId}'";
+            var urlProfile = $"http://localhost/sit-svc/Application/Material/odata/DSMaterial_MaterialClass?$filter=NId eq '{NId}'";
             return Get(urlProfile);
         }
 

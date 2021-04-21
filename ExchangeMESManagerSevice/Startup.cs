@@ -41,6 +41,9 @@ namespace ExchangeMESManagerSevice
             services.AddSingleton<IHostedService,AuthorizationMesService>();
             //services.AddHostedService<AuthorizationMesService>();
             services.AddSingleton<HttpMaterialsRepository>();
+            services.AddSingleton<HttpDMMaterialsRepository>();
+            services.AddSingleton<HttpUoMRepository>();
+            services.AddSingleton<HttpMaterialClassRepository>();
             
         }
 

@@ -14,28 +14,28 @@ using Newtonsoft.Json;
 
 namespace ExchangeMESManagerSevice.Services
 {
-    public class HttpMaterialsRepository
+    public class HttpUoMRepository
     {
         private AuthorizationMesService _authService;
 
-        public HttpMaterialsRepository(IHostedService authService)
+        public HttpUoMRepository(IHostedService authService)
         {
             _authService = (AuthorizationMesService)authService;
         }
 
-        public MaterialDTOResponse DeleteMaterial(MaterialDTODeleteParameter com)
+        public UoMDTOResponse DeleteUoM(UoMDTODeleteParameter com)
         {
-            return ExecuteCommand<MaterialDTODeleteParameter>(com, "DeleteMaterial"); ;
+            return ExecuteCommand<UoMDTODeleteParameter>(com, "DeleteBaseUoM"); ;
         }
 
-        public MaterialDTOResponse CreateMaterial(MaterialDTOCreateParameter com)
+        public UoMDTOResponse CreateUoM(UoMDTOCreateParameter com)
         {
-            return ExecuteCommand<MaterialDTOCreateParameter>(com, "CreateMaterial"); ;
+            return ExecuteCommand<UoMDTOCreateParameter>(com, "CreateBaseUoM"); ;
         }
 
-        private MaterialDTOResponse ExecuteCommand<T>(T com,string commandName)
+        private UoMDTOResponse ExecuteCommand<T>(T com,string commandName)
         {
-            HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/Material/odata/{commandName}") as HttpWebRequest;
+            HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/Reference/odata/{commandName}") as HttpWebRequest;
             webRequest.Method = "POST";
             webRequest.ContentType = "application/json";
             Command<T> comTest = new Command<T>()
@@ -61,7 +61,7 @@ namespace ExchangeMESManagerSevice.Services
                 using (var reader1 = new StreamReader(ex.Response.GetResponseStream()))
                 {
                     var testErr = reader1.ReadToEnd();
-                    var serStatusErr = JsonConvert.DeserializeObject<MaterialDTOResponse>(testErr);
+                    var serStatusErr = JsonConvert.DeserializeObject<UoMDTOResponse>(testErr);
                     return serStatusErr;
 
                 }
@@ -70,49 +70,52 @@ namespace ExchangeMESManagerSevice.Services
             postStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(postStream);
             string responseFromServer = reader.ReadToEnd();
-            var serStatus2 = JsonConvert.DeserializeObject<MaterialDTOResponse>(responseFromServer);
+            var serStatus2 = JsonConvert.DeserializeObject<UoMDTOResponse>(responseFromServer);
             return serStatus2;
         }
 
 
-        public MaterialDTOResponse UpdateMaterial(MaterialDTOUpdateParameter com)
+        public UoMDTOResponse UpdateUoM(UoMDTOUpdateParameter com)
         {
-            return ExecuteCommand<MaterialDTOUpdateParameter>(com, "UpdateMaterial");
+            return ExecuteCommand<UoMDTOUpdateParameter>(com, "UpdateUoM");
         }
 
-        public List<MaterialDTO> Get(string urlProfile)
+        public List<UoMDTO> Get(string urlProfile)
         {
             HttpClient client = new HttpClient();
 
             if (_authService.StateOAuth == null)
             {
-                return new List<MaterialDTO>();
+                return new List<UoMDTO>();
             }
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _authService.StateOAuth.access_token);
             client.CancelPendingRequests();
             var task = Task.Run(async () => await client.GetAsync(urlProfile));
             HttpResponseMessage output = task.Result;
             HttpContent stream = output.Content;
-            var content = Task.Run(async () => await stream.ReadAsAsync<MaterialDTOResponse>());
+            var content = Task.Run(async () => await stream.ReadAsAsync<UoMDTOResponse>());
             var res = content.Result;
             return res.value;
 
         }
 
-
-        public List<MaterialDTO> GetAll()
+        public List<UoMDTO> GetAll()
         {
-            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/Material";
+            var urlProfile = "http://localhost/sit-svc/Application/Reference/odata/UoM?$expand=UoMDimension($select=Name)&$orderby=NId asc";
             return Get(urlProfile);
         }
 
-        //Сделать фильтр через ODATA
-        public List<MaterialDTO> GetByNId(string NId)
+        public List<UoMDTO> GetByNId(string NId)
         {
-            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/Material?$filter=NId eq '{NId}'";
+            var urlProfile = $"http://localhost/sit-svc/Application/Reference/odata/UoM?$filter=NId eq '{NId}'&$expand=UoMDimension($select=Name)";
             return Get(urlProfile);
         }
 
+        public List<UoMDTO> GetById(string Id)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/Reference/odata/UoM?$filter=Id eq '{Id}'&$expand=UoMDimension($select=Name)";
+            return Get(urlProfile);
+        }
 
 
     }

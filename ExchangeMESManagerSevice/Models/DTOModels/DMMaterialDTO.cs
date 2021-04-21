@@ -9,16 +9,21 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     public class QuantityType
     {
         public string UoMNId;
-        public float QuantityValue;
+        public float? QuantityValue;
     }
-
+    public class AMPowderPropertiesParameterType
+    {
+        public QuantityType MinQuantity;
+        public int MaxRecycleCount;
+    }
+    
     public class DMMaterialDTOResponse
     {
         [JsonProperty(PropertyName = "@odata.context")]
         public string @ODataContext;
         public List<DMMaterialDTO> value;
         public bool Succeeded;
-        public string MaterialId;
+        public string DM_MaterialId;
         public List<string> PropertyIds;
         public object Error;
         public object SitUafExecutionDetail;
@@ -27,25 +32,39 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     public class DMMaterialDTOUpdateParameter
     {
         public string Id;
-        public string Name;
-        public string Description;
-        public string UoMNId;
+        public bool SerialNumberProfile;
+        public bool FirstArticleInspection;
+        public bool IsPhantom;
+        public bool Traceable;
+        public QuantityType Volume;
+        public QuantityType Weight;
+        public string MaterialId;
+        public string CorrelationId;
+        public string EffectivityExpression;
+        public string SupplierId;
+        public AMPowderPropertiesParameterType AMPowderProperties;
+        public string LogisticClassNId;
+        public string MaterialClassId;
+        public string FunctionalCodeId;
     }
 
     public class DMMaterialDTOCreateParameter
     {
-        public bool UseDefault;
-        public string NId;
-        public string Revision;
-        public string UId;
-        public string Name;
-        public string Description;
-        public string UoMNId;
-        public String TemplateNId;
+        public bool SerialNumberProfile;
+        public bool FirstArticleInspection;
+        public bool IsPhantom;
+        public bool Traceable;
+        public QuantityType Volume;
+        public QuantityType Weight;
+        public string MaterialId;
+        public AMPowderPropertiesParameterType AMPowderProperties;
+        public string LogisticClassNId;
+        public string MaterialClassId;
+        public string FunctionalCodeId;
     }
     public class DMMaterialDTODeleteParameter
     {
-        public string Id;
+        public string DM_MaterialId;
     }
     /// <summary>
     /// Доп свойства модели Material
@@ -54,7 +73,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     {
         public string Id;
         public string AId;
-        public bool IsFrozen;
+        public Nullable<bool> IsFrozen;
         public int ConcurrencyVersion;
         public int IsDeleted;
         public DateTime CreatedOn;
@@ -62,15 +81,15 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string EntityType;//"Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.DMMaterial"
         public string OptimisticVersion;
         public String ConcurrencyToken;
-        public bool IsLocked;
-        public bool ToBeCleaned;
-        public bool SerialNumberProfile;
-        public bool FirstArticleInspection;
-        public bool IsPhantom;
+        public Nullable<bool> IsLocked;
+        public Nullable<bool> ToBeCleaned;
+        public Nullable<bool> SerialNumberProfile;
+        public Nullable<bool> FirstArticleInspection;
+        public Nullable<bool> IsPhantom;
         public string LogisticClassNId;
         public string CorrelationId;
         public string EffectivityExpression;
-        public bool Traceable;
+        public Nullable<bool> Traceable;
         public string Material_Id;
         public string MaterialClass_Id;
         public string Supplier_Id;

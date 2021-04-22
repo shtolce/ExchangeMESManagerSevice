@@ -54,8 +54,18 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<ProcessesDTODeleteParameter, ProcessesDTOResponse>(com, "DeleteProcessFromCatalogue"); ;
         }
+        public ProcessesDTOResponse LinkOperation(ProcessesDTOLinkOperationParameter com)
+        {
+            return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "LinkOperationToProcess"); ;
+        }
+        public ProcessesDTOResponse UnlinkOperation(ProcessesDTOLinkOperationParameter com)
+        {
+            return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "UnlinkOperationToProcess"); ;
+        }
 
         
+
+
 
         private D ExecuteCommand<T,D>(T com,string commandName)
         {
@@ -98,20 +108,20 @@ namespace ExchangeMESManagerSevice.Services
             return serStatus2;
         }
 
-        public List<AsPlannedBOPDTO> Get(string urlProfile)
+        public List<T> Get<T,D>(string urlProfile) where D:IResponse<T>
         {
             HttpClient client = new HttpClient();
 
             if (_authService.StateOAuth == null)
             {
-                return new List<AsPlannedBOPDTO>();
+                return new List<T>();
             }
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _authService.StateOAuth.access_token);
             client.CancelPendingRequests();
             var task = Task.Run(async () => await client.GetAsync(urlProfile));
             HttpResponseMessage output = task.Result;
             HttpContent stream = output.Content;
-            var content = Task.Run(async () => await stream.ReadAsAsync<AsPlannedBOPDTOResponse>());
+            var content = Task.Run(async () => await stream.ReadAsAsync<D>());
             var res = content.Result;
             return res.value;
 
@@ -121,14 +131,23 @@ namespace ExchangeMESManagerSevice.Services
         public List<AsPlannedBOPDTO> GetAll()
         {
             var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/AsPlannedBOP?$count=true&$filter=Processes/any()&$expand=Processes($expand=FinalMaterialId($expand=Material($select=NId)))";
-            return Get(urlProfile);
+            return Get<AsPlannedBOPDTO, AsPlannedBOPDTOResponse>(urlProfile);
         }
 
-        //Сделать фильтр через ODATA
         public List<AsPlannedBOPDTO> GetByNId(string NId)
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/AsPlannedBOP?$count=true&$filter=BaseLineName eq '{NId}' & Processes/any()&$expand=Processes($expand=FinalMaterialId($expand=Material($select=NId)))";
-            return Get(urlProfile);
+            return Get<AsPlannedBOPDTO, AsPlannedBOPDTOResponse>(urlProfile);
+        }
+        public List<ProcessToOperationLinkDTO> GetAllProcessToOperationLinks()
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ProcessToOperationLink?$count=true&$expand=ChildOperation($expand=WorkOperationId($select=Id,NId),OperationStepCategoryId)";
+            return Get<ProcessToOperationLinkDTO, ProcessToOperationLinkDTOResponse>(urlProfile);
+        }
+        public List<ProcessToOperationLinkDTO> GetAllProcessToOperationLinksByBOPId(string ProcessId,string BOPId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ProcessToOperationLink?$count=true&$expand=ChildOperation($expand=WorkOperationId($select=Id,NId),OperationStepCategoryId)&$filter=AsPlannedBOP_Id eq {BOPId} and ParentProcess_Id eq {ProcessId}";
+            return Get<ProcessToOperationLinkDTO, ProcessToOperationLinkDTOResponse>(urlProfile);
         }
 
 

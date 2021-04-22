@@ -64,27 +64,25 @@ namespace ExchangeMESManagerSevice.Controllers
 
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test = _AsPlannedBOPRepository.GetByNId("AeroAssembly_LG.CC");
+            var test = _AsPlannedBOPRepository.GetAllProcessToOperationLinksByBOPId("a3332b56-7b59-435d-b877-71c70f315652","b22240ca-864e-433b-9791-09cfc4380174");
 
-            var command = new ProcessesDTOUpdateParameter
-            {
-                
-                Id = "b8421801-9d5e-4ce8-9c55-728e6b355c3c"
-                ,Description ="888"
-                ,Name="888"
-                ,FinalMaterialId= "e1e8fcae-cd05-460f-b947-570d63e26b22"
-                ,Plant="123"
-                ,Quantity = new QuantityType {QuantityValue=1,UoMNId="n/a" }
-                ,MaxQuantity = new QuantityType { QuantityValue = 1, UoMNId = "n/a" }
-
-            };
-
-            var res = _AsPlannedBOPRepository.UpdateProcess(command);
 
 
             return View(listOptionRes);
 
             /*
+            var command = new ProcessesDTOLinkOperationParameter
+            {
+
+                 ProcessId = "84863b87-76eb-4652-9c19-bcf86362a29f",
+                 OperationId = "639f69e7-e367-47f1-89c7-17a340be04a7",
+                 Sequence = 70,
+                 AsPlannedBOPId = "839a8d5b-a0bf-4524-bb3e-8b42780ba968"
+
+            };
+
+            var res = _AsPlannedBOPRepository.LinkOperation(command);
+
             var command = new ProcessesDTOUpdateParameter
             {
                 

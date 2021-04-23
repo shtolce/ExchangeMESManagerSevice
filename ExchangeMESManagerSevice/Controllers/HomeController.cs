@@ -64,9 +64,7 @@ namespace ExchangeMESManagerSevice.Controllers
 
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test = _AsPlannedBOPRepository.GetAllProcessToOperationLinksByBOPId("a3332b56-7b59-435d-b877-71c70f315652","b22240ca-864e-433b-9791-09cfc4380174");
-
-
+            var test = _AsPlannedBOPRepository.GetAllOperationsById("b16210cf-82b3-4a21-bac0-1911642d286a");
 
             return View(listOptionRes);
 

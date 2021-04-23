@@ -38,6 +38,21 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public object Error;
         public object SitUafExecutionDetail;
     }
+    public class OperationDTOResponse : IResponse<OperationDTO>
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string @ODataContext;
+        [JsonProperty(PropertyName = "@odata.count")]
+        public int ODataCount;
+        public List<OperationDTO> value { get; set; }
+        public bool Succeeded;
+        public string Id;
+        public List<string> OperationId;
+        public object Error;
+        public object SitUafExecutionDetail;
+    }
+
+
 
     public class ProcessToOperationLinkDTOResponse: IResponse<ProcessToOperationLinkDTO>
     {

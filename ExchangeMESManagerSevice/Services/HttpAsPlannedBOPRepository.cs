@@ -63,10 +63,6 @@ namespace ExchangeMESManagerSevice.Services
             return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "UnlinkOperationToProcess"); ;
         }
 
-        
-
-
-
         private D ExecuteCommand<T,D>(T com,string commandName)
         {
             HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/AppU4DM/odata/{commandName}") as HttpWebRequest;
@@ -148,6 +144,16 @@ namespace ExchangeMESManagerSevice.Services
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ProcessToOperationLink?$count=true&$expand=ChildOperation($expand=WorkOperationId($select=Id,NId),OperationStepCategoryId)&$filter=AsPlannedBOP_Id eq {BOPId} and ParentProcess_Id eq {ProcessId}";
             return Get<ProcessToOperationLinkDTO, ProcessToOperationLinkDTOResponse>(urlProfile);
+        }
+        public List<OperationDTO> GetAllOperations()
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/Operation?$count=true&$expand=WorkOperationId,OperationStepCategoryId";
+            return Get<OperationDTO, OperationDTOResponse>(urlProfile);
+        }
+        public List<OperationDTO> GetAllOperationsById(string Id)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/Operation?$count=true&$expand=WorkOperationId,OperationStepCategoryId&$filter=Id eq {Id}";
+            return Get<OperationDTO, OperationDTOResponse>(urlProfile);
         }
 
 

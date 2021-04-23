@@ -39,15 +39,9 @@ namespace ExchangeMESManagerSevice
             services.AddDbContext<ExchangeSettingsContext>(options => options.UseSqlServer(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IHostedService,AuthorizationMesService>();
-            //services.AddHostedService<AuthorizationMesService>();
-            services.AddSingleton<HttpMaterialsRepository>();
-            services.AddSingleton<HttpDMMaterialsRepository>();
-            services.AddSingleton<HttpUoMRepository>();
-            services.AddSingleton<HttpMaterialClassRepository>();
-            services.AddSingleton<HttpEquipmentRepository>();
-            services.AddSingleton<HttpEquipmentConfigurationRepository>();
-            services.AddSingleton<HttpAsPlannedBOPRepository>();
-            services.AddSingleton<HttpSupplierRepository>();
+            services.AddSingleton<MESUoWService>();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

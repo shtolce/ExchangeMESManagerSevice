@@ -40,13 +40,12 @@ namespace ExchangeMESManagerSevice.Controllers
         {
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test = _MESUoWService.SupplierRepository.GetByNId("qwe123");
-            var command = new SupplierDTOCreateParameter
+            var test = _MESUoWService.MaterialsRepository.GetAllBoMItem();
+            var command = new BoMItemDTODeleteParameter
             {
-                NId = "rty123123",
-                Name = "ert"
+                Ids = new String[] { "5d4398f6-e71e-4d5d-aaa8-da122135d614" }
             };
-            var res = _MESUoWService.SupplierRepository.CreateSupplier(command);
+            var res = _MESUoWService.MaterialsRepository.DeleteBoMItemList(command);
 
             return View(listOptionRes);
 

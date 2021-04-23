@@ -14,4 +14,8 @@
     <PackageReference Include="System.Management" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\SQLServices\" />
+  </ItemGroup>
+
 </Project>

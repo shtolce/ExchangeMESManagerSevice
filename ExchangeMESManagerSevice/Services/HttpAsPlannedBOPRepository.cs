@@ -44,24 +44,39 @@ namespace ExchangeMESManagerSevice.Services
 
         public ProcessesDTOResponse CreateProcess(ProcessesDTOCreateParameter com)
         {
-            return ExecuteCommand<ProcessesDTOCreateParameter, ProcessesDTOResponse>(com, "UADMCreateProcess"); ;
+            return ExecuteCommand<ProcessesDTOCreateParameter, ProcessesDTOResponse>(com, "UADMCreateProcess"); 
         }
         public ProcessesDTOResponse UpdateProcess(ProcessesDTOUpdateParameter com)
         {
-            return ExecuteCommand<ProcessesDTOUpdateParameter, ProcessesDTOResponse>(com, "UADMUpdateProcess"); ;
+            return ExecuteCommand<ProcessesDTOUpdateParameter, ProcessesDTOResponse>(com, "UADMUpdateProcess"); 
         }
         public ProcessesDTOResponse DeleteProcess(ProcessesDTODeleteParameter com)
         {
-            return ExecuteCommand<ProcessesDTODeleteParameter, ProcessesDTOResponse>(com, "DeleteProcessFromCatalogue"); ;
+            return ExecuteCommand<ProcessesDTODeleteParameter, ProcessesDTOResponse>(com, "DeleteProcessFromCatalogue"); 
         }
         public ProcessesDTOResponse LinkOperation(ProcessesDTOLinkOperationParameter com)
         {
-            return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "LinkOperationToProcess"); ;
+            return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "LinkOperationToProcess"); 
         }
         public ProcessesDTOResponse UnlinkOperation(ProcessesDTOLinkOperationParameter com)
         {
-            return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "UnlinkOperationToProcess"); ;
+            return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "UnlinkOperationToProcess"); 
         }
+        public OperationDTOResponse UADMCreateOperationInCatalogue(OperationDTOCreateParameter com)
+        {
+            return ExecuteCommand<OperationDTOCreateParameter, OperationDTOResponse>(com, "UADMCreateOperationInCatalogue"); 
+        }
+        public OperationDTOResponse UADMUpdateOperationInCatalogue(OperationDTOUpdateParameter com)
+        {
+            return ExecuteCommand<OperationDTOUpdateParameter, OperationDTOResponse>(com, "UpdateOperation"); 
+        }
+        public OperationDTOResponse UADMDeleteOperationInCatalogue(OperationDTODeleteParameter com)
+        {
+            return ExecuteCommand<OperationDTODeleteParameter, OperationDTOResponse>(com, "DeleteOperationFromCatalogue"); 
+        }
+
+
+        //POST /sit-svc/Application/AppU4DM/odata/UADMCreateOperationInCatalogue HTTP/1.1
 
         private D ExecuteCommand<T,D>(T com,string commandName)
         {
@@ -122,7 +137,6 @@ namespace ExchangeMESManagerSevice.Services
             return res.value;
 
         }
-        ///sit-svc/Application/AppU4DM/odata/AsPlannedBOP?$count=true&$filter=Processes/any()&$expand=Processes($expand=FinalMaterialId($expand=Material($select=NId));$select=Id,Name,Revision,NId,UId,Plant,Quantity),SegregationTags
 
         public List<AsPlannedBOPDTO> GetAll()
         {

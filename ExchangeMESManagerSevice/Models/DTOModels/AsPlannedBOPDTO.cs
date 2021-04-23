@@ -123,6 +123,55 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     {
         public string Id;
     }
+    public class OperationDTODeleteParameter
+    {
+        public string Id;
+    }
+
+    public class OperationParameterTypeDTO
+    {
+        public string NId;
+        public string Name;
+        public string Revision;
+        public int? Sequence;
+        public string Description;
+        public Nullable<bool> Optional;
+        public String WorkOperationId;
+        public string UId;
+        public Nullable<bool> ElectronicSignatureStart;
+        public Nullable<bool> ElectronicSignaturePause;
+        public Nullable<bool> ElectronicSignatureComplete;
+        public String RequiredInspectionRole;
+        public String RequiredCertificateNId;
+        public String EffectivityExpression;
+        public String OperationStepCategoryId;
+    
+    }
+
+
+
+    public class OperationDTOUpdateParameter
+    {
+        public string Id;
+        public Nullable<bool> ToBeCollectedDocument;
+        public OperationParameterTypeDTO Operation;
+    }
+    public class OperationDTOCreateParameter
+    {
+        public string UID;
+        public string NId;
+        public string Name;
+        public string Description;
+        public string Revision;
+        public Nullable<bool> RequiredInspectionRole;
+        public Nullable<bool> ElectronicSignatureStart;
+        public Nullable<bool> ElectronicSignaturePause;
+        public Nullable<bool> ElectronicSignatureComplete;
+        public Nullable<bool> RequiredCertificateNId;
+        public string WorkOperationTypeNId;
+        public string OperationStepCategoryId;
+    }
+
 
 
     public class ProcessesDTO
@@ -229,6 +278,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String OperationStepCategoryId_Id;
         public WorkOperationTypeDTO WorkOperationId;
         public OperationStepCategoryDTO OperationStepCategoryId;
+
     }
 
 

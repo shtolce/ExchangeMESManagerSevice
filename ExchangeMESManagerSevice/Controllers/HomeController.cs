@@ -66,6 +66,20 @@ namespace ExchangeMESManagerSevice.Controllers
             SelectList listOptionRes = new SelectList(list, list[0]);
             var test = _AsPlannedBOPRepository.GetAllOperationsById("b16210cf-82b3-4a21-bac0-1911642d286a");
 
+            var command = new OperationDTOUpdateParameter
+            {
+
+                Id = "fa6a7731-621b-4b4f-84f8-39a6b5db919d"
+                ,Operation = new OperationParameterTypeDTO
+                {
+                    NId = "testOp1222223"
+                    ,Name = "testOp1212312313"
+                    ,Revision = "A"
+                }
+
+            };
+            var res = _AsPlannedBOPRepository.UADMUpdateOperationInCatalogue(command);
+
             return View(listOptionRes);
 
             /*

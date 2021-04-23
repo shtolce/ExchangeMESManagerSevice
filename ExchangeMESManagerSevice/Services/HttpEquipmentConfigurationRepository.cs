@@ -23,12 +23,12 @@ namespace ExchangeMESManagerSevice.Services
             _authService = (AuthorizationMesService)authService;
         }
 
-        public EquipmentConfigurationDTOResponse DeleteEquipmentConfiguration(EquipmentConfigurationDTODeleteParameter com)
+        public EquipmentConfigurationDTOResponse Delete(EquipmentConfigurationDTODeleteParameter com)
         {
             return ExecuteCommand<EquipmentConfigurationDTODeleteParameter>(com, "DeleteEquipmentConfiguration"); ;
         }
 
-        public EquipmentConfigurationDTOResponse CreateEquipmentConfiguration(EquipmentConfigurationDTOCreateParameter com)
+        public EquipmentConfigurationDTOResponse Create(EquipmentConfigurationDTOCreateParameter com)
         {
             return ExecuteCommand<EquipmentConfigurationDTOCreateParameter>(com, "CreateEquipmentConfiguration"); ;
         }
@@ -75,7 +75,7 @@ namespace ExchangeMESManagerSevice.Services
         }
 
 
-        public EquipmentConfigurationDTOResponse UpdateEquipmentConfiguration(EquipmentConfigurationDTOUpdateParameter com)
+        public EquipmentConfigurationDTOResponse Update(EquipmentConfigurationDTOUpdateParameter com)
         {
             return ExecuteCommand<EquipmentConfigurationDTOUpdateParameter>(com, "UpdateEquipmentConfiguration");
         }

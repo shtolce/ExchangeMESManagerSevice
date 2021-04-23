@@ -23,12 +23,12 @@ namespace ExchangeMESManagerSevice.Services
             _authService = (AuthorizationMesService)authService;
         }
 
-        public MaterialDTOResponse DeleteMaterial(MaterialDTODeleteParameter com)
+        public MaterialDTOResponse Delete(MaterialDTODeleteParameter com)
         {
             return ExecuteCommand<MaterialDTODeleteParameter>(com, "DeleteMaterial"); ;
         }
 
-        public MaterialDTOResponse CreateMaterial(MaterialDTOCreateParameter com)
+        public MaterialDTOResponse Create(MaterialDTOCreateParameter com)
         {
             return ExecuteCommand<MaterialDTOCreateParameter>(com, "CreateMaterial"); ;
         }
@@ -75,7 +75,7 @@ namespace ExchangeMESManagerSevice.Services
         }
 
 
-        public MaterialDTOResponse UpdateMaterial(MaterialDTOUpdateParameter com)
+        public MaterialDTOResponse Update(MaterialDTOUpdateParameter com)
         {
             return ExecuteCommand<MaterialDTOUpdateParameter>(com, "UpdateMaterial");
         }

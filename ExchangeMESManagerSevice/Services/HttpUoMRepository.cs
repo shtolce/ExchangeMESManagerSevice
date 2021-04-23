@@ -23,12 +23,12 @@ namespace ExchangeMESManagerSevice.Services
             _authService = (AuthorizationMesService)authService;
         }
 
-        public UoMDTOResponse DeleteUoM(UoMDTODeleteParameter com)
+        public UoMDTOResponse Delete(UoMDTODeleteParameter com)
         {
             return ExecuteCommand<UoMDTODeleteParameter>(com, "DeleteBaseUoM"); ;
         }
 
-        public UoMDTOResponse CreateUoM(UoMDTOCreateParameter com)
+        public UoMDTOResponse Create(UoMDTOCreateParameter com)
         {
             return ExecuteCommand<UoMDTOCreateParameter>(com, "CreateBaseUoM"); ;
         }
@@ -75,7 +75,7 @@ namespace ExchangeMESManagerSevice.Services
         }
 
 
-        public UoMDTOResponse UpdateUoM(UoMDTOUpdateParameter com)
+        public UoMDTOResponse Update(UoMDTOUpdateParameter com)
         {
             return ExecuteCommand<UoMDTOUpdateParameter>(com, "UpdateUoM");
         }

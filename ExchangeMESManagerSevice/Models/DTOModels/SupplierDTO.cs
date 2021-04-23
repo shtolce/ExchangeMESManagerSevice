@@ -6,45 +6,34 @@ using Newtonsoft.Json;
 
 namespace ExchangeMESManagerSevice.Models.DTOModels
 {
-    public class MaterialDTOResponse
+    public class SupplierDTOResponse
     {
         [JsonProperty(PropertyName = "@odata.context")]
         public string @ODataContext;
-        public List<MaterialDTO> value;
+        [JsonProperty(PropertyName = "@odata.count")]
+        public int ODataCount;
+        public List<SupplierDTO> value;
         public bool Succeeded;
-        public string MaterialId;
+        public string SupplierId;
         public List<string> PropertyIds;
         public object Error;
         public object SitUafExecutionDetail;
     }
 
-    public class MaterialDTOUpdateParameter
+    public class SupplierDTOCreateParameter
     {
-        public string Id;
-        public string Name;
-        public string Description;
-        public string UoMNId;
-    }
-
-    public class MaterialDTOCreateParameter
-    {
-        public bool UseDefault;
         public string NId;
-        public string Revision;
-        public string UId;
         public string Name;
         public string Description;
-        public string UoMNId;
-        public String TemplateNId;
     }
-    public class MaterialDTODeleteParameter
+    public class SupplierDTODeleteParameter
     {
-        public string Id;
+        public string[] SupplierIds;
     }
     /// <summary>
     /// Класс материалов MES. Является базовым. Все его доп свойства расширены в другой модели DMMaterial
     /// </summary>
-    public class MaterialDTO
+    public class SupplierDTO
     {
         public string Id;
         public string AId;
@@ -58,14 +47,9 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String ConcurrencyToken;
         public bool IsLocked;
         public bool ToBeCleaned;
-        public string Revision;
-        public String SourceRevision;
-        public bool IsCurrent;
-        public string UId;
         public string NId;
         public string Name;
         public string Description;
-        public string UoMNId;
-        public String TemplateNId;
+        public string[] SegregationTags;
     }
 }

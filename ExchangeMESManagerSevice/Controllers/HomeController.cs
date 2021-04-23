@@ -38,8 +38,9 @@ namespace ExchangeMESManagerSevice.Controllers
         private HttpEquipmentRepository _EquipmentRepository;
         private HttpEquipmentConfigurationRepository _EquipmentConfigurationRepository;
         private HttpAsPlannedBOPRepository _AsPlannedBOPRepository;
+        private HttpSupplierRepository _SupplierRepository;
 
-
+        
         public HomeController(ExchangeSettingsContext context, IHostedService authService, HttpMaterialsRepository materialRepo
             , HttpDMMaterialsRepository DMMaterialRepo
             , HttpUoMRepository UoMRepository
@@ -47,6 +48,7 @@ namespace ExchangeMESManagerSevice.Controllers
             , HttpEquipmentRepository EquipmentRepository
             , HttpEquipmentConfigurationRepository EquipmentConfigurationRepository
             , HttpAsPlannedBOPRepository AsPlannedBOPRepository
+            , HttpSupplierRepository SupplierRepository
             )
         {
             db = context;
@@ -58,27 +60,21 @@ namespace ExchangeMESManagerSevice.Controllers
             _EquipmentRepository = EquipmentRepository;
             _EquipmentConfigurationRepository = EquipmentConfigurationRepository;
             _AsPlannedBOPRepository = AsPlannedBOPRepository;
+            _SupplierRepository = SupplierRepository;
         }
         public IActionResult Index()
         {
 
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test = _AsPlannedBOPRepository.GetAllOperationsById("b16210cf-82b3-4a21-bac0-1911642d286a");
+            var test = _SupplierRepository.GetByNId("qwe123");
 
-            var command = new OperationDTOUpdateParameter
+            var command = new SupplierDTOCreateParameter
             {
-
-                Id = "fa6a7731-621b-4b4f-84f8-39a6b5db919d"
-                ,Operation = new OperationParameterTypeDTO
-                {
-                    NId = "testOp1222223"
-                    ,Name = "testOp1212312313"
-                    ,Revision = "A"
-                }
-
+                NId = "rty123",
+                Name = "ert"
             };
-            var res = _AsPlannedBOPRepository.UADMUpdateOperationInCatalogue(command);
+            var res = _SupplierRepository.CreateSupplier(command);
 
             return View(listOptionRes);
 

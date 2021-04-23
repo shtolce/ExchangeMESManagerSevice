@@ -108,7 +108,6 @@ namespace ExchangeMESManagerSevice.Services
                     var testErr = reader1.ReadToEnd();
                     var serStatusErr = JsonConvert.DeserializeObject<D>(testErr);
                     return serStatusErr;
-
                 }
 
             }

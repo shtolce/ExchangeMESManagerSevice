@@ -18,11 +18,24 @@ namespace ExchangeMESManagerSevice.Services
         private HttpEquipmentConfigurationRepository _EquipmentConfigurationRepository;
         private HttpAsPlannedBOPRepository _AsPlannedBOPRepository;
         private HttpSupplierRepository _SupplierRepository;
-
+        private HttpWorkOrdersRepository _WorkOrdersRepository;
+        
         public MESUoWService(IHostedService authService)
         {
             _authService = (AuthorizationMesService)authService;
         }
+
+
+        public HttpWorkOrdersRepository WorkOrdersRepository
+        {
+            get
+            {
+                if (_WorkOrdersRepository == null)
+                    _WorkOrdersRepository = new HttpWorkOrdersRepository(_authService);
+                return _WorkOrdersRepository;
+            }
+        }
+
 
         public HttpMaterialsRepository MaterialsRepository
         {

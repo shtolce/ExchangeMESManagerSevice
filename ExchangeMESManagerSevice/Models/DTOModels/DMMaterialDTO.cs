@@ -97,6 +97,6 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public QuantityType Weight;
         public QuantityType Volume;
         public MaterialDTO Material;
-        string[] SegregationTags;
+        public string[] SegregationTags;
     }
 }

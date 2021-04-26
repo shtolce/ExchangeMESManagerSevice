@@ -6,6 +6,18 @@ using Newtonsoft.Json;
 
 namespace ExchangeMESManagerSevice.Models.DTOModels
 {
+    public class ToBeConsumedMaterialDTOResponse : IResponse<ToBeConsumedMaterialDTO>
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string @ODataContext;
+        public List<ToBeConsumedMaterialDTO> value { get; set; }
+        public bool Succeeded;
+        public string WorkOrderId;
+        public List<string> PropertyIds;
+        public object Error;
+        public object SitUafExecutionDetail;
+    }
+
     public class WorkOrderDTOResponse:IResponse<WorkOrderDTO>
     {
         [JsonProperty(PropertyName = "@odata.context")]
@@ -176,6 +188,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public List<WorkOrderOperationDTO> WorkOrderOperations;
         public string[] SegregationTags;
         public ProducedMaterialItemDTO[] ProducedMaterialItems;
+
     }
     public class ToBeUsedMachineDTO
     {
@@ -261,8 +274,47 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public WorkOrderDTO WorkOrder;
         public StatusDTO Status;
         public StatusDTO PreviousStatus;
+        public List<ToBeConsumedMaterialDTO> ToBeConsumedMaterials;
         public ToBeUsedMachineDTO[] ToBeUsedMachines;
     }
+
+    public class ToBeConsumedMaterialDTO
+    {
+        public string Id;
+        public string AId;
+        public Nullable<bool> IsFrozen;
+        public int ConcurrencyVersion;
+        public int IsDeleted;
+        public DateTime CreatedOn;
+        public DateTime LastUpdatedOn;
+        public string EntityType;
+        public string OptimisticVersion;
+        public String ConcurrencyToken;
+        public Nullable<bool> IsLocked;
+        public Nullable<bool> ToBeCleaned;
+        public string Name;
+        public String DCDRuntimeTask;
+        public String DCDTask;
+        public String FAIRuntimeTask;
+        public String GroupId;
+        public String LogicalPosition;
+        public String MaterialSpecificationType;
+        public String PrekitSerialNumber;
+        public string NId;
+        public double? Quantity;
+        public bool? AlternativeSelected;
+        public int Sequence;
+        public string MaterialDefinition_Id;
+        public string WorkOrderOperation_Id;
+        public String WorkOrderStep_Id;
+        public WorkOrderOperationDTO WorkOrderOperation;
+        public DMMaterialDTO MaterialDefinition;
+
+        
+    }
+
+
+
 
 
 }

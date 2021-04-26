@@ -40,7 +40,7 @@ namespace ExchangeMESManagerSevice.Controllers
         {
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test = _MESUoWService.WorkOrdersRepository.GetGetWorkOrderOperationsByOrderNId("0000-3.42.4");
+            var test = _MESUoWService.WorkOrdersRepository.GetAll();
             var command = new BoMItemDTODeleteParameter
             {
                 Ids = new String[] { "5d4398f6-e71e-4d5d-aaa8-da122135d614" }

@@ -122,30 +122,39 @@ namespace ExchangeMESManagerSevice.Services
 
         public List<WorkOrderDTO> GetAll()
         {
-            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrder?$expand=FinalMaterial($expand = Material),ProductionType($select= NId),WorkOrderOperations,SegregationTags, ProducedMaterialItems($expand= DM_MaterialTrackingUnit($expand = MaterialTrackingUnit($select = code)))";
+            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrder?$expand=FinalMaterial($expand = Material),ProductionType($select= NId),WorkOrderOperations($expand=ToBeConsumedMaterials),SegregationTags, ProducedMaterialItems($expand= DM_MaterialTrackingUnit($expand = MaterialTrackingUnit($select = code)))";
             return Get<WorkOrderDTO, WorkOrderDTOResponse>(urlProfile); 
         }
 
         //Сделать фильтр через ODATA
         public List<WorkOrderDTO> GetByNId(string NId)
         {
-            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrder?$expand=FinalMaterial($expand = Material),ProductionType($select= NId),WorkOrderOperations,SegregationTags, ProducedMaterialItems($expand= DM_MaterialTrackingUnit($expand = MaterialTrackingUnit($select = code)))&$filter=NId eq '{NId}'";
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrder?$expand=FinalMaterial($expand = Material),ProductionType($select= NId),WorkOrderOperations($expand=ToBeConsumedMaterials),SegregationTags, ProducedMaterialItems($expand= DM_MaterialTrackingUnit($expand = MaterialTrackingUnit($select = code)))&$filter=NId eq '{NId}'";
             return Get<WorkOrderDTO, WorkOrderDTOResponse>(urlProfile);
         }
 
         public List<WorkOrderOperationDTO> GetAllWorkOrderOperations()
         {
-            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrderOperation?$count=true&$expand=WorkOrder,ToBeUsedMachines,WorkOperationType,OperationStepCategoryId";
+            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrderOperation?$count=true&$expand=WorkOrder,ToBeConsumedMaterials,ToBeUsedMachines,WorkOperationType,OperationStepCategoryId";
             return Get<WorkOrderOperationDTO, WorkOrderOperationDTOResponse>(urlProfile);
         }
 
-        //Сделать фильтр через ODATA
         public List<WorkOrderOperationDTO> GetGetWorkOrderOperationsByOrderNId(string NId)
         {
-            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrderOperation?$count=true&$expand=WorkOrder,ToBeUsedMachines,WorkOperationType,OperationStepCategoryId&$filter=WorkOrder/NId eq '{NId}'";
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrderOperation?$count=true&$expand=WorkOrder,ToBeConsumedMaterials,ToBeUsedMachines,WorkOperationType,OperationStepCategoryId&$filter=WorkOrder/NId eq '{NId}'";
             return Get<WorkOrderOperationDTO, WorkOrderOperationDTOResponse>(urlProfile);
         }
 
+        public List<ToBeConsumedMaterialDTO> GetAllToBeConsumedMaterialDTO()
+        {
+            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/ToBeConsumedMaterial?$count=true&$expand=WorkOrderOperation,MaterialDefinition";
+            return Get<ToBeConsumedMaterialDTO, ToBeConsumedMaterialDTOResponse>(urlProfile);
+        }
+        public List<ToBeConsumedMaterialDTO> GetAllToBeConsumedMaterialDTOById(string Id)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ToBeConsumedMaterial?$count=true&$expand=WorkOrderOperation,MaterialDefinition&$filter=WorkOrderOperation_Id eq {Id}";
+            return Get<ToBeConsumedMaterialDTO, ToBeConsumedMaterialDTOResponse>(urlProfile);
+        }
 
     }
 }

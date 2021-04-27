@@ -23,44 +23,26 @@ namespace ExchangeMESManagerSevice.Services
             _authService = (AuthorizationMesService)authService;
         }
 
-        public WorkOrderDTOResponse Delete(WorkOrderDTODeleteParameter com)
+        public WorkOrderDTOResponse CreateWorkOrdersFromAsPlannedBOP(WorkOrderDTOCreateFromAsPlannedBOPParameter com)
         {
-            return ExecuteCommand<WorkOrderDTODeleteParameter, WorkOrderDTOResponse>(com, "DeleteWorkOrder"); ;
+            return ExecuteCommand<WorkOrderDTOCreateFromAsPlannedBOPParameter, WorkOrderDTOResponse>(com, "UADMCreateWorkOrdersFromAsPlannedBOP"); ;
+        }
+        public WorkOrderDTOResponse CreateWorkOrderFromProcess(WorkOrderDTOCreateFromProcessParameter com)
+        {
+            return ExecuteCommand<WorkOrderDTOCreateFromProcessParameter, WorkOrderDTOResponse>(com, "UADMCreateWorkOrderFromProcess"); ;
         }
 
-        public WorkOrderDTOResponse Create(WorkOrderDTOCreateParameter com)
+        public WorkOrderDTOResponse CreateWorkOrder(WorkOrderDTOCreateParameter com)
         {
             return ExecuteCommand<WorkOrderDTOCreateParameter, WorkOrderDTOResponse>(com, "CreateWorkOrder"); ;
         }
-        public WorkOrderDTOResponse Update(WorkOrderDTOUpdateParameter com)
+
+        public MaterialBatchDTOResponse GenerateMaterialBatchId(MaterialBatchDTOGenerateParameter com)
         {
-            return ExecuteCommand<WorkOrderDTOUpdateParameter, WorkOrderDTOResponse>(com, "UpdateWorkOrder");
+            return ExecuteCommand<MaterialBatchDTOGenerateParameter, MaterialBatchDTOResponse>(com, "GenerateMaterialBatchId"); ;
         }
 
-        public BoMDTOResponse CreateBoM(BoMDTOCreateParameter com)
-        {
-            return ExecuteCommand<BoMDTOCreateParameter, BoMDTOResponse>(com, "DSWorkOrder_CreateBoM"); ;
-        }
-
-        public BoMItemDTOResponse CreateBoMItem(BoMItemDTOCreateParameter com)
-        {
-            return ExecuteCommand<BoMItemDTOCreateParameter, BoMItemDTOResponse>(com, "CreateBoMItem", "AppU4DM"); ;
-        }
-        public BoMItemDTOResponse DeleteBoMItemList(BoMItemDTODeleteParameter com)
-        {
-            return ExecuteCommand<BoMItemDTODeleteParameter, BoMItemDTOResponse>(com, "DeleteBoMItemList", "AppU4DM"); ;
-        }
-        
-
-        public BoMDTOResponse ChangeBoMStatus(WorkOrderDTOCreateParameter com)
-        {
-            return ExecuteCommand<WorkOrderDTOCreateParameter, BoMDTOResponse>(com, "DSWorkOrder_ChangeBoMStatus"); ;
-        }
-
-
-
-
-        private D ExecuteCommand<T, D>(T com, string commandName,string AppName="WorkOrder")
+        private D ExecuteCommand<T, D>(T com, string commandName,string AppName= "AppU4DM")
         {
             HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/{AppName}/odata/{commandName}") as HttpWebRequest;
             webRequest.Method = "POST";
@@ -116,9 +98,7 @@ namespace ExchangeMESManagerSevice.Services
             var content = Task.Run(async () => await stream.ReadAsAsync<D>());
             var res = content.Result;
             return res.value;
-
         }
-
 
         public List<WorkOrderDTO> GetAll()
         {
@@ -126,7 +106,6 @@ namespace ExchangeMESManagerSevice.Services
             return Get<WorkOrderDTO, WorkOrderDTOResponse>(urlProfile); 
         }
 
-        //Сделать фильтр через ODATA
         public List<WorkOrderDTO> GetByNId(string NId)
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrder?$expand=FinalMaterial($expand = Material),ProductionType($select= NId),WorkOrderOperations($expand=ToBeConsumedMaterials),SegregationTags, ProducedMaterialItems($expand= DM_MaterialTrackingUnit($expand = MaterialTrackingUnit($select = code)))&$filter=NId eq '{NId}'";
@@ -155,6 +134,14 @@ namespace ExchangeMESManagerSevice.Services
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ToBeConsumedMaterial?$count=true&$expand=WorkOrderOperation,MaterialDefinition&$filter=WorkOrderOperation_Id eq {Id}";
             return Get<ToBeConsumedMaterialDTO, ToBeConsumedMaterialDTOResponse>(urlProfile);
         }
+
+        public List<TemplateToMaterialPlantDTO> GetAllTemplateToMaterialPlant()
+        {
+            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/TemplateToMaterialPlant?$expand=Template($expand=TemplateType),SegregationTags";
+            return Get<TemplateToMaterialPlantDTO, TemplateToMaterialPlantDTOResponse>(urlProfile);
+        }
+        
+
 
     }
 }

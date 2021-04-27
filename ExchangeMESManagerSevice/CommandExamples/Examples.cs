@@ -8,6 +8,31 @@ namespace ExchangeMESManagerSevice.CommandExamples
     public class Examples
     {
         /*
+
+            var command = new WorkOrderDTOCreateFromProcessParameter
+            {
+                NId = "qwtt123456",
+                ProcessId = "2a195880-c74e-48df-81c1-7512be1e2063",
+                ProductionTypeNId = "FullQuantity",
+                Quantity = 5,
+                AsPlannedId = "9a17c871-0686-4f75-9bff-8d9252393caa",
+                FinalMaterialId = "0dbfd323-15ad-4aba-8835-c49700a6182a",
+                Plant = "Enterprise",
+                BatchId = "MB_SF_20210427_077",
+                ERPOrder = "qwtt123456"
+            };        
+        
+        
+        var command = new WorkOrderDTOCreateFromAsPlannedBOPParameter
+            {
+                BaselineUId="f55df0c6-8d46-4879-a6b7-3199d01ae05b"
+                ,ProductionTypeNId="FullQuantity"
+                ,ERPOrder="qwe123"
+            };
+            var res = _MESUoWService.WorkOrdersRepository.CreateWorkOrdersFromAsPlannedBOP(command);
+
+        
+        
         var command = new ProcessesDTOLinkOperationParameter
         {
 

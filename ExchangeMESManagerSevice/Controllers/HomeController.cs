@@ -41,11 +41,21 @@ namespace ExchangeMESManagerSevice.Controllers
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
             var test = _MESUoWService.WorkOrdersRepository.GetAll();
-            var command = new BoMItemDTODeleteParameter
+            var command = new WorkOrderDTOCreateParameter
             {
-                Ids = new String[] { "5d4398f6-e71e-4d5d-aaa8-da122135d614" }
+                NId = "gqwtt123456",
+                ProductionTypeNId = "FullQuantity",
+                FinalMaterialId = "0dbfd323-15ad-4aba-8835-c49700a6182a",
+                Plant = "Enterprise",
+                BatchId = "MB_SF_20210427_078",
+                ERPOrder = "gqwtt123456",
+                InitialQuantity = 3,
+                PlannedTargetQuantity = null,
+                Name = "er123",
+                Sequence = 1,
+
             };
-            var res = _MESUoWService.MaterialsRepository.DeleteBoMItemList(command);
+            var res = _MESUoWService.WorkOrdersRepository.CreateWorkOrder(command);
 
             return View(listOptionRes);
 

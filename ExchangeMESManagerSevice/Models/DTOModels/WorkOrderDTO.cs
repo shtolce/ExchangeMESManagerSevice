@@ -36,9 +36,66 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public List<WorkOrderOperationDTO> value { get; set; }
         public bool Succeeded;
         public string WorkOrderId;
+        public string Ids;
+        public string Id;
         public List<string> PropertyIds;
         public object Error;
         public object SitUafExecutionDetail;
+    }
+
+    public class MaterialBatchDTOResponse : IResponse<MaterialBatchDTO>
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string @ODataContext;
+        public List<MaterialBatchDTO> value { get; set; }
+        public bool Succeeded;
+        public string MaterialBatchId;
+        public List<string> PropertyIds;
+        public object Error;
+        public object SitUafExecutionDetail;
+    }
+
+
+    public class TemplateToMaterialPlantDTOResponse : IResponse<TemplateToMaterialPlantDTO>
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string @ODataContext;
+        public List<TemplateToMaterialPlantDTO> value { get; set; }
+        public bool Succeeded;
+        public List<string> PropertyIds;
+        public object Error;
+        public object SitUafExecutionDetail;
+    }
+
+    public class MaterialBatchDTOGenerateParameter
+    {
+        public string IdMaterialId;
+        public string TemplateId;
+    }
+    /// <summary>
+    /// Для записи одиночной операции
+    /// </summary>
+    public class WorkOrderOperationDTOCreateParameter
+    {
+        public string WorkOrderId;
+        public WorkOrderOperationDTO WorkOrderOperation;
+        public String DependencyType;
+    }
+    /// <summary>
+    /// Для записи массива операций
+    /// </summary>
+    public class WorkOrderOperationsDTOCreateParameter
+    {
+        public string WorkOrderId;
+        public List<WorkOrderOperationDTO> WorkOrderOperation;
+        public String DependencyType;
+    }
+
+    public class WorkOrderOperationFromProcessOperationDTOCreateParameter
+    {
+        public string WorkOrderId;
+        public WorkOrderOperationFromProcessOperationDTO WorkOrderOperation;
+        public String DependencyType;
     }
 
     public class WorkOrderDTOUpdateParameter
@@ -49,17 +106,42 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string UoMNId;
     }
 
+    
     public class WorkOrderDTOCreateParameter
     {
-        public bool UseDefault;
         public string NId;
-        public string Revision;
-        public string UId;
+        public string ProductionTypeNId;
+        public double InitialQuantity;
+        public double? PlannedTargetQuantity;
+        public string FinalMaterialId;
+        public string Plant;
         public string Name;
-        public string Description;
-        public string UoMNId;
-        public String TemplateNId;
+        public int Sequence;
+        public string BatchId;
+        public string ERPOrder;
     }
+
+    public class WorkOrderDTOCreateFromAsPlannedBOPParameter
+    {
+        public string BaselineUId;
+        public string ProductionTypeNId;
+        public string ERPOrder;
+    }
+    public class WorkOrderDTOCreateFromProcessParameter
+    {
+        public string ERPOrder;
+        public string NId;
+        public string ProcessId;
+        public string ProductionTypeNId;
+        public double Quantity;
+        public string AsPlannedId;
+        public string FinalMaterialId;
+        public string Plant;
+        public string BatchId;
+    }
+
+    
+
     public class WorkOrderDTODeleteParameter
     {
         public string Id;
@@ -110,9 +192,15 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string DM_MaterialTrackingUnit_Id;
         public string WorkOrder_Id;
         public DM_MaterialTrackingUnitDTO DM_MaterialTrackingUnit;
+    }
+    public class MaterialBatchDTO
+    {
+        public string Id;
 
     }
 
+
+    
     public class StatusDTO
     {
         public string StateMachineNId;
@@ -277,6 +365,29 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public List<ToBeConsumedMaterialDTO> ToBeConsumedMaterials;
         public ToBeUsedMachineDTO[] ToBeUsedMachines;
     }
+    public class WorkOrderOperationFromProcessOperationDTO
+    {
+        public string NId;
+        public DateTimeOffset? EstimatedStartTime;
+        public DateTimeOffset? EstimatedEndTime;
+        public int Priority;
+        public string Name;
+        public String OperationId;
+        public String WorkOperationTypeId;
+        public String RequiredCertificateNId;
+        public String RequiredInspectionRole;
+        public Nullable<bool> ElectronicSignatureStart;
+        public Nullable<bool> ElectronicSignaturePause;
+        public Nullable<bool> ElectronicSignatureComplete;
+        public Nullable<bool> ToBeCollectedDocument;
+        public int Sequence;
+        public TimeSpan EstimatedDuration;
+        public String OperationStepCategoryId;
+        public String AsPlannedBopId;
+    }
+
+
+
 
     public class ToBeConsumedMaterialDTO
     {
@@ -309,12 +420,82 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String WorkOrderStep_Id;
         public WorkOrderOperationDTO WorkOrderOperation;
         public DMMaterialDTO MaterialDefinition;
+    }
 
-        
+    public class TemplateToMaterialPlantDTO
+    {
+        public string Id;
+        public string AId;
+        public Nullable<bool> IsFrozen;
+        public int ConcurrencyVersion;
+        public int IsDeleted;
+        public DateTime CreatedOn;
+        public DateTime LastUpdatedOn;
+        public string EntityType;
+        public string OptimisticVersion;
+        public String ConcurrencyToken;
+        public Nullable<bool> IsLocked;
+        public Nullable<bool> ToBeCleaned;
+        public string EquipmentNId;
+        public string DM_Material;
+        public string Template_Id;
+        public TemplateDTO Template;
+        public string[] SegregationTags;
+    }
+
+    public class TemplateDTO
+    {
+        public string Id;
+        public string AId;
+        public Nullable<bool> IsFrozen;
+        public int ConcurrencyVersion;
+        public int IsDeleted;
+        public DateTime CreatedOn;
+        public DateTime LastUpdatedOn;
+        public string EntityType;
+        public string OptimisticVersion;
+        public String ConcurrencyToken;
+        public Nullable<bool> IsLocked;
+        public Nullable<bool> ToBeCleaned;
+        public string NId;
+        public String EditingUser;
+        public Nullable<bool> Editing;
+        public string TemplateType_Id;
+        public TemplateTypeDTO TemplateType;
+    }
+
+    public class TemplateTypeDTO
+    {
+        public string Id;
+        public string AId;
+        public Nullable<bool> IsFrozen;
+        public int ConcurrencyVersion;
+        public int IsDeleted;
+        public DateTime CreatedOn;
+        public DateTime LastUpdatedOn;
+        public string EntityType;
+        public string OptimisticVersion;
+        public String ConcurrencyToken;
+        public Nullable<bool> IsLocked;
+        public Nullable<bool> ToBeCleaned;
+        public string NId;
     }
 
 
 
 
 
+
+
 }
+
+
+
+
+
+
+
+
+
+
+

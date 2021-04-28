@@ -169,7 +169,7 @@ namespace ExchangeMESManagerSevice.Services
         }
         public List<ToBeConsumedMaterialDTO> GetAllToBeConsumedMaterialDTOById(string Id)
         {
-            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ToBeConsumedMaterial?$count=true&$expand=WorkOrderOperation,MaterialDefinition&$filter=WorkOrderOperation_Id eq {Id}";
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ToBeConsumedMaterial?$count=true&$expand=WorkOrderOperation,MaterialDefinition&$filter=WorkOrderOperation_Id eq '{Id}'";
             return Get<ToBeConsumedMaterialDTO, ToBeConsumedMaterialDTOResponse>(urlProfile);
         }
 
@@ -186,7 +186,7 @@ namespace ExchangeMESManagerSevice.Services
         }
         public List<WorkOOperationDependencyDTO> GetAllWorkOOperationDependencyByToWOId(string Id)
         {
-            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/WorkOOperationDependency?$count=true&$expand=FromWOO($expand=WorkOrder),ToWOO($expand=WorkOrder)&$filter=ToWOO/Id eq {Id}";
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOOperationDependency?$count=true&$expand=FromWOO($expand=WorkOrder),ToWOO($expand=WorkOrder)&$filter=ToWOO/Id eq '{Id}'";
             return Get<WorkOOperationDependencyDTO, WorkOOperationDependencyDTOResponse>(urlProfile);
         }
 

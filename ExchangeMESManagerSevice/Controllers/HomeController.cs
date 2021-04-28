@@ -40,15 +40,21 @@ namespace ExchangeMESManagerSevice.Controllers
         {
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test = _MESUoWService.BufferRepository.GetAll();
+            var test = _MESUoWService.BufferRepository.GetAllBufferDefinitions();
 
 
-            var command = new WorkOrderOperationDTODeleteParameter
+            var command = new BufferDefinitionDTOCreateParameter
             {
-                Id="255231e2-eb3d-4a8f-9f60-971cbbb1d604"
+                IsValid=false
+                ,Quantity=new QuantityType {UoMNId="n/a",QuantityValue=12}
+                ,NId="qwe"
+                ,Name="qwe"
+                ,Version="qwe"
+                ,CapacityType="Quantity"
+
             };
 
-            var res = _MESUoWService.WorkOrdersRepository.DeleteWorkOrderOperation(command);
+            var res = _MESUoWService.BufferRepository.CreateBufferDefinition(command);
             return View(listOptionRes);
 
         }

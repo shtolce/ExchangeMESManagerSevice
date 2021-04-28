@@ -20,6 +20,20 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public object SitUafExecutionDetail;
     }
 
+    public class BufferDefinitionDTOResponse
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string @ODataContext;
+        [JsonProperty(PropertyName = "@odata.count")]
+        public int ODataCount;
+        public List<BufferDefinitionDTO> value;
+        public bool Succeeded;
+        public string Id;
+        public List<string> PropertyIds;
+        public object Error;
+        public object SitUafExecutionDetail;
+    }
+
     public class BufferDTOUpdateParameter
     {
         public string BufferConfigurationId;
@@ -27,19 +41,36 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class BufferDTOCreateParameter
     {
-        public bool UseDefault;
         public string NId;
-        public string Revision;
-        public string UId;
         public string Name;
         public string Description;
-        public string UoMNId;
-        public String TemplateNId;
+        public String BufferDefinition;
+        public String LocationNId;
+        public String Status;
+        public QuantityType Quantity;
+        public DateTimeOffset? ValidFrom;
+        public DateTimeOffset? ValidTo;
+
     }
     public class BufferDTODeleteParameter
     {
-        public string BufferConfigurationId;
+        public string Id;
     }
+
+    public class BufferDefinitionDTOCreateParameter
+    {
+        public string NId;
+        public string Name;
+        public string Version;
+        public string CapacityType;
+        public bool? IsValid;
+        public QuantityType Quantity;
+    }
+    public class BufferDefinitionDTODeleteParameter
+    {
+        public string Id;
+    }
+
 
     public class CapacityTypeDTO
     {
@@ -107,8 +138,8 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String EquipmentName;
         public String Name;
         public String NId;
-        DateTimeOffset? ValidityFrom;
-        DateTimeOffset? ValidityTo;
+        public DateTimeOffset? ValidityFrom;
+        public DateTimeOffset? ValidityTo;
         public String BufferDefinition_Id;
         public String CapacityType_Id;
         public QuantityType MaxQty;

@@ -8,7 +8,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 {
     public class QuantityType
     {
-        public string UoMNId;
+        public String UoMNId;
         public float? QuantityValue;
     }
     public class AMPowderPropertiesParameterType

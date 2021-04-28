@@ -25,17 +25,27 @@ namespace ExchangeMESManagerSevice.Services
 
         public BufferDTOResponse Delete(BufferDTODeleteParameter com)
         {
-            return ExecuteCommand<BufferDTODeleteParameter>(com, "DeleteBuffer"); ;
+            return ExecuteCommand<BufferDTODeleteParameter, BufferDTOResponse>(com, "DeleteBuffer"); ;
         }
 
         public BufferDTOResponse Create(BufferDTOCreateParameter com)
         {
-            return ExecuteCommand<BufferDTOCreateParameter>(com, "CreateBuffer"); ;
+            return ExecuteCommand<BufferDTOCreateParameter, BufferDTOResponse>(com, "CreateBuffer"); ;
         }
 
-        private BufferDTOResponse ExecuteCommand<T>(T com,string commandName)
+        public BufferDefinitionDTOResponse CreateBufferDefinition(BufferDefinitionDTOCreateParameter com)
         {
-            HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/Buffer/odata/{commandName}") as HttpWebRequest;
+            return ExecuteCommand<BufferDefinitionDTOCreateParameter, BufferDefinitionDTOResponse>(com, "CreateBufferDefinition"); ;
+        }
+
+        public BufferDefinitionDTOResponse DeleteBufferDefinition(BufferDefinitionDTODeleteParameter com)
+        {
+            return ExecuteCommand<BufferDefinitionDTODeleteParameter, BufferDefinitionDTOResponse>(com, "DeleteBufferDefinition"); ;
+        }
+
+        private D ExecuteCommand<T, D>(T com, string commandName, string AppName = "AppU4DM")
+        {
+            HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/{AppName}/odata/{commandName}") as HttpWebRequest;
             webRequest.Method = "POST";
             webRequest.ContentType = "application/json";
             Command<T> comTest = new Command<T>()
@@ -61,23 +71,23 @@ namespace ExchangeMESManagerSevice.Services
                 using (var reader1 = new StreamReader(ex.Response.GetResponseStream()))
                 {
                     var testErr = reader1.ReadToEnd();
-                    var serStatusErr = JsonConvert.DeserializeObject<BufferDTOResponse>(testErr);
+                    var serStatusErr = JsonConvert.DeserializeObject<D>(testErr);
                     return serStatusErr;
-
                 }
 
             }
             postStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(postStream);
             string responseFromServer = reader.ReadToEnd();
-            var serStatus2 = JsonConvert.DeserializeObject<BufferDTOResponse>(responseFromServer);
+            var serStatus2 = JsonConvert.DeserializeObject<D>(responseFromServer);
             return serStatus2;
         }
 
 
+
         public BufferDTOResponse Update(BufferDTOUpdateParameter com)
         {
-            return ExecuteCommand<BufferDTOUpdateParameter>(com, "UpdateBuffer");
+            return ExecuteCommand<BufferDTOUpdateParameter, BufferDTOResponse>(com, "UpdateBuffer");
         }
 
         public List<BufferDTO> Get(string urlProfile)
@@ -112,6 +122,18 @@ namespace ExchangeMESManagerSevice.Services
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/Buffer?$expand=BufferDefinition,CapacityType&$filter=NId eq '{NId}'";
             return Get(urlProfile);
         }
+
+        public List<BufferDTO> GetAllBufferDefinitions()
+        {
+            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/BufferDefinition?$count=true&$expand=CapacityType";
+            return Get(urlProfile);
+        }
+        public List<BufferDTO> GetAllBufferDefinitionsByNId(string NId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/BufferDefinition?$count=true&$expand=CapacityType&$filter=NId eq '{NId}'";
+            return Get(urlProfile);
+        }
+
 
 
 

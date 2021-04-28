@@ -22,7 +22,6 @@ namespace ExchangeMESManagerSevice.Services
         {
             _authService = (AuthorizationMesService)authService;
         }
-
         public WorkOrderDTOResponse CreateWorkOrdersFromAsPlannedBOP(WorkOrderDTOCreateFromAsPlannedBOPParameter com)
         {
             return ExecuteCommand<WorkOrderDTOCreateFromAsPlannedBOPParameter, WorkOrderDTOResponse>(com, "UADMCreateWorkOrdersFromAsPlannedBOP"); ;
@@ -31,11 +30,50 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<WorkOrderDTOCreateFromProcessParameter, WorkOrderDTOResponse>(com, "UADMCreateWorkOrderFromProcess"); ;
         }
-
         public WorkOrderDTOResponse CreateWorkOrder(WorkOrderDTOCreateParameter com)
         {
             return ExecuteCommand<WorkOrderDTOCreateParameter, WorkOrderDTOResponse>(com, "CreateWorkOrder"); ;
         }
+        public WorkOrderDTOResponse DeleteWorkOrder(WorkOrderDTODeleteParameter com)
+        {
+            return ExecuteCommand<WorkOrderDTODeleteParameter, WorkOrderDTOResponse>(com, "DeleteWorkOrder"); ;
+        }
+        public WorkOrderDTOResponse UpdateWorkOrder(WorkOrderDTOUpdateParameter com)
+        {
+            return ExecuteCommand<WorkOrderDTOUpdateParameter, WorkOrderDTOResponse>(com, "EditWorkOrder"); ;
+        }
+        public WorkOrderOperationDTOResponse CreateWorkOrderOperation(WorkOrderOperationDTOCreateParameter com)
+        {
+            return ExecuteCommand<WorkOrderOperationDTOCreateParameter, WorkOrderOperationDTOResponse>(com, "CreateWorkOrderOperation"); ;
+        }
+        public WorkOrderOperationDTOResponse CreateWorkOrderOperations(WorkOrderOperationsDTOCreateParameter com)
+        {
+            return ExecuteCommand<WorkOrderOperationsDTOCreateParameter, WorkOrderOperationDTOResponse>(com, "CreateWorkOrderOperations"); ;
+        }
+        public WorkOrderOperationDTOResponse CreateWorkOrderOperationFromProcessOperation(WorkOrderOperationFromProcessOperationDTOCreateParameter com)
+        {
+            return ExecuteCommand<WorkOrderOperationFromProcessOperationDTOCreateParameter, WorkOrderOperationDTOResponse>(com, "UADMCreateWorkOrderOperationFromProcessOperation"); ;
+        }
+        public WorkOrderOperationDTOResponse UpdateWorkOrderOperation(WorkOrderOperationDTOUpdateParameter com)
+        {
+            return ExecuteCommand<WorkOrderOperationDTOUpdateParameter, WorkOrderOperationDTOResponse>(com, "EditWorkOrderOperation"); ;
+        }
+        public WorkOrderOperationDTOResponse DeleteWorkOrderOperation(WorkOrderOperationDTODeleteParameter com)
+        {
+            return ExecuteCommand<WorkOrderOperationDTODeleteParameter, WorkOrderOperationDTOResponse>(com, "DeleteWorkOrderOperation"); ;
+        }
+
+
+        public WorkOOperationDependencyDTOResponse CreateWorkOrderOperationDependencies(WorkOrderOperationDependenciesDTOCreateParameter com)
+        {
+            return ExecuteCommand<WorkOrderOperationDependenciesDTOCreateParameter, WorkOOperationDependencyDTOResponse>(com, "CreateWorkOOperationDependencies"); ;
+        }
+        public WorkOOperationDependencyDTOResponse DeleteWOOperationDependency(WorkOrderOperationDependenciesDTODeleteParameter com)
+        {
+            return ExecuteCommand<WorkOrderOperationDependenciesDTODeleteParameter, WorkOOperationDependencyDTOResponse>(com, "DeleteWOOperationDependency"); ;
+        }
+
+        //сделать все методы создания операций. потом удаление обновление ордеров и операций потом svc/Application/AppU4DM/odata/WorkOOperationDependency?
 
         public MaterialBatchDTOResponse GenerateMaterialBatchId(MaterialBatchDTOGenerateParameter com)
         {
@@ -140,7 +178,20 @@ namespace ExchangeMESManagerSevice.Services
             var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/TemplateToMaterialPlant?$expand=Template($expand=TemplateType),SegregationTags";
             return Get<TemplateToMaterialPlantDTO, TemplateToMaterialPlantDTOResponse>(urlProfile);
         }
-        
+
+        public List<WorkOOperationDependencyDTO> GetAllWorkOOperationDependency()
+        {
+            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/WorkOOperationDependency?$count=true&$expand=FromWOO($expand=WorkOrder),ToWOO($expand=WorkOrder)";
+            return Get<WorkOOperationDependencyDTO, WorkOOperationDependencyDTOResponse>(urlProfile);
+        }
+        public List<WorkOOperationDependencyDTO> GetAllWorkOOperationDependencyByToWOId(string Id)
+        {
+            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/WorkOOperationDependency?$count=true&$expand=FromWOO($expand=WorkOrder),ToWOO($expand=WorkOrder)&$filter=ToWOO/Id eq {Id}";
+            return Get<WorkOOperationDependencyDTO, WorkOOperationDependencyDTOResponse>(urlProfile);
+        }
+
+
+
 
 
     }

@@ -9,6 +9,99 @@ namespace ExchangeMESManagerSevice.CommandExamples
     {
         /*
 
+            var command = new WorkOrderOperationDependenciesDTOCreateParameter
+            {
+                Dependencies = new List<WorkOOperationDependencyParameterDTO>
+                {
+                    new WorkOOperationDependencyParameterDTO
+                    {
+                         FromId="053c7b53-8a76-438d-9423-0ddbac51e607"
+                        ,OperationDependencyType="AfterStart"
+                        ,PartialCompleted=null
+                        ,ToId="186ce7d6-b6b0-4c39-8339-4adb8a8a5e62"
+                    }
+                }
+            };
+
+
+
+           var command = new WorkOrderOperationDependenciesDTODeleteParameter
+            {
+                Dependency = new WorkOOperationDependencyParameterDTO
+                {
+                     FromId="053c7b53-8a76-438d-9423-0ddbac51e607"
+                    ,OperationDependencyType="AfterStart"
+                    ,PartialCompleted=null
+                    ,ToId="186ce7d6-b6b0-4c39-8339-4adb8a8a5e62"
+                }
+            };
+
+
+            var command = new WorkOrderOperationFromProcessOperationDTOCreateParameter
+            {
+                WorkOrderId = "e58f6585-09ba-4084-9939-5d228f9b8c69",
+                WorkOrderOperation = new WorkOrderOperationFromOperationParameterDTO
+                {
+                     NId="asdasdwedwe123"
+                    ,EstimatedStartTime=null
+                    ,EstimatedEndTime=null
+                    ,Priority=0
+                    ,Name="asdasd"
+                    ,OperationId="26389f96-5dff-4eca-b577-8a10c405f264"
+                    ,WorkOperationTypeId=null
+                    ,RequiredCertificateNId=null
+                    ,RequiredInspectionRole=null
+                    ,ElectronicSignatureStart=false
+                    ,ElectronicSignaturePause=false
+                    ,ElectronicSignatureComplete=false
+                    ,ToBeCollectedDocument=false
+                    ,Sequence=20
+                    ,EstimatedDuration=null
+                    ,OperationStepCategoryId=null
+                    ,AsPlannedBopId="2f9bdf4d-a35f-4766-b00a-05507e87b48d"
+                }
+            };
+
+
+
+            var command = new WorkOrderOperationDTOCreateParameter
+            {
+                WorkOrderId = "e58f6585-09ba-4084-9939-5d228f9b8c69",
+                WorkOrderOperation = new WorkOrderOperationParameterDTO
+                {
+                    NId = "asd123",
+                    Priority = 0,
+                    Description = "asd123",
+                    Name = "asd123",
+                    OperationId = null,
+                    WorkOperationTypeId = "f3663e25-a42e-4f31-ae45-ab8eb0ba62e7",
+                    Sequence = 10,
+                    OperationStepCategoryId  = "b433bc9f-8c70-4d7c-b472-0fcfe08c7d7a",
+
+                    EstimatedDuration = null
+
+
+                }
+            };
+
+
+
+            var command = new WorkOrderDTOCreateParameter
+            {
+                NId = "gqwtt123456",
+                ProductionTypeNId = "FullQuantity",
+                FinalMaterialId = "0dbfd323-15ad-4aba-8835-c49700a6182a",
+                Plant = "Enterprise",
+                BatchId = "MB_SF_20210427_078",
+                ERPOrder = "gqwtt123456",
+                InitialQuantity = 3,
+                PlannedTargetQuantity = null,
+                Name = "er123",
+                Sequence = 1,
+
+            };
+
+
             var command = new WorkOrderDTOCreateFromProcessParameter
             {
                 NId = "qwtt123456",

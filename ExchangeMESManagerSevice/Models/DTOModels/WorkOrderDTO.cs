@@ -29,6 +29,20 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public object Error;
         public object SitUafExecutionDetail;
     }
+    public class WorkOOperationDependencyDTOResponse : IResponse<WorkOOperationDependencyDTO>
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string @ODataContext;
+        public List<WorkOOperationDependencyDTO> value { get; set; }
+        public bool Succeeded;
+        public string[] Ids;
+        public List<string> PropertyIds;
+        public object Error;
+        public object SitUafExecutionDetail;
+    }
+
+    
+
     public class WorkOrderOperationDTOResponse : IResponse<WorkOrderOperationDTO>
     {
         [JsonProperty(PropertyName = "@odata.context")]
@@ -72,13 +86,48 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string IdMaterialId;
         public string TemplateId;
     }
+
+
+    public class WorkOrderOperationDependenciesDTOCreateParameter
+    {
+        public List<WorkOOperationDependencyParameterDTO> Dependencies;
+    }
+
+    public class WorkOrderOperationDependenciesDTODeleteParameter
+    {
+        public WorkOOperationDependencyParameterDTO Dependency;
+    }
+    public class WorkOrderOperationDTODeleteParameter
+    {
+        public string Id;
+    }
+
+    public class WorkOrderOperationDTOUpdateParameter
+    {
+        public string Id;
+        public DateTimeOffset? EstimatedEndTime;
+        public DateTimeOffset? EstimatedStartTime;
+        public string Description;
+        public string Name;
+        public String RequiredCertificateNId;
+        public String RequiredInspectionRole;
+        public Nullable<bool> ElectronicSignatureStart;
+        public Nullable<bool> ElectronicSignaturePause;
+        public Nullable<bool> ElectronicSignatureComplete;
+        public Nullable<bool> ToBeCollectedDocument;
+        public String WorkOperationTypeId;
+        public String OperationStepCategoryId;
+        public TimeSpan? EstimatedDuration;
+
+    }
+
     /// <summary>
     /// Для записи одиночной операции
     /// </summary>
     public class WorkOrderOperationDTOCreateParameter
     {
         public string WorkOrderId;
-        public WorkOrderOperationDTO WorkOrderOperation;
+        public WorkOrderOperationParameterDTO WorkOrderOperation;
         public String DependencyType;
     }
     /// <summary>
@@ -87,26 +136,17 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     public class WorkOrderOperationsDTOCreateParameter
     {
         public string WorkOrderId;
-        public List<WorkOrderOperationDTO> WorkOrderOperation;
+        public List<WorkOrderOperationParameterDTO> WorkOrderOperation;
         public String DependencyType;
     }
 
     public class WorkOrderOperationFromProcessOperationDTOCreateParameter
     {
         public string WorkOrderId;
-        public WorkOrderOperationFromProcessOperationDTO WorkOrderOperation;
+        public WorkOrderOperationFromOperationParameterDTO WorkOrderOperation;
         public String DependencyType;
     }
 
-    public class WorkOrderDTOUpdateParameter
-    {
-        public string Id;
-        public string Name;
-        public string Description;
-        public string UoMNId;
-    }
-
-    
     public class WorkOrderDTOCreateParameter
     {
         public string NId;
@@ -140,7 +180,21 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string BatchId;
     }
 
-    
+    public class WorkOrderDTOUpdateParameter
+    {
+        public string NId;
+        public string Name;
+        public string ParentBatch;
+        public string ProductionTypeNId;
+        public string ERPOrder;
+        public string BatchId;
+        public double? PlannedTargetQuantity;
+        public DateTimeOffset? DueDate;
+        public string Id;
+        public DateTimeOffset? EstimatedEndTime;
+        public double? InitialQuantity;
+        public string FinalMaterialId;
+}
 
     public class WorkOrderDTODeleteParameter
     {
@@ -300,7 +354,6 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public bool? Preferred;
         public String WorkOrderOperation_Id;
     }
-
     public class WorkOrderOperationDTO
     {
         public string Id;
@@ -365,6 +418,85 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public List<ToBeConsumedMaterialDTO> ToBeConsumedMaterials;
         public ToBeUsedMachineDTO[] ToBeUsedMachines;
     }
+
+    public class WorkOrderOperationParameterDTO
+    {
+        public string NId;
+        public DateTimeOffset? EstimatedStartTime;
+        public DateTimeOffset? EstimatedEndTime;
+        public int Priority;
+        public string Description;
+        public string Name;
+        public String OperationId;
+        public String WorkOperationTypeId;
+        public String RequiredCertificateNId;
+        public String RequiredInspectionRole;
+        public Nullable<bool> ElectronicSignatureStart;
+        public Nullable<bool> ElectronicSignaturePause;
+        public Nullable<bool> ElectronicSignatureComplete;
+        public Nullable<bool> ToBeCollectedDocument;
+        public int Sequence;
+        public TimeSpan? EstimatedDuration;
+        public String OperationStepCategoryId;
+    }
+
+    public class WorkOOperationDependencyParameterDTO
+    {
+        public bool? PartialCompleted;
+        public String FromId;
+        public String ToId;
+        public String OperationDependencyType;
+    
+    }
+
+    public class WorkOrderOperationFromOperationParameterDTO
+    {
+        public string NId;
+        public DateTimeOffset? EstimatedStartTime;
+        public DateTimeOffset? EstimatedEndTime;
+        public int Priority;
+        public string Name;
+        public String OperationId;
+        public String WorkOperationTypeId;
+        public String RequiredCertificateNId;
+        public String RequiredInspectionRole;
+        public Nullable<bool> ElectronicSignatureStart;
+        public Nullable<bool> ElectronicSignaturePause;
+        public Nullable<bool> ElectronicSignatureComplete;
+        public Nullable<bool> ToBeCollectedDocument;
+        public int Sequence;
+        public TimeSpan? EstimatedDuration;
+        public String OperationStepCategoryId;
+        public String AsPlannedBopId;
+    }
+
+
+    public class WorkOOperationDependencyDTO
+    {
+        public string Id;
+        public string AId;
+        public bool IsFrozen;
+        public int ConcurrencyVersion;
+        public int IsDeleted;
+        public DateTime CreatedOn;
+        public DateTime LastUpdatedOn;
+        public string EntityType;
+        public string OptimisticVersion;
+        public String ConcurrencyToken;
+        public bool IsLocked;
+        public bool ToBeCleaned;
+        public String DependencyType;
+        public bool? WorkOOperationDependency;
+        public String FromWOO_Id;
+        public String ToWOO_Id;
+        public WorkOrderOperationDTO FromWOO;
+        public WorkOrderOperationDTO ToWOO;
+        public WorkOrderDTO WorkOrder;
+    }
+
+
+
+
     public class WorkOrderOperationFromProcessOperationDTO
     {
         public string NId;

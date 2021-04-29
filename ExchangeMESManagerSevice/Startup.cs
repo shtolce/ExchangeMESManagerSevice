@@ -39,9 +39,10 @@ namespace ExchangeMESManagerSevice
             services.AddDbContext<ExchangeSettingsContext>(options => options.UseSqlServer(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IHostedService,AuthorizationMesService>();
+            services.AddSingleton<SQLUoWService>();
             services.AddSingleton<MESUoWService>();
 
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -31,30 +31,29 @@ namespace ExchangeMESManagerSevice.Controllers
     {
         ExchangeSettingsContext db;
         private MESUoWService _MESUoWService;
-        public HomeController(ExchangeSettingsContext context , MESUoWService MESUoWService)
+        private SQLUoWService _SQLUoWService;
+        public HomeController(ExchangeSettingsContext context , MESUoWService MESUoWService, SQLUoWService SQLUoWService)
         {
             db = context;
             _MESUoWService = MESUoWService;
+            _SQLUoWService = SQLUoWService;
         }
         public IActionResult Index()
         {
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test = _MESUoWService.BufferRepository.GetAllBufferDefinitions();
 
-
-            var command = new BufferDefinitionDTOCreateParameter
+            MaterialDTO obj = new MaterialDTO
             {
-                IsValid=false
-                ,Quantity=new QuantityType {UoMNId="n/a",QuantityValue=12}
-                ,NId="qwe"
-                ,Name="qwe"
-                ,Version="qwe"
-                ,CapacityType="Quantity"
-
+                NId = "test1"
+                ,Description = "103"
+                ,Name = "test1"
+                ,UId = "test1"
+                ,LastUpdatedOn = DateTime.Now
             };
+            var test = _SQLUoWService.MateriaSQLRepository.Create(obj);
 
-            var res = _MESUoWService.BufferRepository.CreateBufferDefinition(command);
+
             return View(listOptionRes);
 
         }

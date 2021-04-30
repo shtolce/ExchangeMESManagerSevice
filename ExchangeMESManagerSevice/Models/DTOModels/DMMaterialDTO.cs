@@ -71,32 +71,32 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     /// </summary>
     public class DMMaterialDTO
     {
-        public string Id;
-        public string AId;
-        public Nullable<bool> IsFrozen;
-        public int ConcurrencyVersion;
-        public int IsDeleted;
-        public DateTime CreatedOn;
-        public DateTime LastUpdatedOn;
-        public string EntityType;//"Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.DMMaterial"
-        public string OptimisticVersion;
-        public String ConcurrencyToken;
-        public Nullable<bool> IsLocked;
-        public Nullable<bool> ToBeCleaned;
-        public Nullable<bool> SerialNumberProfile;
-        public Nullable<bool> FirstArticleInspection;
-        public Nullable<bool> IsPhantom;
-        public string LogisticClassNId;
-        public string CorrelationId;
-        public string EffectivityExpression;
-        public Nullable<bool> Traceable;
-        public string Material_Id;
-        public string MaterialClass_Id;
-        public string Supplier_Id;
-        public string FunctionalCode_Id;
-        public QuantityType Weight;
-        public QuantityType Volume;
-        public MaterialDTO Material;
-        public string[] SegregationTags;
+        public string Id { get; set; }
+        public string AId { get; set; }
+        public Nullable<bool> IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public int IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public Nullable<bool> IsLocked { get; set; }
+        public Nullable<bool> ToBeCleaned { get; set; }
+        public Nullable<bool> SerialNumberProfile { get; set; }
+        public Nullable<bool> FirstArticleInspection { get; set; }
+        public Nullable<bool> IsPhantom { get; set; }
+        public string LogisticClassNId { get; set; }
+        public string CorrelationId { get; set; }
+        public string EffectivityExpression { get; set; }
+        public Nullable<bool> Traceable { get; set; }
+        public string Material_Id { get; set; }
+        public string MaterialClass_Id { get; set; }
+        public string Supplier_Id { get; set; }
+        public string FunctionalCode_Id { get; set; }
+        public QuantityType Weight { get; set; }
+        public QuantityType Volume { get; set; }
+        public MaterialDTO Material { get; set; }
+        public string[] SegregationTags { get; set; }
     }
 }

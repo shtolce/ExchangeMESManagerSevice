@@ -11,21 +11,57 @@ namespace ExchangeMESManagerSevice.Services
     {
         private bool disposed = false;
         private MateriaSQLRepository _MateriaSQLRepository;
-
+        private DM_MateriaSQLRepository _DM_MateriaSQLRepository;
+        private EquipmentConfigurationSQLRepository _EquipmentConfigurationSQLRepository;
+        private EquipmentSQLRepository _EquipmentSQLRepository;
+        
+        public string ConnectionString = @"Data Source=DMKIM\MSSQLSERVER1;Integrated Security=True;Initial Catalog=PBD_Preactor;";
         public SQLUoWService()
         {
         }
-         
+
+        public EquipmentSQLRepository EquipmentSQLRepository
+        {
+            get
+            {
+                if (_EquipmentSQLRepository == null)
+                    _EquipmentSQLRepository = new EquipmentSQLRepository(ConnectionString);
+                return _EquipmentSQLRepository;
+            }
+        }
+
+        public EquipmentConfigurationSQLRepository EquipmentConfigurationSQLRepository
+        {
+            get
+            {
+                if (_EquipmentConfigurationSQLRepository == null)
+                    _EquipmentConfigurationSQLRepository = new EquipmentConfigurationSQLRepository(ConnectionString);
+                return _EquipmentConfigurationSQLRepository;
+            }
+        }
+
+
 
         public MateriaSQLRepository MateriaSQLRepository
         {
             get
             {
                 if (_MateriaSQLRepository == null)
-                    _MateriaSQLRepository = new MateriaSQLRepository();
+                    _MateriaSQLRepository = new MateriaSQLRepository(ConnectionString);
                 return _MateriaSQLRepository;
             }
         }
+
+        public DM_MateriaSQLRepository DM_MateriaSQLRepository
+        {
+            get
+            {
+                if (_DM_MateriaSQLRepository == null)
+                    _DM_MateriaSQLRepository = new DM_MateriaSQLRepository(ConnectionString);
+                return _DM_MateriaSQLRepository;
+            }
+        }
+
 
         public virtual void Dispose(bool disposing)
         {

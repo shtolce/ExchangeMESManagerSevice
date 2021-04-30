@@ -52,32 +52,32 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     /// </summary>
     public class EquipmentDTO
     {
-        public string Id;
-        public string AId;
-        public bool IsFrozen;
-        public int ConcurrencyVersion;
-        public int IsDeleted;
-        public DateTime CreatedOn;
-        public DateTime LastUpdatedOn;
-        public string EntityType;
-        public string OptimisticVersion;
-        public String ConcurrencyToken;
-        public bool IsLocked;
-        public bool ToBeCleaned;
-        public string Revision;
-        public String SourceRevision;
-        public bool IsCurrent;
-        public string UId;
-        public string NId;
-        public string Name;
-        public string Description;
-        public string UoMNId;
-        public String TemplateNId;
-        public String WorkCalendarNId;
-        public String LocationNId;
-        public String EquipmentConfigurationId;
-        public String LevelNId;
-        StatusType Status;
+        public string Id { get; set; }
+        public string AId { get; set; }
+        public bool IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public int IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn{ get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public bool IsLocked { get; set; }
+        public bool ToBeCleaned { get; set; }
+        public string Revision { get; set; }
+        public String SourceRevision { get; set; }
+        public bool IsCurrent { get; set; }
+        public string UId { get; set; }
+        public string NId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string UoMNId { get; set; }
+        public String TemplateNId { get; set; }
+        public String WorkCalendarNId { get; set; }
+        public String LocationNId { get; set; }
+        public String EquipmentConfigurationId { get; set; }
+        public String LevelNId { get; set; }
+        public StatusType Status { get; set; }
 
 
     }

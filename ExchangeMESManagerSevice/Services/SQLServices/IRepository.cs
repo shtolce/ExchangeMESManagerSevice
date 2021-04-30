@@ -10,7 +10,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         IEnumerable<T> GetAll();
         T GetByNId(string NId);
         int Create(T obj);
-        void Update(T obj);
-        void Delete(int id);
+        int Update(T obj);
+        int Delete(string NId);
     }
 }

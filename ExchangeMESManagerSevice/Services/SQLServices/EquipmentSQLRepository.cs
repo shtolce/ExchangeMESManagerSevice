@@ -8,32 +8,32 @@ using Dapper;
 using ExchangeMESManagerSevice.Models.DTOModels;
 namespace ExchangeMESManagerSevice.Services.SQLServices
 {
-    public class MateriaSQLRepository : IRepository<MaterialDTO>, IDisposable
+    public class EquipmentSQLRepository : IRepository<EquipmentDTO>, IDisposable
     {
         private string _connectionString;
 
-        public MateriaSQLRepository(string connectionString)
+        public EquipmentSQLRepository(string connectionString)
         {
             _connectionString = connectionString;
 
         }
 
-        public int Create(MaterialDTO obj)
+        public int Create(EquipmentDTO obj)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sql = SQLQueriesMaterial.CreateMaterialQuery;
+                var sql = SQLQueriesEquipment.CreateEquipmentQuery;
                 connection.Open();
                 var result = connection.Execute(sql,obj ,commandType: CommandType.Text);
                 return result;
             };
         }
 
-        public int Update(MaterialDTO obj)
+        public int Update(EquipmentDTO obj)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sql = SQLQueriesMaterial.UpdateMaterialQuery;
+                var sql = SQLQueriesEquipment.UpdateEquipmentQuery;
                 connection.Open();
                 var result = connection.Execute(sql, obj, commandType: CommandType.Text);
                 return result;
@@ -44,7 +44,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sql = SQLQueriesMaterial.DeleteMaterialQuery;
+                var sql = SQLQueriesEquipment.DeleteEquipmentQuery;
                 connection.Open();
                 var result = connection.Execute(sql, new { NId }, commandType: CommandType.Text);
                 return result;
@@ -52,24 +52,24 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
         }
 
-        public IEnumerable<MaterialDTO> GetAll()
+        public IEnumerable<EquipmentDTO> GetAll()
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sql = SQLQueriesMaterial.GetMaterialQuery;
+                var sql = SQLQueriesEquipment.GetEquipmentQuery;
                 connection.Open();
-                var list = connection.Query<MaterialDTO>(sql, commandType: CommandType.Text);
+                var list = connection.Query<EquipmentDTO>(sql, commandType: CommandType.Text);
                 return list;
             };
         }
 
-        public MaterialDTO GetByNId(string NId)
+        public EquipmentDTO GetByNId(string NId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sql = SQLQueriesMaterial.GetMaterialQueryByNId;
+                var sql = SQLQueriesEquipment.GetEquipmentQueryByNId;
                 connection.Open();
-                var list = connection.QueryFirst<MaterialDTO>(sql,new {NId}, commandType: CommandType.Text);
+                var list = connection.QueryFirst<EquipmentDTO>(sql,new {NId}, commandType: CommandType.Text);
                 return list;
             };
 

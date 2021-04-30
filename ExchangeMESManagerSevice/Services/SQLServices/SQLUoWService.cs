@@ -14,10 +14,44 @@ namespace ExchangeMESManagerSevice.Services
         private DM_MateriaSQLRepository _DM_MateriaSQLRepository;
         private EquipmentConfigurationSQLRepository _EquipmentConfigurationSQLRepository;
         private EquipmentSQLRepository _EquipmentSQLRepository;
+        private BufferSQLRepository _BufferSQLRepository;
+        private BufferDefinitionSQLRepository _BufferDefinitionSQLRepository;
+        private EquipmentGroupConfigurationSQLRepository _EquipmentGroupConfigurationSQLRepository;
         
         public string ConnectionString = @"Data Source=DMKIM\MSSQLSERVER1;Integrated Security=True;Initial Catalog=PBD_Preactor;";
         public SQLUoWService()
         {
+        }
+        public EquipmentGroupConfigurationSQLRepository EquipmentGroupConfigurationSQLRepository
+        {
+            get
+            {
+                if (_EquipmentGroupConfigurationSQLRepository == null)
+                    _EquipmentGroupConfigurationSQLRepository = new EquipmentGroupConfigurationSQLRepository(ConnectionString);
+                return _EquipmentGroupConfigurationSQLRepository;
+            }
+        }
+
+
+        public BufferDefinitionSQLRepository BufferDefinitionSQLRepository
+        {
+            get
+            {
+                if (_BufferDefinitionSQLRepository == null)
+                    _BufferDefinitionSQLRepository = new BufferDefinitionSQLRepository(ConnectionString);
+                return _BufferDefinitionSQLRepository;
+            }
+        }
+
+
+        public BufferSQLRepository BufferSQLRepository
+        {
+            get
+            {
+                if (_BufferSQLRepository == null)
+                    _BufferSQLRepository = new BufferSQLRepository(ConnectionString);
+                return _BufferSQLRepository;
+            }
         }
 
         public EquipmentSQLRepository EquipmentSQLRepository

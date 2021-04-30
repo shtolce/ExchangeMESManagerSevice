@@ -339,6 +339,152 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         #endregion
 
     }
+    public static class SQLQueriesEquipmentGroupConfiguration
+    {
+
+        #region GetEquipmentGroupConfigurationQuery
+        public static string GetEquipmentGroupConfigurationQuery = $@"
+            SELECT 
+	               [Name] as NId
+	              ,[Name] as Name
+                  ,[Resource] as EquipmentConfigurationNId
+                  ,[BD] as Description
+                  ,[UID] as AId
+              FROM [RealData].[ResourceGroupData]
+        ";
+        #endregion
+
+        #region GetEquipmentGroupConfigurationQueryByNId
+        public static string GetEquipmentGroupConfigurationQueryByNId = $@"Select       
+        SELECT 
+	            [Name] as NId
+	            ,[Name] as Name
+                ,[Resource] as EquipmentConfigurationNId
+                ,[BD] as Description
+                ,[UID] as AId
+            FROM [RealData].[ResourceGroupData]
+          Where NId = @NId";
+        #endregion
+
+        #region CreateEquipmentGroupConfigurationQuery
+        public static string CreateEquipmentGroupConfigurationQuery = $@"
+          insert into [RealData].[ResourceGroupData] (
+           [Name]
+          ,[Resource]
+          ,[BD]
+          ,[NameCalendar]
+          ,[UID]
+          ,[MaxLoad]
+	      )
+	      Values
+	      (
+	        @Name
+	        ,@EquipmentConfigurationNId
+	        ,@Description
+	        ,EquipmentConfigurationName
+            ,@AID
+	        ,0
+	      )
+         ";
+        #endregion
+
+        #region UpdateEquipmentGroupConfigurationQuery
+        public static string UpdateEquipmentGroupConfigurationQuery = $@"
+            Update [RealData].[ResourceGroupData] 
+            SET
+            [Name] = @Name
+            ,[Resource] = @EquipmentConfigurationNId
+            ,[BD] = @Description
+            ,[NameCalendar] =EquipmentConfigurationName
+            ,[UID] = @AID
+            ,[MaxLoad] = 0
+       ";
+        #endregion
+
+        #region DeleteEquipmentGroupConfigurationQuery
+        public static string DeleteEquipmentGroupConfigurationQuery = $@"
+        Delete from [RealData].[ResourceGroupData]
+	       where
+		   [Name]= @NId
+        ";
+        #endregion
+
+    }
+    public static class SQLQueriesBuffer
+    {
+
+        #region GetBufferQuery
+        public static string GetBufferQuery = $@"
+          SELECT 
+	           [Name] as Name
+	          ,[Name] as NId
+	          ,[Name] as EquipmentNId
+	          ,[Name] as EquipmentName
+              ,[BD] as Description
+              ,[UID] as AID
+	          ,GetDate() as CreatedOn
+	          ,GetDate() as LastUpdatedOn
+	          ,N'Siemens.SimaticIT.MasterData.EQU_MS.MSModel.DataModel.Buffer' as EntityType
+          FROM [RealData].[ResourceData]       ";
+        #endregion
+
+        #region GetBufferQueryByNId
+        public static string GetBufferQueryByNId = $@"Select       
+          SELECT 
+	           [Name] as Name
+	          ,[Name] as NId
+	          ,[Name] as EquipmentNId
+	          ,[Name] as EquipmentName
+              ,[BD] as Description
+              ,[UID] as AID
+	          ,GetDate() as CreatedOn
+	          ,GetDate() as LastUpdatedOn
+	          ,N'Siemens.SimaticIT.MasterData.EQU_MS.MSModel.DataModel.Buffer' as EntityType
+          FROM [RealData].[ResourceData]
+          Where NId = @NId";
+        #endregion
+
+        #region CreateBufferQuery
+        public static string CreateBufferQuery = $@"
+          insert into [RealData].[ResourceData] (
+           [Name]
+          ,[BD]
+          ,[NameCalendar]
+          ,[UID]
+          ,[MaxLoad]
+	      )
+	      Values
+	      (
+  	         @Name
+	        ,@Description
+	        ,@Name
+            ,@AID
+	        ,0
+	      )
+         ";
+        #endregion
+
+        #region UpdateBufferQuery
+        public static string UpdateBufferQuery = $@"
+            Update [RealData].[ResourceData] 
+            SET
+            [Name] = @Name
+            ,[BD] = @Description
+            ,[NameCalendar] =@Name
+            ,[UID] = @AID
+            ,[MaxLoad] = 0
+       ";
+        #endregion
+
+        #region DeleteBufferQuery
+        public static string DeleteBufferQuery = $@"
+        Delete from [RealData].[ResourceData]
+	       where
+		   [Name]= @NId
+        ";
+        #endregion
+
+    }
 
 
 

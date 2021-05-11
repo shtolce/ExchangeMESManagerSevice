@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
 namespace ExchangeMESManagerSevice.Models.DTOModels
 {
     public class EquipmentConfigurationDTOResponse:IResponse<EquipmentConfigurationDTO>
@@ -12,7 +11,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string @ODataContext;
         [JsonProperty(PropertyName = "@odata.count")]
         public int ODataCount;
-        public List<EquipmentConfigurationDTO> value { get; set; };
+        public List<EquipmentConfigurationDTO> value { get; set; }
         public bool Succeeded;
         public string EquipmentConfigurationId;
         public List<string> PropertyIds;
@@ -25,7 +24,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string @ODataContext;
         [JsonProperty(PropertyName = "@odata.count")]
         public int ODataCount;
-        public List<EquipmentGroupConfigurationDTO> value { get; set; };
+        public List<EquipmentGroupConfigurationDTO> value { get; set; }
         public bool Succeeded;
         public string EquipmentConfigurationId;
         public List<string> PropertyIds;
@@ -81,7 +80,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string[] EquipmentConfigurationIds;
     }
 
-    public class EquipmentGroupConfigurationDTO
+    public class EquipmentGroupConfigurationDTO:ICloneable
     {
         public string Id { get; set; }
         public string AId { get; set; }
@@ -100,7 +99,36 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Description { get; set; }
         public String Category { get; set; }
         public List<EquipmentConfigurationDTO> EquipmentConfigurations;
+        //Два поля нужны для автомаппинга 
+        public String EquipmentConfigurationNId { get; set; }
+        public String EquipmentConfigurationName { get; set; }
+        public String EquipmentConfigurationAId { get; set; }
 
+
+        public object Clone()
+        {
+            return new EquipmentGroupConfigurationDTO
+            {
+                 Id = this.Id
+                ,AId = this.AId
+                ,IsFrozen = this.IsFrozen
+                ,ConcurrencyVersion = this.ConcurrencyVersion
+                ,IsDeleted = this.IsDeleted
+                ,CreatedOn = this.CreatedOn
+                ,LastUpdatedOn = this.LastUpdatedOn
+                ,EntityType = this.EntityType
+                ,OptimisticVersion = this.OptimisticVersion
+                ,ConcurrencyToken = this.ConcurrencyToken
+                ,IsLocked = this.IsLocked
+                ,ToBeCleaned = this.ToBeCleaned
+                ,NId = this.NId
+                ,Name = this.Name
+                ,Description = this.Description
+                ,Category = this.Category
+                ,EquipmentConfigurations = this.EquipmentConfigurations.GetRange(0, this.EquipmentConfigurations.Count)
+
+            };
+        }
     }
 
 

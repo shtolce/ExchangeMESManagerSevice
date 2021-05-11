@@ -58,10 +58,11 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
        public static string UpdateMaterialQuery = $@"
        Update [RealData].[ItemData]
 	       set
-		   [PartNo]= @NId
-          ,[Product] = @Name
+          [Product] = @Name
           ,[UID] = @UId
           ,[BD] = @Description
+           WHERE [PartNo]= @NId
+
        ";
         #endregion
 
@@ -72,16 +73,6 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 		   [PartNo]= @NId
         ";
         #endregion
-
-
-
-
-
-
-
-
-
-
 
 
     }
@@ -138,10 +129,10 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string UpdateDMMaterialQuery = $@"
        Update [RealData].[ItemData]
 	       set
-		   [PartNo]= @NId
-          ,[Product] = @Name
+          [Product] = @Name
           ,[UID] = @UId
           ,[BD] = @Description
+          WHERE [PartNo]= @NId
        ";
         #endregion
 
@@ -152,16 +143,6 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 		   [PartNo]= @NId
         ";
         #endregion
-
-
-
-
-
-
-
-
-
-
 
 
     }
@@ -228,13 +209,13 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string UpdateEquipmentConfigurationQuery = $@"
             Update [RealData].[ResourceData] 
             SET
-            [Name] = @Name
-            ,[FiniteModeBehaviour] = N'Нет'
+            [FiniteModeBehaviour] = N'Нет'
             ,[InfiniteModeBehaviour] = null
             ,[BD] = @Description
             ,[NameCalendar] =''
             ,[UID] = @AID
             ,[MaxLoad] = 0
+            WHERE [Name] = @Name
        ";
         #endregion
 
@@ -245,16 +226,6 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 		   [Name]= @NId
         ";
         #endregion
-
-
-
-
-
-
-
-
-
-
 
 
     }
@@ -320,13 +291,13 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string UpdateEquipmentQuery = $@"
             Update [RealData].[ResourceData] 
             SET
-            [Name] = @Name
-            ,[FiniteModeBehaviour] = N'Нет'
+            [FiniteModeBehaviour] = N'Нет'
             ,[InfiniteModeBehaviour] = null
             ,[BD] = @Description
             ,[NameCalendar] =''
             ,[UID] = @AID
             ,[MaxLoad] = 0
+            WHERE [Name] = @Name
        ";
         #endregion
 
@@ -368,36 +339,97 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
         #region CreateEquipmentGroupConfigurationQuery
         public static string CreateEquipmentGroupConfigurationQuery = $@"
-          insert into [RealData].[ResourceGroupData] (
-           [Name]
-          ,[Resource]
-          ,[BD]
-          ,[NameCalendar]
-          ,[UID]
-          ,[MaxLoad]
-	      )
-	      Values
-	      (
-	        @Name
-	        ,@EquipmentConfigurationNId
-	        ,@Description
-	        ,EquipmentConfigurationName
-            ,@AID
-	        ,0
-	      )
-         ";
+          IF NOT EXISTS(select 1 from RealData.Connect_ResourceGroup where ResourceGroup = @Name)
+          BEGIN
+               insert into [RealData].[Connect_ResourceGroup] (
+               [ResourceGroup]
+              ,[UID]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @Name
+                ,@AId
+	            ,@Description
+	          )
+         END;
+
+          IF NOT EXISTS(select 1 from [RealData].[ResourceData] where Name = @EquipmentConfigurationNId)
+          BEGIN
+               insert into [RealData].[ResourceData] (
+               [Name]
+              ,[UID]
+              ,[BD]
+              ,[NameCalendar]
+	          )
+	          Values
+	          (
+ 	             @EquipmentConfigurationNId
+                ,@EquipmentConfigurationAId
+	            ,@Description
+ 	            ,@EquipmentConfigurationNId
+	          )
+         END;
+
+
+        insert into [RealData].[ResourceGroupData] (
+        [Name]
+        ,[Resource]
+        ,[BD]
+        ,[NameCalendar]
+        ,[UID]
+	    )
+	    Values
+	    (
+	    @Name
+	    ,@EquipmentConfigurationNId
+	    ,@Description
+	    ,@EquipmentConfigurationName
+        ,@AId
+	    )
+        ";
         #endregion
 
         #region UpdateEquipmentGroupConfigurationQuery
         public static string UpdateEquipmentGroupConfigurationQuery = $@"
-            Update [RealData].[ResourceGroupData] 
+          IF NOT EXISTS(select 1 from RealData.Connect_ResourceGroup where ResourceGroup = @Name)
+          BEGIN
+               insert into [RealData].[Connect_ResourceGroup] (
+               [ResourceGroup]
+              ,[UID]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @Name
+                ,@AId
+	            ,@Description
+	          )
+         END;
+
+          IF NOT EXISTS(select 1 from [RealData].[ResourceData] where Name = @EquipmentConfigurationNId)
+          BEGIN
+               insert into [RealData].[ResourceData] (
+               [Name]
+              ,[UID]
+              ,[BD]
+              ,[NameCalendar]
+	          )
+	          Values
+	          (
+ 	             @EquipmentConfigurationNId
+                ,@EquipmentConfigurationAId
+	            ,@Description
+ 	            ,@EquipmentConfigurationNId
+	          )
+         END;
+
+        Update [RealData].[ResourceGroupData] 
             SET
-            [Name] = @Name
-            ,[Resource] = @EquipmentConfigurationNId
-            ,[BD] = @Description
-            ,[NameCalendar] =EquipmentConfigurationName
+            [BD] = @Description
+            ,[NameCalendar] =@EquipmentConfigurationName
             ,[UID] = @AID
-            ,[MaxLoad] = 0
+        WHERE Name = @Name and [Resource] = @EquipmentConfigurationNId
        ";
         #endregion
 
@@ -468,11 +500,11 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string UpdateBufferQuery = $@"
             Update [RealData].[ResourceData] 
             SET
-            [Name] = @Name
-            ,[BD] = @Description
+             [BD] = @Description
             ,[NameCalendar] =@Name
             ,[UID] = @AID
             ,[MaxLoad] = 0
+            WHERE [Name] = @Name
        ";
         #endregion
 

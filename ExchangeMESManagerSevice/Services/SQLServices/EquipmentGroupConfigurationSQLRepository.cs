@@ -17,15 +17,43 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
             _connectionString = connectionString;
 
         }
+        private List<EquipmentGroupConfigurationDTO> ExpandRecords(EquipmentGroupConfigurationDTO obj)
+        {
+            List<EquipmentGroupConfigurationDTO> resList = new List<EquipmentGroupConfigurationDTO>();
+            foreach (EquipmentConfigurationDTO item in obj.EquipmentConfigurations)
+            {
+                var tempObj = obj.Clone() as EquipmentGroupConfigurationDTO;
+                tempObj.EquipmentConfigurationNId = item.NId;
+                tempObj.EquipmentConfigurationName = item.Name;
+                tempObj.EquipmentConfigurationAId = item.AId;
+                resList.Add(tempObj);
+            }
+            return resList;
+        }
+
+
+
 
         public int Create(EquipmentGroupConfigurationDTO obj)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
+
                 var sql = SQLQueriesEquipmentGroupConfiguration.CreateEquipmentGroupConfigurationQuery;
                 connection.Open();
-                var result = connection.Execute(sql,obj ,commandType: CommandType.Text);
-                return result;
+                var list = ExpandRecords(obj);
+                foreach (var item in list)
+                {
+                    try
+                    {
+                        var result = connection.Execute(sql, item, commandType: CommandType.Text);
+                    }
+                    catch(Exception ex)
+                    {
+                        return 0;
+                    }
+                }
+                return 1;
             };
         }
 
@@ -35,8 +63,19 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
             {
                 var sql = SQLQueriesEquipmentGroupConfiguration.UpdateEquipmentGroupConfigurationQuery;
                 connection.Open();
-                var result = connection.Execute(sql, obj, commandType: CommandType.Text);
-                return result;
+                var list = ExpandRecords(obj);
+                foreach (var item in list)
+                {
+                    try
+                    {
+                        var result = connection.Execute(sql, item, commandType: CommandType.Text);
+                    }
+                    catch (Exception ex)
+                    {
+                        return 0;
+                    }
+                }
+                return 1;
             };
         }
 

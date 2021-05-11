@@ -43,15 +43,31 @@ namespace ExchangeMESManagerSevice.Controllers
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
 
-            MaterialDTO obj = new MaterialDTO
+            var obj = new EquipmentGroupConfigurationDTO()
             {
-                NId = "test1"
-                ,Description = "103"
-                ,Name = "test1"
-                ,UId = "test1"
-                ,LastUpdatedOn = DateTime.Now
+             Name = "wedwe"
+            ,Description = "103"
+            ,AId = "dwedwe"
+            ,EquipmentConfigurations = new List<EquipmentConfigurationDTO>
+            {
+                new EquipmentConfigurationDTO
+                {
+                    AId = "123"
+                   ,Name = "123"
+                   ,NId = "123"
+                   ,Description = "103"
+                },
+                new EquipmentConfigurationDTO
+                {
+                    AId = "1234"
+                   ,Name = "1234"
+                   ,NId = "1234"
+                  
+                   ,Description = "103"
+                },
+            }
             };
-            var test = _SQLUoWService.MateriaSQLRepository.Create(obj);
+            var test = _SQLUoWService.EquipmentGroupConfigurationSQLRepository.Update(obj);
 
 
             return View(listOptionRes);

@@ -8,11 +8,11 @@ using Dapper;
 using ExchangeMESManagerSevice.Models.DTOModels;
 namespace ExchangeMESManagerSevice.Services.SQLServices
 {
-    public class MateriaSQLRepository : IRepository<MaterialDTO>, IDisposable
+    public class MaterialSQLRepository : IRepository<MaterialDTO>, IDisposable
     {
         private string _connectionString;
 
-        public MateriaSQLRepository(string connectionString)
+        public MaterialSQLRepository(string connectionString)
         {
             _connectionString = connectionString;
 

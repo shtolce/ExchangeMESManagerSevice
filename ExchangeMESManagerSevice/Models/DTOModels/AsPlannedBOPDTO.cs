@@ -176,23 +176,25 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class ProcessesDTO
     {
-        public string Id;
-        public string Name;
-        public string Revision;
-        public string NId;
-        public string UId;
-        public string Plant;
-        public QuantityType Quantity;
-        public QuantityType Volume;
-        public MaterialDTO Material;
-        public DMMaterialDTO FinalMaterialId;
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Revision{ get; set; }
+        public string NId { get; set; }
+        public string UId { get; set; }
+        public string Plant { get; set; }
+        public QuantityType Quantity{ get; set; }
+        public QuantityType Volume { get; set; }
+        public MaterialDTO Material { get; set; }
+        public DMMaterialDTO FinalMaterialId { get; set; }
+        public string FinalMaterialName { get; set; }
+        public string FinalMaterialNId { get; set; }
 
     }
 
 
-/// <summary>
-/// Класс AsPlannedBOPDTO MES. Является базовым. 
-/// </summary>
+    /// <summary>
+    /// Класс AsPlannedBOPDTO MES. Является базовым. 
+    /// </summary>
     public class AsPlannedBOPDTO
     {
         public string Id;
@@ -242,42 +244,42 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     }
 
-
-
     public class OperationDTO
     {
-        public string Id;
-        public Nullable<bool> IsFrozen;
-        public int ConcurrencyVersion;
-        public int IsDeleted;
-        public DateTime CreatedOn;
-        public DateTime LastUpdatedOn;
-        public string EntityType;
-        public string OptimisticVersion;
-        public String ConcurrencyToken;
-        public Nullable<bool> IsLocked;
-        public Nullable<bool> ToBeCleaned;
-        public string Name;
-        public string Description;
-        public Nullable<bool> Optional;
-        public int? Sequence;
-        public String CorrelationId;
-        public string NId;
-        public string Revision;
-        public string UId;
-        public Nullable<bool> ElectronicSignatureStart;
-        public Nullable<bool> ElectronicSignaturePause;
-        public Nullable<bool> ElectronicSignatureComplete;
-        public String RequiredInspectionRole;
-        public String RequiredCertificateNId;
-        public Nullable<bool> ToBeCollectedDocument;
-        public String EffectivityExpression;
-        public Int64? EstimatedDuration_Ticks;
-        public String EstimatedDuration;
-        public String WorkOperationId_Id;
-        public String OperationStepCategoryId_Id;
-        public WorkOperationTypeDTO WorkOperationId;
-        public OperationStepCategoryDTO OperationStepCategoryId;
+        public string Id { get; set; }
+        public Nullable<bool> IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public int IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public Nullable<bool> IsLocked { get; set; }
+        public Nullable<bool> ToBeCleaned { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public Nullable<bool> Optional { get; set; }
+        public int? Sequence { get; set; }
+        public String CorrelationId { get; set; }
+        public string NId { get; set; }
+        public string Revision { get; set; }
+        public string UId { get; set; }
+        public Nullable<bool> ElectronicSignatureStart { get; set; }
+        public Nullable<bool> ElectronicSignaturePause { get; set; }
+        public Nullable<bool> ElectronicSignatureComplete { get; set; }
+        public String RequiredInspectionRole { get; set; }
+        public String RequiredCertificateNId { get; set; }
+        public Nullable<bool> ToBeCollectedDocument { get; set; }
+        public String EffectivityExpression { get; set; }
+        public Int64? EstimatedDuration_Ticks { get; set; }
+        public String EstimatedDuration { get; set; }
+        public String WorkOperationId_Id { get; set; }
+        public String OperationStepCategoryId_Id { get; set; }
+        public WorkOperationTypeDTO WorkOperationId { get; set; }
+        public OperationStepCategoryDTO OperationStepCategoryId { get; set; }
+        //для совместимости с скл
+        public String ResourceGroup { get; set; }
 
     }
 

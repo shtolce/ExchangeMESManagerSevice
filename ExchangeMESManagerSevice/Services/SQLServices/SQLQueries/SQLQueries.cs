@@ -517,7 +517,409 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         #endregion
 
     }
+    /*
+    public static class SQLQueriesAsPlannedBOP
+    {
+        #region GetAsPlannedBOPQuery
+        public static string GetAsPlannedBOPQuery = $@"Select       
+        [PartNo] as NId
+       ,[Product] as Name
+       ,[UID] as UId
+       ,[Area]
+       ,[BD] as Description
+	   ,N'n/a' as UoMNId
+	   ,N'Default' as TemplateNId
+	   ,N'Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.AsPlannedBOP' as EntityType
+	   ,[PartNo] as UId
+	   FROM [RealData].[ItemData]";
+        #endregion
 
+        #region GetAsPlannedBOPQueryByNId
+        public static string GetAsPlannedBOPQueryByNId = $@"Select       
+        [PartNo] as NId
+       ,[Product] as Name
+       ,[UID] as UId
+       ,[Area]
+       ,[BD] as Description
+	   ,N'n/a' as UoMNId
+	   ,N'Default' as TemplateNId
+	   ,N'Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.AsPlannedBOP' as EntityType
+	   ,[PartNo] as UId
+	   FROM [RealData].[ItemData]
+       Where PartNo = @NId";
+        #endregion
+
+        #region CreateAsPlannedBOPQuery
+        public static string CreateAsPlannedBOPQuery = $@"
+       Insert into [RealData].[ItemData]
+       (
+	       [PartNo]
+          ,[Product]
+          ,[UID]
+          ,[BD]
+	   )
+	   Values
+       (
+            @NId
+          , @Name
+          , @UId
+          , @Description
+       )";
+        #endregion
+
+        #region UpdateAsPlannedBOPQuery
+        public static string UpdateAsPlannedBOPQuery = $@"
+       Update [RealData].[ItemData]
+	       set
+          [Product] = @Name
+          ,[UID] = @UId
+          ,[BD] = @Description
+           WHERE [PartNo]= @NId
+
+       ";
+        #endregion
+
+        #region DeleteAsPlannedBOPQuery
+        public static string DeleteAsPlannedBOPQuery = $@"
+        Delete from [RealData].[ItemData]
+	       where
+		   [PartNo]= @NId
+        ";
+        #endregion
+
+
+    }
+    */
+    public static class SQLQueriesOperation
+    {
+        #region GetOperationQuery
+        public static string GetOperationQuery = $@"
+         SELECT [PartNo] as CorrelationId
+              ,[OperationName] as Name
+              ,[OperationName] as NId
+              ,[OperationNo] as Sequence
+              ,[ResourceGroup]
+              ,[RequiredResource]
+              ,[SetupTime]
+              ,[ProcessTimeType]
+              ,[RunTime]*10000000 as EstimatedDuration_Ticks
+              ,[BD] as Description
+              ,[UID] as UId
+              ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Operation' as EntityType
+              ,ResourceGroup 
+          FROM [RealData].[RoutingData]
+        ";
+        #endregion
+
+        #region GetOperationQueryByNId
+        public static string GetOperationQueryByNId = $@"Select       
+         SELECT [PartNo] as CorrelationId
+              ,[OperationName] as Name
+              ,[OperationName] as NId
+              ,[OperationNo] as Sequence
+              ,[ResourceGroup]
+              ,[RequiredResource]
+              ,[SetupTime]
+              ,[ProcessTimeType]
+              ,[RunTime]*10000000 as EstimatedDuration_Ticks
+              ,[BD] as Description
+              ,[UID] as UId
+              ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Operation' as EntityType
+              ,ResourceGroup 
+          FROM [RealData].[RoutingData]
+       Where PartNo = @NId";
+        #endregion
+
+        #region CreateOperationQuery
+        public static string CreateOperationQuery = $@"
+
+          IF NOT EXISTS(select 1 from RealData.[ItemData] where PartNo = @CorrelationId)
+          BEGIN
+               insert into [RealData].[ItemData] (
+               [PartNo]
+              ,[Product]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @CorrelationId
+ 	             ,@CorrelationId
+	            ,@Description
+	          )
+         END;
+
+          IF NOT EXISTS(select 1 from RealData.Connect_ResourceGroup where ResourceGroup = @ResourceGroup)
+          BEGIN
+               insert into [RealData].[Connect_ResourceGroup] (
+               [ResourceGroup]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @ResourceGroup
+	            ,@Description
+	          )
+         END;
+
+
+
+        Insert into [RealData].[RoutingData]
+       (
+               [PartNo]
+              ,[OperationName]
+              ,[OperationNo]
+              ,[RunTime]
+              ,[BD]
+              ,[UID]
+              ,[ResourceGroup]
+	   )
+	   Values
+       (
+           @CorrelationId
+          ,@Name
+          ,@Sequence
+          ,@EstimatedDuration_Ticks/10000000
+          ,@Description
+          ,@UId
+          ,@ResourceGroup
+       )";
+        #endregion
+
+        #region UpdateOperationQuery
+        public static string UpdateOperationQuery = $@"
+
+          IF NOT EXISTS(select 1 from RealData.[ItemData] where PartNo = @CorrelationId)
+          BEGIN
+               insert into [RealData].[ItemData] (
+               [PartNo]
+              ,[Product]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @CorrelationId
+ 	             ,@CorrelationId
+	            ,@Description
+	          )
+         END;
+
+          IF NOT EXISTS(select 1 from RealData.Connect_ResourceGroup where ResourceGroup = @ResourceGroup)
+          BEGIN
+               insert into [RealData].[Connect_ResourceGroup] (
+               [ResourceGroup]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @ResourceGroup
+	            ,@Description
+	          )
+         END;
+
+
+        Update [RealData].[RoutingData]
+	       set
+               [OperationName] = @Name
+              ,[OperationNo] = @Sequence
+              ,[RunTime]  = @EstimatedDuration_Ticks/10000000
+              ,[BD] = @Description
+              ,[UID] = @UId
+              ,ResourceGroup = @ResourceGroup
+           WHERE [PartNo]= @CorrelationId
+
+       ";
+        #endregion
+
+        #region DeleteOperationQuery
+        public static string DeleteOperationQuery = $@"
+        Delete from [RealData].[RoutingData]
+	       where
+		   [PartNo]= @NId
+        ";
+        #endregion
+
+
+    }
+
+    public static class SQLQueriesProcesses
+    {
+        #region GetProcessesQuery
+        public static string GetProcessesQuery = $@"
+              SELECT distinct
+               r.[PartNo] as FinalMaterialId_Material_NId
+              ,r.[PartNo] as Material_NId
+              ,N'Процесс для детали' + r.[PartNo] as Name
+              ,r.[PartNo] as Revision
+              ,r.[PartNo] as NId
+              ,[ResourceGroup] as Plant
+			  ,i.Product as FinalMaterialName
+              ,r.[PartNo] as FinalMaterialNId
+              ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Processes' as EntityType
+          FROM [RealData].[RoutingData] r
+		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo
+        ";
+        #endregion
+
+        #region GetProcessesQueryByNId
+        public static string GetProcessesQueryByNId = $@"       
+              SELECT distinct
+               r.[PartNo] as FinalMaterialId_Material_NId
+              ,r.[PartNo] as Material_NId
+              ,N'Процесс для детали' + r.[PartNo] as Name
+              ,r.[PartNo] as Revision
+              ,r.[PartNo] as NId
+              ,[ResourceGroup] as Plant
+			  ,i.Product as FinalMaterialName
+              ,r.[PartNo] as FinalMaterialNId
+              ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Processes' as EntityType
+          FROM [RealData].[RoutingData] r
+		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo       Where r.PartNo = @NId";
+        #endregion
+
+        #region CreateProcessesQuery
+        public static string CreateProcessesQuery = $@"
+
+          IF NOT EXISTS(select 1 from RealData.[ItemData] where PartNo = @FinalMaterialNId)
+          BEGIN
+               insert into [RealData].[ItemData] (
+               [PartNo]
+              ,[Product]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @FinalMaterialNId
+ 	             ,@FinalMaterialName
+	            ,@Description
+	          )
+         END;
+
+
+       ";
+        #endregion
+
+        #region UpdateProcessesQuery
+        public static string UpdateProcessesQuery = $@"
+
+          IF NOT EXISTS(select 1 from RealData.[ItemData] where PartNo = @CorrelationId)
+          BEGIN
+               insert into [RealData].[ItemData] (
+               [PartNo]
+              ,[Product]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @FinalMaterialNId
+ 	             ,@FinalMaterialName
+	            ,@Description
+	          )
+         END;
+
+       ";
+        #endregion
+
+        #region DeleteProcessesQuery
+        public static string DeleteProcessesQuery = $@"
+        Delete from [RealData].[ItemData]
+	       where
+		   [PartNo]= @NId
+        ";
+        #endregion
+
+
+    }
+
+    public static class SQLQueriesProcessToOperationLink
+    {
+        #region GetProcessToOperationLinkQuery
+        public static string GetProcessToOperationLinkQuery = $@"
+              SELECT distinct
+               r.[PartNo] as FinalMaterialId_Material_NId
+              ,r.[PartNo] as Material_NId
+              ,N'Процесс для детали' + r.[PartNo] as Name
+              ,r.[PartNo] as Revision
+              ,r.[PartNo] as NId
+              ,[ResourceGroup] as Plant
+			  ,i.Product as FinalMaterialName
+              ,r.[PartNo] as FinalMaterialNId
+              ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.ProcessToOperationLink' as EntityType
+          FROM [RealData].[RoutingData] r
+		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo
+        ";
+        #endregion
+
+        #region GetProcessToOperationLinkQueryByNId
+        public static string GetProcessToOperationLinkQueryByNId = $@"       
+              SELECT distinct
+               r.[PartNo] as FinalMaterialId_Material_NId
+              ,r.[PartNo] as Material_NId
+              ,N'Процесс для детали' + r.[PartNo] as Name
+              ,r.[PartNo] as Revision
+              ,r.[PartNo] as NId
+              ,[ResourceGroup] as Plant
+			  ,i.Product as FinalMaterialName
+              ,r.[PartNo] as FinalMaterialNId
+              ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.ProcessToOperationLink' as EntityType
+          FROM [RealData].[RoutingData] r
+		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo       Where r.PartNo = @NId";
+        #endregion
+
+        #region CreateProcessToOperationLinkQuery
+        public static string CreateProcessToOperationLinkQuery = $@"
+
+          IF NOT EXISTS(select 1 from RealData.[ItemData] where PartNo = @FinalMaterialNId)
+          BEGIN
+               insert into [RealData].[ItemData] (
+               [PartNo]
+              ,[Product]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @FinalMaterialNId
+ 	             ,@FinalMaterialName
+	            ,@Description
+	          )
+         END;
+
+
+       ";
+        #endregion
+
+        #region UpdateProcessToOperationLinkQuery
+        public static string UpdateProcessToOperationLinkQuery = $@"
+
+          IF NOT EXISTS(select 1 from RealData.[ItemData] where PartNo = @CorrelationId)
+          BEGIN
+               insert into [RealData].[ItemData] (
+               [PartNo]
+              ,[Product]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @FinalMaterialNId
+ 	             ,@FinalMaterialName
+	            ,@Description
+	          )
+         END;
+
+       ";
+        #endregion
+
+        #region DeleteProcessToOperationLinkQuery
+        public static string DeleteProcessToOperationLinkQuery = $@"
+        Delete from [RealData].[ItemData]
+	       where
+		   [PartNo]= @NId
+        ";
+        #endregion
+
+
+    }
+
+    
 
 
 }

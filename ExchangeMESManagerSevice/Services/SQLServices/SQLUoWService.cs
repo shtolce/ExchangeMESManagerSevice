@@ -10,18 +10,64 @@ namespace ExchangeMESManagerSevice.Services
     public class SQLUoWService : IDisposable
     {
         private bool disposed = false;
-        private MateriaSQLRepository _MateriaSQLRepository;
+        private MaterialSQLRepository _MateriaSQLRepository;
         private DM_MateriaSQLRepository _DM_MateriaSQLRepository;
         private EquipmentConfigurationSQLRepository _EquipmentConfigurationSQLRepository;
         private EquipmentSQLRepository _EquipmentSQLRepository;
         private BufferSQLRepository _BufferSQLRepository;
         private BufferDefinitionSQLRepository _BufferDefinitionSQLRepository;
         private EquipmentGroupConfigurationSQLRepository _EquipmentGroupConfigurationSQLRepository;
+        private OperationSQLRepository _OperationSQLRepository;
+        private AsPlannedBOPSQLRepository _AsPlannedBOPSQLRepository;
+        private ProcessesSQLRepository _ProcessesSQLRepository;
+        private ProcessToOperationLinkSQLRepository _ProcessToOperationLinkSQLRepository;
         
         public string ConnectionString = @"Data Source=DMKIM\MSSQLSERVER1;Integrated Security=True;Initial Catalog=PBD_Preactor;";
         public SQLUoWService()
         {
         }
+
+        public ProcessToOperationLinkSQLRepository ProcessToOperationLinkSQLRepository
+        {
+            get
+            {
+                if (_ProcessToOperationLinkSQLRepository == null)
+                    _ProcessToOperationLinkSQLRepository = new ProcessToOperationLinkSQLRepository(ConnectionString);
+                return _ProcessToOperationLinkSQLRepository;
+            }
+        }
+
+        public ProcessesSQLRepository ProcessesSQLRepository
+        {
+            get
+            {
+                if (_ProcessesSQLRepository == null)
+                    _ProcessesSQLRepository = new ProcessesSQLRepository(ConnectionString);
+                return _ProcessesSQLRepository;
+            }
+        }
+
+
+        public AsPlannedBOPSQLRepository AsPlannedBOPSQLRepository
+        {
+            get
+            {
+                if (_AsPlannedBOPSQLRepository == null)
+                    _AsPlannedBOPSQLRepository = new AsPlannedBOPSQLRepository(ConnectionString);
+                return _AsPlannedBOPSQLRepository;
+            }
+        }
+
+        public OperationSQLRepository OperationSQLRepository
+        {
+            get
+            {
+                if (_OperationSQLRepository == null)
+                    _OperationSQLRepository = new OperationSQLRepository(ConnectionString);
+                return _OperationSQLRepository;
+            }
+        }
+
         public EquipmentGroupConfigurationSQLRepository EquipmentGroupConfigurationSQLRepository
         {
             get
@@ -76,12 +122,12 @@ namespace ExchangeMESManagerSevice.Services
 
 
 
-        public MateriaSQLRepository MateriaSQLRepository
+        public MaterialSQLRepository MateriaSQLRepository
         {
             get
             {
                 if (_MateriaSQLRepository == null)
-                    _MateriaSQLRepository = new MateriaSQLRepository(ConnectionString);
+                    _MateriaSQLRepository = new MaterialSQLRepository(ConnectionString);
                 return _MateriaSQLRepository;
             }
         }

@@ -42,34 +42,25 @@ namespace ExchangeMESManagerSevice.Controllers
         {
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
+            var test1 = _SQLUoWService.ProcessesSQLRepository.GetByNId("00-00000088");
 
-            var obj = new EquipmentGroupConfigurationDTO()
+
+
+
+            var obj = new OperationDTO
             {
-             Name = "wedwe"
-            ,Description = "103"
-            ,AId = "dwedwe"
-            ,EquipmentConfigurations = new List<EquipmentConfigurationDTO>
-            {
-                new EquipmentConfigurationDTO
-                {
-                    AId = "123"
-                   ,Name = "123"
-                   ,NId = "123"
-                   ,Description = "103"
-                },
-                new EquipmentConfigurationDTO
-                {
-                    AId = "1234"
-                   ,Name = "1234"
-                   ,NId = "1234"
-                  
-                   ,Description = "103"
-                },
-            }
+                CorrelationId = "00-00000088"
+                , Name = "qwe"
+                , NId = "qwe"
+                , Sequence =11
+                ,EstimatedDuration_Ticks=10000000
+                ,Description = "1"
+                ,UId = "00-00000088"
+                ,ResourceGroup = "Cattinair G8"
             };
-            var test = _SQLUoWService.EquipmentGroupConfigurationSQLRepository.Update(obj);
+            var test = _SQLUoWService.OperationSQLRepository.Create(obj);
 
-
+            //ProcessesSQL,ASPLannedBOPSQL - не доделаны
             return View(listOptionRes);
 
         }

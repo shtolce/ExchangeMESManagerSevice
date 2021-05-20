@@ -80,7 +80,20 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public object SitUafExecutionDetail;
     }
 
-
+    public class ProcessMachineDTOResponse : IResponse<ProcessMachineDTO>
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string @ODataContext;
+        [JsonProperty(PropertyName = "@odata.count")]
+        public int ODataCount;
+        public List<ProcessMachineDTO> value { get; set; }
+        public bool Succeeded;
+        public string Id;
+        public string EquipmentSpecificationId;
+        public List<string> PropertyIds;
+        public object Error;
+        public object SitUafExecutionDetail;
+    }
 
     public class MaterialSpecificationDTOCreateParameter
     {
@@ -123,16 +136,13 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     public class MaterialSpecificationDTOUpdateParameterFull
     {
         public String Id;
-        public MaterialSpecificationParameterType MaterialSpecification
+        public MaterialSpecificationParameterType MaterialSpecification;
     }
-
-
     
     public class MaterialSpecificationDTODeleteParameter
     {
         public String[] Ids;
     }
-
 
     public class AsPlannedBOPDTOUpdateParameter
     {
@@ -192,6 +202,16 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     {
         public string Id;
     }
+    public class ProcessMachineDTODeleteParameter
+    {
+        public string[] Ids;
+    }
+    public class CreateEquipmentSpecificationDTOCreateParameter
+    {
+        public EquipmentSpecificationParameterType EquipmentSpecification;
+        public string CorrelationId;
+    }
+
 
     public class OperationParameterTypeDTO
     {
@@ -260,27 +280,27 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     /// </summary>
     public class AsPlannedBOPDTO
     {
-        public string Id;
-        public Nullable<bool> IsFrozen;
-        public int ConcurrencyVersion;
-        public int IsDeleted;
-        public DateTime CreatedOn;
-        public DateTime LastUpdatedOn;
-        public string EntityType;
-        public string OptimisticVersion;
-        public String ConcurrencyToken;
-        public Nullable<bool> IsLocked;
-        public Nullable<bool> ToBeCleaned;
-        public string BaselineName;
-        public String CorrelationId;
-        public String BaselineUId;
-        public string PBOPIdentID;
-        public String MasterPlanUID;
-        public string OrderId;
-        public Nullable<bool> IsOutOfDate;
-        public Nullable<bool> Completed;
-        public string[] SegregationTags;
-        public List<ProcessesDTO> Processes;
+        public string Id { get; set; }
+        public Nullable<bool> IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public int IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public Nullable<bool> IsLocked { get; set; }
+        public Nullable<bool> ToBeCleaned { get; set; }
+        public string BaselineName { get; set; }
+        public String CorrelationId { get; set; }
+        public String BaselineUId { get; set; }
+        public string PBOPIdentID { get; set; }
+        public String MasterPlanUID { get; set; }
+        public string OrderId { get; set; }
+        public Nullable<bool> IsOutOfDate { get; set; }
+        public Nullable<bool> Completed { get; set; }
+        public string[] SegregationTags { get; set; }
+        public List<ProcessesDTO> Processes { get; set; }
     }
     public class WorkOperationTypeDTO
     {
@@ -289,21 +309,21 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     }
     public class OperationStepCategoryDTO
     {
-        public string Id;
-        public string NId;
-        public string AId;
-        public Nullable<bool> IsFrozen;
-        public int ConcurrencyVersion;
-        public Nullable<bool> IsDeleted;
-        public DateTime CreatedOn;
-        public DateTime LastUpdatedOn;
-        public string EntityType;
-        public string OptimisticVersion;
-        public String ConcurrencyToken;
-        public Nullable<bool> IsLocked;
-        public Nullable<bool> ToBeCleaned;
-        public string Description;
-        public string Name;
+        public string Id { get; set; }
+        public string NId { get; set; }
+        public string AId { get; set; }
+        public Nullable<bool> IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public Nullable<bool> IsLocked { get; set; }
+        public Nullable<bool> ToBeCleaned { get; set; }
+        public string Description { get; set; }
+        public string Name { get; set; }
 
     }
 
@@ -346,8 +366,6 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     }
 
-
-
     public class ProcessToOperationLinkDTO
     {
         public string Id { get; set; }
@@ -376,11 +394,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String ChildOperation_NId { get; set; }
         public String ChildOperation_Name { get; set; }
         public String Plant { get; set; }
-        
-
-
     }
-
 
     public class MaterialSpecificationDTO
     {
@@ -411,9 +425,50 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public QuantityType Quantity { get; set; }
         public DMMaterialDTO DM_MaterialId { get; set; }
         public MaterialDTO Material { get; set; }
+        //для целей интеграции с ПБД
+        public String MaterialNId { get; set; }
+        public double QuantityVal { get; set; }
+        public int Operation_Number { get; set; }
+        public String Operation_Name { get; set; }
+        public String AsPlannedBOP_NId { get; set; }
 
     }
 
+    public class ProcessMachinesParameterType
+    {
+        public String Name { get; set; }
+        public String NId { get; set; }
+        public String Type { get; set; }
+        public String LevelNId { get; set; }
+        public String EquipmentSpecificationId { get; set; }
+        public String AssociatedPrintJobFileId { get; set; }
+        public String AssociatedPrintJobFileNId { get; set; }
+        public String AssociatedPartProgramId { get; set; }
+        public String AssociatedPartProgramNId { get; set; }
+        public bool? IsWorkOperationAM { get; set; }
+        public bool? IsWorkOperationCNC { get; set; }
+        public String Id { get; set; }
+
+    }
+
+    public class ProcessMachineDTO
+    {
+        public String Id { get; set; }
+        public ProcessMachinesParameterType result { get; set; }
+    }
+
+    public class EquipmentSpecificationParameterType
+    {
+        public String Type { get; set; }
+        public String OperationID { get; set; }
+        public String PartProgram { get; set; }
+        public String EquipmentNId { get; set; }
+        public String EquipmentTypeNId { get; set; }
+        public String EffectivityExpression { get; set; }
+        public String AsPlannedBopId { get; set; }
+        public String UId { get; set; }
+
+    }
 
 
 

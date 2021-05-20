@@ -21,10 +21,20 @@ namespace ExchangeMESManagerSevice.Services
         private AsPlannedBOPSQLRepository _AsPlannedBOPSQLRepository;
         private ProcessesSQLRepository _ProcessesSQLRepository;
         private ProcessToOperationLinkSQLRepository _ProcessToOperationLinkSQLRepository;
+        private MaterialSpecificationSQLRepository _MaterialSpecificationSQLRepository;
         
         public string ConnectionString = @"Data Source=DMKIM\MSSQLSERVER1;Integrated Security=True;Initial Catalog=PBD_Preactor;";
         public SQLUoWService()
         {
+        }
+        public MaterialSpecificationSQLRepository MaterialSpecificationSQLRepository
+        {
+            get
+            {
+                if (_MaterialSpecificationSQLRepository == null)
+                    _MaterialSpecificationSQLRepository = new MaterialSpecificationSQLRepository(ConnectionString);
+                return _MaterialSpecificationSQLRepository;
+            }
         }
 
         public ProcessToOperationLinkSQLRepository ProcessToOperationLinkSQLRepository

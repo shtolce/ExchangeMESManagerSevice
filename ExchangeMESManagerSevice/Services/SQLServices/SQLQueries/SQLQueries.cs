@@ -966,7 +966,100 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
     }
 
-    
+    public static class SQLQueriesMaterialSpecification
+    {
+        #region GetMaterialSpecificationQuery
+        public static string GetMaterialSpecificationQuery = $@"
+            SELECT pBom.[PartNo] as AsPlannedBOP_NId
+	          ,idP.Product as Product
+              ,[OperationName] as Operation_Name
+              ,[OperationNo] as Operation_Number
+              ,[RequiredPartNo] as MaterialNId
+	          ,idRp.Product as requiredProduct
+              ,[RequiredQuantity] as QuantityVal
+              ,pBom.[BD] as CorrelationId
+              ,pBom.[UID] 
+            FROM [RealData].[ProductBoMData] pBom
+            inner join [RealData].[ItemData] idP 
+                on idP.PartNo = pBom.PartNo
+            inner join [RealData].[ItemData] idRp 
+                on idrP.PartNo = pBom.PartNo
+
+        ";
+        #endregion
+
+        #region GetMaterialSpecificationQueryByNId
+        public static string GetMaterialSpecificationQueryByNId = $@"Select       
+            SELECT pBom.[PartNo] as AsPlannedBOP_NId
+	          ,idP.Product as Product
+              ,[OperationName] as Operation_Name
+              ,[OperationNo] as Operation_Number
+              ,[RequiredPartNo] as MaterialNId
+	          ,idRp.Product as requiredProduct
+              ,[RequiredQuantity] as QuantityVal
+              ,pBom.[BD] as CorrelationId
+              ,pBom.[UID] 
+            FROM [RealData].[ProductBoMData] pBom
+            inner join [RealData].[ItemData] idP 
+                on idP.PartNo = pBom.PartNo
+            inner join [RealData].[ItemData] idRp 
+                on idrP.PartNo = pBom.PartNo
+            Where PartNo = @NId";
+        #endregion
+
+        #region CreateMaterialSpecificationQuery
+        public static string CreateMaterialSpecificationQuery = $@"
+       Insert into [RealData].[ProductBoMData]
+       (
+           [PartNo]
+          ,[OperationName]
+          ,[OperationNo]
+          ,[RequiredPartNo]
+          ,[RequiredQuantity]
+          ,[BD]
+          ,[UID]
+	   )
+	   Values
+       (
+            @AsPlannedBOP_NId
+          , @Operation_Name
+          , @Operation_Number
+          , @MaterialNId
+          , @QuantityVal
+          , @CorrelationId
+          , @MaterialNId
+       )";
+        #endregion
+
+        #region UpdateMaterialSpecificationQuery
+        public static string UpdateMaterialSpecificationQuery = $@"
+       Update [RealData].[ProductBoMData]
+	       set
+           [PartNo] = @AsPlannedBOP_NId
+          ,[OperationName] = @Operation_Name
+          ,[OperationNo] = @Operation_Number
+          ,[RequiredPartNo] = @MaterialNId
+          ,[RequiredQuantity] = @QuantityVal
+          ,[BD] = @CorrelationId
+          ,[UID] = @MaterialNId
+
+
+         WHERE [PartNo]= @NId and  OperationNo=@Operation_Number and [RequiredPartNo] = @MaterialNId
+
+       ";
+        #endregion
+
+        #region DeleteMaterialSpecificationQuery
+        public static string DeleteMaterialSpecificationQuery = $@"
+        Delete from [RealData].[ProductBoMData]
+	       where
+		    [PartNo]= @NId and  OperationNo=@Operation_Number and [RequiredPartNo] = @MaterialNId
+        ";
+        #endregion
+
+
+    }
+
 
 
 }

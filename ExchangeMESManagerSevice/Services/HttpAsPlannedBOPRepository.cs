@@ -96,7 +96,16 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<OperationDTODeleteParameter, OperationDTOResponse>(com, "DeleteOperationFromCatalogue"); 
         }
+        public ProcessMachineDTOResponse DeleteEquipmentSpecificationList(ProcessMachineDTODeleteParameter com)
+        {
+            return ExecuteCommand<ProcessMachineDTODeleteParameter, ProcessMachineDTOResponse>(com, "UADMDeleteEquipmentSpecificationList");
+        }
+        public ProcessMachineDTOResponse CreateEquipmentSpecification(CreateEquipmentSpecificationDTOCreateParameter com)
+        {
+            return ExecuteCommand<CreateEquipmentSpecificationDTOCreateParameter, ProcessMachineDTOResponse>(com, "CreateEquipmentSpecification");
+        }
 
+        
         private D ExecuteCommand<T,D>(T com,string commandName)
         {
             HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/AppU4DM/odata/{commandName}") as HttpWebRequest;
@@ -192,17 +201,21 @@ namespace ExchangeMESManagerSevice.Services
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/MaterialSpecification?$top=10&$skip=0&$count=true&$expand=DM_MaterialId($expand=Material($select=NId,Name,Revision)),MaterialTypeNId";
             return Get<MaterialSpecificationDTO, MaterialSpecificationDTOResponse>(urlProfile);
-
         }
 
         public List<MaterialSpecificationDTO> GetAllMaterialSpecificationByOpId(string OpId)
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/MaterialSpecification?$top=10&$skip=0&$count=true&$expand=DM_MaterialId($expand=Material($select=NId,Name,Revision)),MaterialTypeNId&$filter=Operation_Id eq {OpId}";
             return Get<MaterialSpecificationDTO, MaterialSpecificationDTOResponse>(urlProfile);
-
-            //"MaterialSpecification?$top=10&$skip=0&$count=true&$expand=DM_MaterialId($expand=Material($select=NId,Name,Revision)),MaterialTypeNId&$filter=Operation_Id%20eq%2026389f96-5dff-4eca-b577-8a10c405f264%20and%20AsPlannedBOP_Id%20eq%202f9bdf4d-a35f-4766-b00a-05507e87b48d HTTP/1.1"
-
         }
+
+        public List<ProcessMachineDTO> GetAllProcessMachines(string OperationId,string AsPlannedBOP_Id)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/UADMGetAllProcessMachines(function=@x)?@x={{\"OperationId\":\"{OperationId}\",\"AsPlannedBOP_Id\":\"{AsPlannedBOP_Id}\"}}";
+            return Get<ProcessMachineDTO, ProcessMachineDTOResponse>(urlProfile);
+        }
+
+
 
 
     }

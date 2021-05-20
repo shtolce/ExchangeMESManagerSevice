@@ -517,10 +517,10 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         #endregion
 
     }
-    /*
+    
     public static class SQLQueriesAsPlannedBOP
     {
-        #region GetAsPlannedBOPQuery
+        #region GetAsPlannedBOPQuery не сделан просто скопирован шаблон
         public static string GetAsPlannedBOPQuery = $@"Select       
         [PartNo] as NId
        ,[Product] as Name
@@ -589,7 +589,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
 
     }
-    */
+    
     public static class SQLQueriesOperation
     {
         #region GetOperationQuery
@@ -834,62 +834,32 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
     {
         #region GetProcessToOperationLinkQuery
         public static string GetProcessToOperationLinkQuery = $@"
-              SELECT distinct
-               r.[PartNo] as FinalMaterialId_Material_NId
-              ,r.[PartNo] as Material_NId
-              ,N'Процесс для детали' + r.[PartNo] as Name
-              ,r.[PartNo] as Revision
-              ,r.[PartNo] as NId
-              ,[ResourceGroup] as Plant
-			  ,i.Product as FinalMaterialName
-              ,r.[PartNo] as FinalMaterialNId
+             SELECT [PartNo] as ParentProcess_NId
+              ,[OperationName] as ChildOperation_Name
+              ,[OperationNo] as Sequence
+              ,[BD] as CorrelationId
+              ,[PartNo]+'_'+CAST([OperationNo] as nvarchar(99)) as UID
+              ,[PartNo]+'_'+CAST([OperationNo] as nvarchar(99)) as AId
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.ProcessToOperationLink' as EntityType
-          FROM [RealData].[RoutingData] r
-		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo
+            FROM [RealData].[RoutingData]
         ";
         #endregion
 
         #region GetProcessToOperationLinkQueryByNId
         public static string GetProcessToOperationLinkQueryByNId = $@"       
-              SELECT distinct
-               r.[PartNo] as FinalMaterialId_Material_NId
-              ,r.[PartNo] as Material_NId
-              ,N'Процесс для детали' + r.[PartNo] as Name
-              ,r.[PartNo] as Revision
-              ,r.[PartNo] as NId
-              ,[ResourceGroup] as Plant
-			  ,i.Product as FinalMaterialName
-              ,r.[PartNo] as FinalMaterialNId
+             SELECT [PartNo] as ParentProcess_NId
+              ,[OperationName] as ChildOperation_Name
+              ,[OperationNo] as Sequence
+              ,[BD] as CorrelationId
+              ,[PartNo]+'_'+CAST([OperationNo] as nvarchar(99)) as UID
+              ,[PartNo]+'_'+CAST([OperationNo] as nvarchar(99)) as AId
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.ProcessToOperationLink' as EntityType
-          FROM [RealData].[RoutingData] r
-		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo       Where r.PartNo = @NId";
+            FROM [RealData].[RoutingData]
+		  Where r.PartNo = @NId";
         #endregion
 
         #region CreateProcessToOperationLinkQuery
         public static string CreateProcessToOperationLinkQuery = $@"
-
-          IF NOT EXISTS(select 1 from RealData.[ItemData] where PartNo = @FinalMaterialNId)
-          BEGIN
-               insert into [RealData].[ItemData] (
-               [PartNo]
-              ,[Product]
-              ,[BD]
-	          )
-	          Values
-	          (
- 	             @FinalMaterialNId
- 	             ,@FinalMaterialName
-	            ,@Description
-	          )
-         END;
-
-
-       ";
-        #endregion
-
-        #region UpdateProcessToOperationLinkQuery
-        public static string UpdateProcessToOperationLinkQuery = $@"
-
           IF NOT EXISTS(select 1 from RealData.[ItemData] where PartNo = @CorrelationId)
           BEGIN
                insert into [RealData].[ItemData] (
@@ -899,11 +869,88 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 	          )
 	          Values
 	          (
- 	             @FinalMaterialNId
- 	             ,@FinalMaterialName
-	            ,@Description
+ 	             @ParentProcess_NId
+ 	             ,@ParentProcess_Name
+	            ,@CorrelationId
 	          )
          END;
+
+          IF NOT EXISTS(select 1 from RealData.Connect_ResourceGroup where ResourceGroup = @ResourceGroup)
+          BEGIN
+               insert into [RealData].[Connect_ResourceGroup] (
+               [ResourceGroup]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @Plant
+	            ,@CorrelationId
+	          )
+         END;
+
+          IF NOT EXISTS(select 1 from RealData.[RoutingData] where PartNo = @FinalMaterialNId)
+          BEGIN
+               insert into [RealData].[RoutingData] (
+               [PartNo]
+              ,[Product]
+              ,[OperationName]
+              ,[OperationNo]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @ParentProcess_NId
+ 	            ,@ParentProcess_Name
+                ,@ChildOperation_Name
+                ,@Sequence
+	            ,@CorrelationId
+	          )
+         END;
+
+
+       ";
+        #endregion
+
+        #region UpdateProcessToOperationLinkQuery
+        public static string UpdateProcessToOperationLinkQuery = $@"
+          IF NOT EXISTS(select 1 from RealData.[ItemData] where PartNo = @CorrelationId)
+          BEGIN
+               insert into [RealData].[ItemData] (
+               [PartNo]
+              ,[Product]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @ParentProcess_NId
+ 	             ,@ParentProcess_Name
+	            ,@CorrelationId
+	          )
+         END;
+
+          IF NOT EXISTS(select 1 from RealData.Connect_ResourceGroup where ResourceGroup = @ResourceGroup)
+          BEGIN
+               insert into [RealData].[Connect_ResourceGroup] (
+               [ResourceGroup]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @Plant
+	            ,@CorrelationId
+	          )
+         END;
+
+        Update [RealData].[RoutingData]
+	       set
+               [OperationName] = @ParentProcess_Name
+              ,[OperationNo] = @Sequence
+              ,[BD] = @CorrelationId
+              ,[UID] = @ParentProcess_NId
+              ,ResourceGroup = @Plant
+              ,[OperationName] = @ChildOperation_Name
+           WHERE [PartNo]= @ParentProcess_NId
+
 
        ";
         #endregion

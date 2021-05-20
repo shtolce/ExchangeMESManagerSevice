@@ -59,18 +59,17 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
                 var sql = SQLQueriesProcessToOperationLink.GetProcessToOperationLinkQuery;
                 connection.Open();
                 var list = connection.Query<ProcessToOperationLinkDTO>(sql);
-                foreach(var item in list)
+
+                foreach (var item in list)
                 {
-                    item.Quantity = new QuantityType { UoMNId = "u", QuantityValue = 1 };
-                    item.FinalMaterialId = new DMMaterialDTO
+                    item.ChildOperation = new OperationDTO
                     {
-                        Material = new MaterialDTO
-                        {
-                            Name = item.FinalMaterialName
-                            ,NId = item.NId
-                        }
+                        NId = item.ChildOperation_NId
+                        ,Name = item.ChildOperation_NId
+                        ,Description = item.CorrelationId
                     };
                 }
+
                 return list;
             };
         }
@@ -82,17 +81,13 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
                 var sql = SQLQueriesProcessToOperationLink.GetProcessToOperationLinkQueryByNId;
                 connection.Open();
                 var item = connection.QueryFirst<ProcessToOperationLinkDTO>(sql,new {NId}, commandType: CommandType.Text);
-
-                item.Quantity = new QuantityType { UoMNId = "u", QuantityValue = 1 };
-                item.FinalMaterialId = new DMMaterialDTO
+                item.ChildOperation = new OperationDTO
                 {
-                    Material = new MaterialDTO
-                    {
-                        Name = item.FinalMaterialName
-                        ,
-                        NId = item.NId
-                    }
+                    NId = item.ChildOperation_NId
+                    ,Name = item.ChildOperation_NId
+                    ,Description = item.CorrelationId
                 };
+
                 return item;
             };
 

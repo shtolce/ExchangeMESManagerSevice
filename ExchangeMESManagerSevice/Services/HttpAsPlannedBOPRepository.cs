@@ -46,6 +46,28 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<ProcessesDTOCreateParameter, ProcessesDTOResponse>(com, "UADMCreateProcess"); 
         }
+
+        public MaterialSpecificationDTOResponse CreateMaterialSpecification(MaterialSpecificationDTOCreateParameter com)
+        {
+            return ExecuteCommand<MaterialSpecificationDTOCreateParameter, MaterialSpecificationDTOResponse>(com, "UADMCreateMaterialSpecification");
+        }
+
+        public MaterialSpecificationDTOResponse UpdateMaterialSpecification(MaterialSpecificationDTOUpdateParameter com)
+        {
+            return ExecuteCommand<MaterialSpecificationDTOUpdateParameter, MaterialSpecificationDTOResponse>(com, "UADMUpdateMaterialSpecification");
+        }
+
+        public MaterialSpecificationDTOResponse UpdateMaterialSpecificationFull(MaterialSpecificationDTOUpdateParameterFull com)
+        {
+            return ExecuteCommand<MaterialSpecificationDTOUpdateParameterFull, MaterialSpecificationDTOResponse>(com, "UpdateMaterialSpecification");
+        }
+
+
+        public MaterialSpecificationDTOResponse DeleteMaterialSpecificationList(MaterialSpecificationDTODeleteParameter com)
+        {
+            return ExecuteCommand<MaterialSpecificationDTODeleteParameter, MaterialSpecificationDTOResponse>(com, "DeleteMaterialSpecificationList");
+        }
+
         public ProcessesDTOResponse UpdateProcess(ProcessesDTOUpdateParameter com)
         {
             return ExecuteCommand<ProcessesDTOUpdateParameter, ProcessesDTOResponse>(com, "UADMUpdateProcess"); 
@@ -74,9 +96,6 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<OperationDTODeleteParameter, OperationDTOResponse>(com, "DeleteOperationFromCatalogue"); 
         }
-
-
-        //POST /sit-svc/Application/AppU4DM/odata/UADMCreateOperationInCatalogue HTTP/1.1
 
         private D ExecuteCommand<T,D>(T com,string commandName)
         {
@@ -169,6 +188,21 @@ namespace ExchangeMESManagerSevice.Services
             return Get<OperationDTO, OperationDTOResponse>(urlProfile);
         }
 
+        public List<MaterialSpecificationDTO> GetAllMaterialSpecifications()
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/MaterialSpecification?$top=10&$skip=0&$count=true&$expand=DM_MaterialId($expand=Material($select=NId,Name,Revision)),MaterialTypeNId";
+            return Get<MaterialSpecificationDTO, MaterialSpecificationDTOResponse>(urlProfile);
+
+        }
+
+        public List<MaterialSpecificationDTO> GetAllMaterialSpecificationByOpId(string OpId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/MaterialSpecification?$top=10&$skip=0&$count=true&$expand=DM_MaterialId($expand=Material($select=NId,Name,Revision)),MaterialTypeNId&$filter=Operation_Id eq {OpId}";
+            return Get<MaterialSpecificationDTO, MaterialSpecificationDTOResponse>(urlProfile);
+
+            //"MaterialSpecification?$top=10&$skip=0&$count=true&$expand=DM_MaterialId($expand=Material($select=NId,Name,Revision)),MaterialTypeNId&$filter=Operation_Id%20eq%2026389f96-5dff-4eca-b577-8a10c405f264%20and%20AsPlannedBOP_Id%20eq%202f9bdf4d-a35f-4766-b00a-05507e87b48d HTTP/1.1"
+
+        }
 
 
     }

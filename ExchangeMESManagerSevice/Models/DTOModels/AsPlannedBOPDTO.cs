@@ -52,8 +52,6 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public object SitUafExecutionDetail;
     }
 
-
-
     public class ProcessToOperationLinkDTOResponse: IResponse<ProcessToOperationLinkDTO>
     {
         [JsonProperty(PropertyName = "@odata.context")]
@@ -66,6 +64,73 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public List<string> PropertyIds;
         public object Error;
         public object SitUafExecutionDetail;
+    }
+
+    public class MaterialSpecificationDTOResponse : IResponse<MaterialSpecificationDTO>
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string @ODataContext;
+        [JsonProperty(PropertyName = "@odata.count")]
+        public int ODataCount;
+        public List<MaterialSpecificationDTO> value { get; set; }
+        public bool Succeeded;
+        public string Id;
+        public List<string> PropertyIds;
+        public object Error;
+        public object SitUafExecutionDetail;
+    }
+
+
+
+    public class MaterialSpecificationDTOCreateParameter
+    {
+        public String DMMaterialId;
+        public QuantityType Quantity;
+        public String OperationId;
+        public String LogicalPosition;
+        public String StepId;
+        public String MaterialSpecificationTypeId;
+        public String GroupId;
+        public bool? AlternativeSelected;
+        public String EffectivityExpression;
+        public String AsPlannedBopId;
+        public String UId;
+    }
+    public class MaterialSpecificationDTOUpdateParameter
+    {
+        public QuantityType Quantity;
+        public String Id;
+        public String LogicalPosition;
+        public bool? AlternativeSelected;
+    }
+
+    public class MaterialSpecificationParameterType
+    {
+        public String DMMaterialId;
+        public QuantityType Quantity;
+        public String OperationId;
+        public String LogicalPosition;
+        public String StepId;
+        public String MaterialSpecificationTypeId;
+        public String GroupId;
+        public bool? AlternativeSelected;
+        public String EffectivityExpression;
+        public String AsPlannedBopId;
+        public String UId;
+
+    }
+
+    public class MaterialSpecificationDTOUpdateParameterFull
+    {
+        public String Id;
+        public MaterialSpecificationParameterType MaterialSpecification
+    }
+
+
+    
+    public class MaterialSpecificationDTODeleteParameter
+    {
+        public String[] Ids;
     }
 
 
@@ -147,8 +212,6 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String OperationStepCategoryId;
     
     }
-
-
 
     public class OperationDTOUpdateParameter
     {
@@ -287,30 +350,69 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class ProcessToOperationLinkDTO
     {
-        public string Id;
-        public string AId;
-        public Nullable<bool> IsFrozen;
-        public int ConcurrencyVersion;
-        public int IsDeleted;
-        public DateTime CreatedOn;
-        public DateTime LastUpdatedOn;
-        public string EntityType;
-        public string OptimisticVersion;
-        public String ConcurrencyToken;
-        public Nullable<bool> IsLocked;
-        public Nullable<bool> ToBeCleaned;
-        public String CorrelationId;
-        public int? Sequence;
-        public string UId;
-        public String EffectivityExpression;
-        public String ParentProcess_Id;
-        public String ChildOperation_Id;
-        public String AsPlannedBOP_Id;
-        public String MasterPlan_Id;
-        public OperationDTO ChildOperation;
+        public string Id { get; set; }
+        public string AId { get; set; }
+        public Nullable<bool> IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public int IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public Nullable<bool> IsLocked { get; set; }
+        public Nullable<bool> ToBeCleaned { get; set; }
+        public String CorrelationId { get; set; }
+        public int? Sequence { get; set; }
+        public string UId { get; set; }
+        public String EffectivityExpression { get; set; }
+        public String ParentProcess_Id { get; set; }
+        public String ChildOperation_Id { get; set; }
+        public String AsPlannedBOP_Id { get; set; }
+        public String MasterPlan_Id { get; set; }
+        public OperationDTO ChildOperation { get; set; }
+        public String ParentProcess_NId { get; set; }
+        public String ParentProcess_Name { get; set; }
+        public String ChildOperation_NId { get; set; }
+        public String ChildOperation_Name { get; set; }
+        public String Plant { get; set; }
+        
+
+
     }
 
 
+    public class MaterialSpecificationDTO
+    {
+        public string Id { get; set; }
+        public string AId { get; set; }
+        public Nullable<bool> IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public int IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public Nullable<bool> IsLocked { get; set; }
+        public Nullable<bool> ToBeCleaned { get; set; }
+        public string UId { get; set; }
+        public String EffectivityExpression { get; set; }
+        public String LogicalPosition { get; set; }
+        public String GroupId { get; set; }
+        public Nullable<bool> AlternativeSelected { get; set; }
+        public String CorrelationId { get; set; }
+        public String DM_MaterialId_Id { get; set; }
+        public String Operation_Id { get; set; }
+        public String Step_Id { get; set; }
+        public String MaterialTypeNId_Id { get; set; }
+        public String AsPlannedBOP_Id { get; set; }
+        public String MasterPlan_Id { get; set; }
+        public QuantityType Quantity { get; set; }
+        public DMMaterialDTO DM_MaterialId { get; set; }
+        public MaterialDTO Material { get; set; }
+
+    }
 
 
 

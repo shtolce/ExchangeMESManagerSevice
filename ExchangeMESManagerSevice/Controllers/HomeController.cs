@@ -42,24 +42,16 @@ namespace ExchangeMESManagerSevice.Controllers
         {
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            var test1 = _SQLUoWService.ProcessesSQLRepository.GetByNId("00-00000088");
+            var test1 = _SQLUoWService.ProcessToOperationLinkSQLRepository.GetAll();
 
-
-
-
-            var obj = new OperationDTO
+            var obj = new MaterialSpecificationDTOUpdateParameter
             {
-                CorrelationId = "00-00000088"
-                , Name = "qwe"
-                , NId = "qwe"
-                , Sequence =11
-                ,EstimatedDuration_Ticks=10000000
-                ,Description = "1"
-                ,UId = "00-00000088"
-                ,ResourceGroup = "Cattinair G8"
+                LogicalPosition="123"
+                ,Id="92584f1b-d6a7-42d9-a251-da7a79d75df6"
+                ,Quantity  =new QuantityType{UoMNId="n/a",QuantityValue=42}
             };
-            var test = _SQLUoWService.OperationSQLRepository.Create(obj);
-
+            //var test = _SQLUoWService.OperationSQLRepository.Create(obj);
+            var test = _MESUoWService.AsPlannedBOPRepository.UpdateMaterialSpecification(obj);
             //ProcessesSQL,ASPLannedBOPSQL - не доделаны
             return View(listOptionRes);
 

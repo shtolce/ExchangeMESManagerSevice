@@ -22,10 +22,20 @@ namespace ExchangeMESManagerSevice.Services
         private ProcessesSQLRepository _ProcessesSQLRepository;
         private ProcessToOperationLinkSQLRepository _ProcessToOperationLinkSQLRepository;
         private MaterialSpecificationSQLRepository _MaterialSpecificationSQLRepository;
+        private EquipmentSpecificationSQLRepository _EquipmentSpecificationSQLRepository;
         
-        public string ConnectionString = @"Data Source=DMKIM\MSSQLSERVER1;Integrated Security=True;Initial Catalog=PBD_Preactor;";
+        public string ConnectionString = @"Data Source=DMKIM\MSSQLSERVER1;Integrated Security=True;Initial Catalog=PBD_Opcenter;";
         public SQLUoWService()
         {
+        }
+        public EquipmentSpecificationSQLRepository EquipmentSpecificationSQLRepository
+        {
+            get
+            {
+                if (_EquipmentSpecificationSQLRepository == null)
+                    _EquipmentSpecificationSQLRepository = new EquipmentSpecificationSQLRepository(ConnectionString);
+                return _EquipmentSpecificationSQLRepository;
+            }
         }
         public MaterialSpecificationSQLRepository MaterialSpecificationSQLRepository
         {

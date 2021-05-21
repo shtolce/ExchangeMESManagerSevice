@@ -95,6 +95,23 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public object SitUafExecutionDetail;
     }
 
+    public class EquipmentSpecificationDTOResponse : IResponse<EquipmentSpecificationDTO>
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string @ODataContext;
+        [JsonProperty(PropertyName = "@odata.count")]
+        public int ODataCount;
+        public List<EquipmentSpecificationDTO> value { get; set; }
+        public bool Succeeded;
+        public string Id;
+        public string EquipmentSpecificationId;
+        public List<string> PropertyIds;
+        public object Error;
+        public object SitUafExecutionDetail;
+    }
+
+
+
     public class MaterialSpecificationDTOCreateParameter
     {
         public String DMMaterialId;
@@ -211,8 +228,13 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public EquipmentSpecificationParameterType EquipmentSpecification;
         public string CorrelationId;
     }
+    public class EquipmentSpecificationDTOLinkParameter
+    {
+        public string EquipmentSpecificationId;
+        public string OperationId;
+    }
 
-
+    
     public class OperationParameterTypeDTO
     {
         public string NId;
@@ -456,6 +478,41 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String Id { get; set; }
         public ProcessMachinesParameterType result { get; set; }
     }
+
+    public class EquipmentSpecificationDTO
+    {
+        public string Id { get; set; }
+        public string AId { get; set; }
+        public Nullable<bool> IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public int IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public Nullable<bool> IsLocked { get; set; }
+        public Nullable<bool> ToBeCleaned { get; set; }
+        public String PartProgram { get; set; }
+        public String EquipmentTypeNId { get; set; }
+        public String Type { get; set; }
+        public String PrintJobFile { get; set; }
+        public String PrintJobFileId { get; set; }
+        public String EquipmentNId { get; set; }
+        public String EffectivityExpression { get; set; }
+        public String UId { get; set; }
+        public String ParentOperation_Id { get; set; }
+        public String MasterPlan_Id { get; set; }
+        public String AsPlannedBOP_Id { get; set; }
+        //для целей интеграции
+        public String ParentOperation_NId { get; set; }
+        public String ParentOperation_Name { get; set; }
+        public int ParentOperation_Sequence { get; set; }
+        public String AsPlannedBOP_NId { get; set; }
+        public String EquipmentGroupNId { get; set; }
+    }
+
+
 
     public class EquipmentSpecificationParameterType
     {

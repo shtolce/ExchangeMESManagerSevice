@@ -100,12 +100,16 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<ProcessMachineDTODeleteParameter, ProcessMachineDTOResponse>(com, "UADMDeleteEquipmentSpecificationList");
         }
-        public ProcessMachineDTOResponse CreateEquipmentSpecification(CreateEquipmentSpecificationDTOCreateParameter com)
+        public EquipmentSpecificationDTOResponse CreateEquipmentSpecification(CreateEquipmentSpecificationDTOCreateParameter com)
         {
-            return ExecuteCommand<CreateEquipmentSpecificationDTOCreateParameter, ProcessMachineDTOResponse>(com, "CreateEquipmentSpecification");
+            return ExecuteCommand<CreateEquipmentSpecificationDTOCreateParameter, EquipmentSpecificationDTOResponse>(com, "CreateEquipmentSpecification");
+        }
+        public EquipmentSpecificationDTOResponse LinkEquipmentSpecificationToOperation(EquipmentSpecificationDTOLinkParameter com)
+        {
+            return ExecuteCommand<EquipmentSpecificationDTOLinkParameter, EquipmentSpecificationDTOResponse>(com, "LinkEquipmentSpecificationToOperation");
         }
 
-        
+
         private D ExecuteCommand<T,D>(T com,string commandName)
         {
             HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/AppU4DM/odata/{commandName}") as HttpWebRequest;
@@ -208,6 +212,19 @@ namespace ExchangeMESManagerSevice.Services
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/MaterialSpecification?$top=10&$skip=0&$count=true&$expand=DM_MaterialId($expand=Material($select=NId,Name,Revision)),MaterialTypeNId&$filter=Operation_Id eq {OpId}";
             return Get<MaterialSpecificationDTO, MaterialSpecificationDTOResponse>(urlProfile);
         }
+        public List<EquipmentSpecificationDTO> GetAllEquipmentSpecification()
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/EquipmentSpecification";
+            return Get<EquipmentSpecificationDTO, EquipmentSpecificationDTOResponse>(urlProfile);
+        }
+        public List<EquipmentSpecificationDTO> GetAllEquipmentSpecificationById(string Id)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/EquipmentSpecification$filter=Id eq {Id}";
+            return Get<EquipmentSpecificationDTO, EquipmentSpecificationDTOResponse>(urlProfile);
+        }
+
+
+
 
         public List<ProcessMachineDTO> GetAllProcessMachines(string OperationId,string AsPlannedBOP_Id)
         {

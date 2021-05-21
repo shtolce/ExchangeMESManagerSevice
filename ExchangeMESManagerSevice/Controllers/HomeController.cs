@@ -42,8 +42,6 @@ namespace ExchangeMESManagerSevice.Controllers
         {
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-            //var test1 = _SQLUoWService.ProcessToOperationLinkSQLRepository.GetAll();
-            var test = _MESUoWService.AsPlannedBOPRepository.GetAllProcessMachines();
 
             var obj = new MaterialSpecificationDTOUpdateParameter
             {
@@ -51,7 +49,7 @@ namespace ExchangeMESManagerSevice.Controllers
                 ,Id="92584f1b-d6a7-42d9-a251-da7a79d75df6"
                 ,Quantity  =new QuantityType{UoMNId="n/a",QuantityValue=42}
             };
-            //var test = _SQLUoWService.OperationSQLRepository.Create(obj);
+            var test = _SQLUoWService.EquipmentSpecificationSQLRepository.GetAll();
             //var test = _MESUoWService.AsPlannedBOPRepository.UpdateMaterialSpecification(obj);
             //ProcessesSQL,ASPLannedBOPSQL - не доделаны
             return View(listOptionRes);

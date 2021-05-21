@@ -612,7 +612,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         #endregion
 
         #region GetOperationQueryByNId
-        public static string GetOperationQueryByNId = $@"Select       
+        public static string GetOperationQueryByNId = $@"
          SELECT [PartNo] as CorrelationId
               ,[OperationName] as Name
               ,[OperationName] as NId
@@ -989,7 +989,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         #endregion
 
         #region GetMaterialSpecificationQueryByNId
-        public static string GetMaterialSpecificationQueryByNId = $@"Select       
+        public static string GetMaterialSpecificationQueryByNId = $@"
             SELECT pBom.[PartNo] as AsPlannedBOP_NId
 	          ,idP.Product as Product
               ,[OperationName] as Operation_Name
@@ -1060,6 +1060,124 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
     }
 
+    public static class SQLQueriesEquipmentSpecification
+    {
+        #region GetEquipmentSpecificationQuery
+        public static string GetEquipmentSpecificationQuery = $@"
+            SELECT 
+	               rd.[PartNo] as AsPlannedBOP_NId
+                  ,rd.[OperationName] as ParentOperation_NId
+                  ,rd.[OperationName] as ParentOperation_Name
+                  ,rd.[OperationNo] as ParentOperation_Sequence
+                  ,rd.[ResourceGroup]  as EquipmentGroupNId
+                  ,rd.[SetupTime] 
+                  ,rd.[ProcessTimeType] 
+                  ,rd.[RunTime] 
+                  ,rd.[BD] 
+                  ,rd.[UID] 
+	              ,rg.Resource as EquipmentNId
+            FROM [RealData].[RoutingData] rd
+            inner join [RealData].[ResourceGroupData] rg
+            on rg.Name = ResourceGroup
+        ";
+        #endregion
 
+        #region GetEquipmentSpecificationQueryByNId
+        public static string GetEquipmentSpecificationQueryByNId = $@"
+            SELECT 
+	               rd.[PartNo] as AsPlannedBOP_NId
+                  ,rd.[OperationName] as ParentOperation_NId
+                  ,rd.[OperationName] as ParentOperation_Name
+                  ,rd.[OperationNo] as ParentOperation_Sequence
+                  ,rd.[ResourceGroup] as  EquipmentGroupNId
+                  ,rd.[SetupTime] 
+                  ,rd.[ProcessTimeType] 
+                  ,rd.[RunTime] 
+                  ,rd.[BD] 
+                  ,rd.[UID] 
+	              ,rg.Resource as EquipmentNId
+            FROM [RealData].[RoutingData] rd
+            inner join [RealData].[ResourceGroupData] rg
+            on rg.Name = ResourceGroup
+           Where PartNo = @NId";
+        #endregion
+
+        #region CreateEquipmentSpecificationQuery
+        public static string CreateEquipmentSpecificationQuery = $@"
+
+          IF NOT EXISTS(select 1 from RealData.Connect_ResourceGroup where ResourceGroup = @EquipmentGroupNId)
+          BEGIN
+               insert into [RealData].[Connect_ResourceGroup] (
+               [ResourceGroup]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @EquipmentGroupNId
+	            ,'103'
+	          )
+         END;
+
+        Insert into [RealData].[RoutingData]
+       (
+               [PartNo]
+              ,[OperationName]
+              ,[OperationNo]
+              ,[RunTime]
+              ,[BD]
+              ,[UID]
+              ,[ResourceGroup]
+	   )
+	   Values
+       (
+           @AsPlannedBOP_NId
+          ,@ParentOperation_NId
+          ,@ParentOperation_Sequence
+          ,@EstimatedDuration_Ticks/10000000
+          ,'103'
+          ,@AId
+          ,@EquipmentGroupNId
+       )";
+        #endregion
+
+        #region UpdateEquipmentSpecificationQuery
+        public static string UpdateEquipmentSpecificationQuery = $@"
+
+          IF NOT EXISTS(select 1 from RealData.Connect_ResourceGroup where ResourceGroup = @EquipmentGroupNId)
+          BEGIN
+               insert into [RealData].[Connect_ResourceGroup] (
+               [ResourceGroup]
+              ,[BD]
+	          )
+	          Values
+	          (
+ 	             @EquipmentGroupNId
+	            ,'103'
+	          )
+         END;
+
+        Update [RealData].[RoutingData]
+	       set
+               PartNo = @AsPlannedBOP_NId             
+              ,[OperationName] = @ParentOperation_NId
+              ,[OperationNo] = @ParentOperation_NId
+              ,[BD] = '103'
+              ,UID = @AId
+              ,ResourceGroup = @EquipmentGroupNId
+           WHERE [PartNo]= @AsPlannedBOP_NId
+
+       ";
+        #endregion
+
+        #region DeleteEquipmentSpecificationQuery
+        public static string DeleteEquipmentSpecificationQuery = $@"
+        Delete from [RealData].[RoutingData]
+	       where
+		   [PartNo]= @NId
+        ";
+        #endregion
+
+
+    }
 
 }

@@ -42,7 +42,7 @@ namespace ExchangeMESManagerSevice.Controllers
         {
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
-
+            /*
             var obj = new MaterialSpecificationDTOUpdateParameter
             {
                 LogicalPosition="123"
@@ -52,6 +52,7 @@ namespace ExchangeMESManagerSevice.Controllers
             var test = _SQLUoWService.EquipmentSpecificationSQLRepository.GetAll();
             //var test = _MESUoWService.AsPlannedBOPRepository.UpdateMaterialSpecification(obj);
             //ProcessesSQL,ASPLannedBOPSQL - не доделаны
+            */
             return View(listOptionRes);
 
         }

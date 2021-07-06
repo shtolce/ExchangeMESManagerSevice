@@ -42,6 +42,7 @@ namespace ExchangeMESManagerSevice.Controllers
         {
             List<string> list = WMISevice.GetSQLInstances().ToList();
             SelectList listOptionRes = new SelectList(list, list[0]);
+//            var test = _SQLUoWService.EquipmentSpecificationSQLRepository.GetAll();
             /*
             var obj = new MaterialSpecificationDTOUpdateParameter
             {

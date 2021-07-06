@@ -21,9 +21,11 @@ namespace ExchangeMESManagerSevice.Services
         private HttpWorkOrdersRepository _WorkOrdersRepository;
         private HttpBufferRepository _BufferRepository;
 
-        public MESUoWService(IHostedService authService)
+        public MESUoWService(AuthorizationMesService authService)
         {
-            _authService = (AuthorizationMesService)authService;
+            var test = authService.GetType();
+            if (authService.GetType().Name == "AuthorizationMesService")
+                _authService = (AuthorizationMesService)authService;
         }
          
 

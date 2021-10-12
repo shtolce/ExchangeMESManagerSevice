@@ -4,6 +4,7 @@ using System.Linq;
 using System.Management;
 using System.Threading;
 using System.Threading.Tasks;
+using ExchangeMESManagerSevice.Services.ExchangeScenarios;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Hosting;
 
@@ -14,26 +15,27 @@ namespace ExchangeMESManagerSevice.Services
         private Timer _timer;
         private MESUoWService _MESUoWService;
         private SQLUoWService _SQLUoWService;
-
+        private BaseReferencesScenarios _scenarios;
         public ScheduledExchangeService(MESUoWService mESUoWService, SQLUoWService sQLUoWService)
         {
             _MESUoWService = mESUoWService;
             _SQLUoWService = sQLUoWService;
+            _scenarios = new BaseReferencesScenarios(_MESUoWService, _SQLUoWService);
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _timer = new Timer(getNewData, null, TimeSpan.Zero,
+            _timer = new Timer(GetNewData, null, TimeSpan.Zero,
                         TimeSpan.FromSeconds(30));
             return Task.CompletedTask;
         }
-
-        private void getNewData(object state)
+        /// <summary>
+        /// Общая функция запуска сценариев
+        /// </summary>
+        /// <param name="state"></param>
+        private void GetNewData(object state)
         {
-            var test = _SQLUoWService.EquipmentSpecificationSQLRepository.GetAll();
-            List<string> list = WMISevice.GetSQLInstances().ToList();
-            SelectList listOptionRes = new SelectList(list, list[0]);
-
+            _scenarios.GetScenario1();
 
 
 

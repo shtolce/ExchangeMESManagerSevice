@@ -2,6 +2,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/ExchangeMESManagerSevice",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:57728",
       "sslPort": 44365
@@ -17,7 +21,7 @@
       "use64Bit": true
     },
     "ExchangeMESManagerSevice": {
-      "commandName": "Project",
+      "commandName": "IIS",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

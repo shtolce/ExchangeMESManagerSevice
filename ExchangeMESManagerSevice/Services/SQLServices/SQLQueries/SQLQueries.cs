@@ -1074,7 +1074,8 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
                   ,rd.[ProcessTimeType] 
                   ,rd.[RunTime] 
                   ,rd.[BD] 
-                  ,rd.[UID] 
+                  --,rd.[UID] 
+                  ,'' as UID 
 	              ,rg.Resource as EquipmentNId
             FROM [RealData].[RoutingData] rd
             inner join [RealData].[ResourceGroupData] rg

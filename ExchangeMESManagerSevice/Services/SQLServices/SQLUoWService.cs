@@ -24,7 +24,7 @@ namespace ExchangeMESManagerSevice.Services
         private MaterialSpecificationSQLRepository _MaterialSpecificationSQLRepository;
         private EquipmentSpecificationSQLRepository _EquipmentSpecificationSQLRepository;
         
-        public string ConnectionString = @"Data Source=DMKIM\MSSQLSERVER1;Integrated Security=True;Initial Catalog=PBD_Opcenter;";
+        public string ConnectionString = @"Data Source=WIN-RI0FKDRK5SJ;Integrated Security=True;Initial Catalog=pbdstock;";
         public SQLUoWService()
         {
         }

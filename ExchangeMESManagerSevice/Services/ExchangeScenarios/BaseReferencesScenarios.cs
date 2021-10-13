@@ -19,7 +19,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         private void GetEquipment()
         {
             var test = _SQLUoWService.EquipmentSpecificationSQLRepository.GetAll();
-
+            var test2 = _MESUoWService.EquipmentRepository.GetAll();
 
         }
 

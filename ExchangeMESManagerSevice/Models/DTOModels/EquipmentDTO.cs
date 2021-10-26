@@ -22,7 +22,13 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class EquipmentDTOUpdateParameter
     {
+
         public string EquipmentConfigurationId;
+
+        public EquipmentDTOUpdateParameter(EquipmentDTO eq)
+        {
+            EquipmentConfigurationId = eq.EquipmentConfigurationId;
+        }
     }
 
     public class EquipmentDTOCreateParameter
@@ -35,6 +41,18 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Description;
         public string UoMNId;
         public String TemplateNId;
+
+        public EquipmentDTOCreateParameter(EquipmentDTO eq)
+        {
+            UseDefault = true;
+            NId = eq.NId;
+            Revision = eq.Revision;
+            UId = eq.UId;
+            Name = eq.Name;
+            Description = eq.Description;
+            UoMNId = eq.UoMNId;
+            TemplateNId = eq.TemplateNId;
+        }
     }
     public class EquipmentDTODeleteParameter
     {

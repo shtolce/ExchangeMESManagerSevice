@@ -100,10 +100,10 @@ namespace ExchangeMESManagerSevice.Services
             }
             if (namespaces.Count > 0)
             {
-                if (namespaces.Contains("ComputerManagement15"))
+                if (namespaces.Contains("ComputerManagement14"))
                 {
                     //use katmai+ namespace
-                    wmiNamespaceToUse = wmiNamespaceToUse + "\\ComputerManagement15";
+                    wmiNamespaceToUse = wmiNamespaceToUse + "\\ComputerManagement14";
                 }
                 else if (namespaces.Contains("ComputerManagement"))
                 {

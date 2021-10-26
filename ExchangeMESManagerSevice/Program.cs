@@ -29,6 +29,7 @@ namespace ExchangeMESManagerSevice
                 var host = WebHost.CreateDefaultBuilder(args)
                         .UseStartup<Startup>()
                         .Build();
+
                 host.Run();
             }
             else

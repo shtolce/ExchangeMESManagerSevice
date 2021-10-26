@@ -1,7 +1,11 @@
 {
   "iisSettings": {
-    "windowsAuthentication": false,
+    "windowsAuthentication": true,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/ExchangeMESManagerSevice",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:57728",
       "sslPort": 44365

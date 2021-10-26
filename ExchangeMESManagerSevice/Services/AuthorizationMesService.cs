@@ -27,8 +27,8 @@ namespace ExchangeMESManagerSevice.Services
         {
             //Web Request OAuth2 перенести в библиотеку сервиса
             string grant_type = "password";
-            string username = @"DMKIM\Shtolce";
-            string password = "159753";
+            string username = @"shtolce";
+            string password = "shtolce11021980";
 
             HttpWebRequest webRequest = HttpWebRequest.Create("http://localhost/sit-auth/OAuth/Token") as HttpWebRequest;
             webRequest.Method = "POST";

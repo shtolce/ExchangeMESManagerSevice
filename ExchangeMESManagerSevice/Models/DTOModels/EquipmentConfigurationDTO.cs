@@ -34,10 +34,19 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class EquipmentConfigurationDTOUpdateParameter
     {
+
         public string Name;
         public string Description;
         public string LevelNId;
         public string Id;
+
+        public EquipmentConfigurationDTOUpdateParameter(EquipmentConfigurationDTO eq)
+        {
+            Name = eq.Name;
+            Description = eq.Description;
+            LevelNId = eq.LevelNId;
+            Id = eq.Id;
+        }
     }
 
     public class EquipmentConfigurationDTOCreateParameter
@@ -48,6 +57,16 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Description;
         public string EquipmentTypeNId;
         public String LocationNId;
+
+        public EquipmentConfigurationDTOCreateParameter(EquipmentConfigurationDTO eq)
+        {
+            LevelNId = eq.LevelNId;
+            NId = eq.NId;
+            Name = eq.Name;
+            Description = eq.Description;
+            EquipmentTypeNId = eq.EquipmentTypeNId;
+            LocationNId = eq.LocationNId;
+        }
     }
     public class EquipmentConfigurationDTODeleteParameter
     {
@@ -58,9 +77,18 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class EquipmentGroupConfigurationDTOUpdateParameter
     {
+
+
         public string Id;
         public string Name;
         public string Description;
+
+        public EquipmentGroupConfigurationDTOUpdateParameter(EquipmentGroupConfigurationDTO eq)
+        {
+            Id = eq.Id;
+            Name = eq.Name;
+            Description = eq.Description;
+        }
     }
 
     public class EquipmentGroupConfigurationDTOCreateParameter

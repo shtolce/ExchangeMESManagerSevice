@@ -61,7 +61,10 @@ namespace ExchangeMESManagerSevice.Services
 
 
         private D ExecuteCommand<T, D>(T com, string commandName,string AppName="Material")
+            where D : class
         {
+            if (_authService.StateOAuth == null)
+                return null;
             HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/{AppName}/odata/{commandName}") as HttpWebRequest;
             webRequest.Method = "POST";
             webRequest.ContentType = "application/json";

@@ -81,6 +81,14 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Name;
         public string Description;
         public string UoMNId;
+
+        public MaterialDTOUpdateParameter(MaterialDTO matEl)
+        {
+            Id = matEl.Id;
+            Name = matEl.Name;
+            Description = matEl.Description;
+            UoMNId = matEl.UoMNId;
+        }
     }
 
     public class MaterialDTOCreateParameter
@@ -93,6 +101,18 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Description;
         public string UoMNId;
         public String TemplateNId;
+
+        public MaterialDTOCreateParameter(MaterialDTO matEl)
+        {
+            UseDefault = true;
+            NId = matEl.NId;
+            Revision = matEl.Revision;
+            UId = matEl.UId;
+            Name = matEl.Name;
+            Description = matEl.Description;
+            UoMNId = matEl.UoMNId;
+            TemplateNId = matEl.TemplateNId;
+        }
     }
     public class MaterialDTODeleteParameter
     {
@@ -158,10 +178,6 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     }
 
-
-
-
-
     /// <summary>
     /// Класс материалов MES. Является базовым. Все его доп свойства расширены в другой модели DMMaterial
     /// </summary>
@@ -188,5 +204,29 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Description { get; set; }
         public string UoMNId { get; set; }
         public String TemplateNId { get; set; }
+        public void UpdateRecord(MaterialDTO newEl)
+        {
+            this.AId = newEl.AId;
+            this.IsFrozen = newEl.IsFrozen;
+            this.ConcurrencyVersion = newEl.ConcurrencyVersion;
+            this.IsDeleted = newEl.IsDeleted;
+            this.CreatedOn = newEl.CreatedOn;
+            this.LastUpdatedOn = newEl.LastUpdatedOn;
+            this.EntityType = newEl.EntityType;
+            this.OptimisticVersion = newEl.OptimisticVersion;
+            this.ConcurrencyToken = newEl.ConcurrencyToken;
+            this.IsLocked = newEl.IsLocked;
+            this.ToBeCleaned = newEl.ToBeCleaned;
+            this.Revision = newEl.Revision;
+            this.SourceRevision = newEl.SourceRevision;
+            this.IsCurrent = newEl.IsCurrent;
+            this.UId = newEl.UId;
+            this.NId = newEl.NId;
+            this.Name = newEl.Name;
+            this.Description = newEl.Description;
+            this.UoMNId = newEl.UoMNId;
+            this.TemplateNId = newEl.TemplateNId;
+        }//UpdateRecord
+
     }
 }

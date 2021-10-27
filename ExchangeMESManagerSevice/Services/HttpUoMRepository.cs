@@ -35,6 +35,8 @@ namespace ExchangeMESManagerSevice.Services
 
         private UoMDTOResponse ExecuteCommand<T>(T com,string commandName)
         {
+            if (_authService.StateOAuth == null)
+                return null;
             HttpWebRequest webRequest = HttpWebRequest.Create($"http://localhost/sit-svc/Application/Reference/odata/{commandName}") as HttpWebRequest;
             webRequest.Method = "POST";
             webRequest.ContentType = "application/json";

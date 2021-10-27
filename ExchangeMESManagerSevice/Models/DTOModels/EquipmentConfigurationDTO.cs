@@ -56,7 +56,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Name;
         public string Description;
         public string EquipmentTypeNId;
-        public String LocationNId;
+        //public String LocationNId;
 
         public EquipmentConfigurationDTOCreateParameter(EquipmentConfigurationDTO eq)
         {
@@ -65,7 +65,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
             Name = eq.Name;
             Description = eq.Description;
             EquipmentTypeNId = eq.EquipmentTypeNId;
-            LocationNId = eq.LocationNId;
+            //LocationNId = eq.LocationNId;
         }
     }
     public class EquipmentConfigurationDTODeleteParameter
@@ -189,6 +189,33 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String EquipmentConfigurationId { get; set; }
         public String EquipmentTypeNId { get; set; }
         public String LevelNId { get; set; }
+        public void UpdateRecord(EquipmentConfigurationDTO newEq)
+        {
+            this.AId = newEq.AId;
+            this.IsFrozen = newEq.IsFrozen;
+            this.ConcurrencyVersion = newEq.ConcurrencyVersion;
+            this.IsDeleted = newEq.IsDeleted;
+            this.CreatedOn = newEq.CreatedOn;
+            this.LastUpdatedOn = newEq.LastUpdatedOn;
+            this.EntityType = newEq.EntityType;
+            this.OptimisticVersion = newEq.OptimisticVersion;
+            this.ConcurrencyToken = newEq.ConcurrencyToken;
+            this.IsLocked = newEq.IsLocked;
+            this.ToBeCleaned = newEq.ToBeCleaned;
+            this.IsCurrent = newEq.IsCurrent;
+            this.UId = newEq.UId;
+            this.NId = newEq.NId;
+            this.Name = newEq.Name;
+            this.Description = newEq.Description;
+            this.UoMNId = newEq.UoMNId;
+            this.TemplateNId = newEq.TemplateNId;
+            this.WorkCalendarNId = newEq.WorkCalendarNId;
+            this.LocationNId = newEq.LocationNId;
+            this.EquipmentConfigurationId = newEq.EquipmentConfigurationId;
+            this.LevelNId = newEq.LevelNId;
+
+        }
+
     }
     ///sit-svc/Application/Equipment/odata/EquipmentConfiguration
 

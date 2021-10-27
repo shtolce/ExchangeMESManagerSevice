@@ -96,9 +96,39 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String EquipmentConfigurationId { get; set; }
         public String LevelNId { get; set; }
         public StatusType Status { get; set; }
+        public void UpdateRecord(EquipmentDTO newEq)
+        {
+            this.AId = newEq.AId;
+            this.IsFrozen = newEq.IsFrozen;
+            this.ConcurrencyVersion = newEq.ConcurrencyVersion;
+            this.IsDeleted = newEq.IsDeleted;
+            this.CreatedOn = newEq.CreatedOn;
+            this.LastUpdatedOn = newEq.LastUpdatedOn;
+            this.EntityType = newEq.EntityType;
+            this.OptimisticVersion = newEq.OptimisticVersion;
+            this.ConcurrencyToken = newEq.ConcurrencyToken;
+            this.IsLocked = newEq.IsLocked;
+            this.ToBeCleaned = newEq.ToBeCleaned;
+            this.Revision = newEq.Revision;
+            this.SourceRevision = newEq.SourceRevision;
+            this.IsCurrent = newEq.IsCurrent;
+            this.UId = newEq.UId;
+            this.NId = newEq.NId;
+            this.Name = newEq.Name;
+            this.Description = newEq.Description;
+            this.UoMNId = newEq.UoMNId;
+            this.TemplateNId = newEq.TemplateNId;
+            this.WorkCalendarNId = newEq.WorkCalendarNId;
+            this.LocationNId = newEq.LocationNId;
+            //this.EquipmentConfigurationId = newEq.EquipmentConfigurationId;
+            this.LevelNId = newEq.LevelNId;
+            this.Status = newEq.Status;
+
+        }
 
 
     }
     //GET /sit-svc/Application/Equipment/odata/Equipment?$top=24&$skip=0&$orderby=NId%20asc&$count=true HTTP/1.1
+
 
 }

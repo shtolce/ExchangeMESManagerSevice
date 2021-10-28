@@ -15,9 +15,10 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
        ,[Area]
        ,[BD] as Description
 	   ,N'n/a' as UoMNId
-	   ,N'Default' as TemplateNId
+	   ,[PartNo] as TemplateNId
 	   ,N'Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.Material' as EntityType
 	   ,[PartNo] as UId
+       ,'A' as Revision
 	   FROM [RealData].[ItemData]";
         #endregion
 
@@ -29,9 +30,11 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
        ,[Area]
        ,[BD] as Description
 	   ,N'n/a' as UoMNId
-	   ,N'Default' as TemplateNId
+	   ,[PartNo] as TemplateNId
 	   ,N'Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.Material' as EntityType
 	   ,[PartNo] as UId
+       ,'A' as Revision
+
 	   FROM [RealData].[ItemData]
        Where PartNo = @NId";
        #endregion
@@ -80,29 +83,31 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
     {
         #region GetDMMaterialQuery
         public static string GetDMMaterialQuery = $@"Select       
-        [PartNo] as NId
-       ,[Product] as Name
-       ,[UID] as UId
-       ,[Area]
-       ,[BD] as Description
-	   ,N'n/a' as UoMNId
-	   ,N'Default' as TemplateNId
-	   ,N'Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.DM_Material' as EntityType
-	   ,[PartNo] as UId
+            ROW_NUMBER() over (Order by Partno) as DMMaterial_Id
+           ,[PartNo] as MaterialNId
+           ,[Product] as MaterialName
+           ,[UID] as MaterialId
+           ,[Area]
+           ,[BD] as Description
+	       ,N'n/a' as MaterialUoMNId
+	       ,N'Default' as MaterialTemplateNId
+	       ,N'Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.DM_Material' as EntityType
+	       ,[PartNo] as MaterialUId
 	   FROM [RealData].[ItemData]";
         #endregion
 
         #region GetDMMaterialQueryByNId
         public static string GetDMMaterialQueryByNId = $@"Select       
-        [PartNo] as NId
-       ,[Product] as Name
-       ,[UID] as UId
-       ,[Area]
-       ,[BD] as Description
-	   ,N'n/a' as UoMNId
-	   ,N'Default' as TemplateNId
-	   ,N'Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.DM_Material' as EntityType
-	   ,[PartNo] as UId
+           ROW_NUMBER() over (Order by Partno) as DMMaterial_Id
+           ,[PartNo] as NId
+           ,[Product] as Name
+           ,[UID] as UId
+           ,[Area]
+           ,[BD] as Description
+	       ,N'n/a' as MaterialUoMNId
+	       ,N'Default' as MaterialTemplateNId
+	       ,N'Siemens.SimaticIT.MasterData.MAT_MS.MSModel.DataModel.DM_Material' as EntityType
+	       ,[PartNo] as UId
 	   FROM [RealData].[ItemData]
        Where PartNo = @NId";
         #endregion

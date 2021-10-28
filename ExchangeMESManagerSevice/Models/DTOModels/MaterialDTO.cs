@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using Newtonsoft.Json;
 
 namespace ExchangeMESManagerSevice.Models.DTOModels
@@ -104,14 +106,14 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
         public MaterialDTOCreateParameter(MaterialDTO matEl)
         {
-            UseDefault = true;
+            UseDefault = false;
             NId = matEl.NId;
             Revision = matEl.Revision;
             UId = matEl.UId;
             Name = matEl.Name;
             Description = matEl.Description;
             UoMNId = matEl.UoMNId;
-            TemplateNId = matEl.TemplateNId;
+            //TemplateNId = matEl.TemplateNId;
         }
     }
     public class MaterialDTODeleteParameter
@@ -183,7 +185,21 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     /// </summary>
     public class MaterialDTO
     {
+        /// <summary>
+        /// При запуске этого метода задействуются атрибуты анотации при маппировании даппером
+        /// </summary>
+        public static void DapperMapping()
+        {
+            Dapper.SqlMapper.SetTypeMap(typeof(MaterialDTO),
+                new CustomPropertyTypeMap(typeof(MaterialDTO), (type, columnName) =>
+                    type.GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(false).OfType<ColumnAttribute>()
+                    .Any(attr => attr.Name == columnName)))
+                );
+        }
+
+        [Column("MaterialId")]
         public string Id { get; set; }
+        [Column("MaterialAId")]
         public string AId { get; set; }
         public bool IsFrozen { get; set; }
         public int ConcurrencyVersion { get; set; }
@@ -198,11 +214,16 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Revision { get; set; }
         public String SourceRevision { get; set; }
         public bool IsCurrent { get; set; }
+        [Column("MaterialUId")]
         public string UId { get; set; }
+        [Column("MaterialNId")]
         public string NId { get; set; }
+        [Column("MaterialName")]
         public string Name { get; set; }
         public string Description { get; set; }
+        [Column("MaterialUoMNId")]
         public string UoMNId { get; set; }
+        [Column("MaterialTemplateNId")]
         public String TemplateNId { get; set; }
         public void UpdateRecord(MaterialDTO newEl)
         {

@@ -12,12 +12,14 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         private MESUoWService _MESUoWService;
         private SQLUoWService _SQLUoWService;
         MaterialSQLRepository sqlMatRepo;
+        DM_MateriaSQLRepository sqlDMMatRepo;
+        MaterialSpecificationSQLRepository sqlMatSpecRepo;
         EquipmentSQLRepository sqlEqRepo;
         EquipmentConfigurationSQLRepository sqlEqConfRepo;
         HttpEquipmentRepository mesEqRepo;
         HttpEquipmentConfigurationRepository mesEqConfRepo;
         HttpMaterialsRepository mesMatRepo;
-
+        HttpDMMaterialsRepository mesDMMatRepo;
         public BaseReferencesScenarios(MESUoWService MESUoWService, SQLUoWService SQLUoWService)
         {
             _MESUoWService = MESUoWService;
@@ -26,10 +28,13 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             sqlEqRepo = _SQLUoWService.EquipmentSQLRepository;
             sqlEqConfRepo = _SQLUoWService.EquipmentConfigurationSQLRepository;
             sqlMatRepo = _SQLUoWService.MateriaSQLRepository;
+            sqlMatSpecRepo = _SQLUoWService.MaterialSpecificationSQLRepository;
+            sqlDMMatRepo = _SQLUoWService.DM_MateriaSQLRepository;
             //Инициализация репозиториев на стороне MES
             mesEqRepo = _MESUoWService.EquipmentRepository;
             mesEqConfRepo = _MESUoWService.EquipmentConfigurationRepository;
             mesMatRepo = _MESUoWService.MaterialsRepository;
+            mesDMMatRepo = _MESUoWService.DMMaterialsRepository;
         }
 
         /// <summary>
@@ -37,8 +42,9 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         /// </summary>
         public void GetScenario1()
         {
-            ImportEquipmentToMes();
+            //ImportEquipmentToMes();
             ImportMaterialToMes();
+            ImportBomToMes();
         }
 
     }

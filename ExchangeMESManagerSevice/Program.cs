@@ -23,7 +23,7 @@ namespace ExchangeMESManagerSevice
             var pathToContentRoot = Path.GetDirectoryName(pathToExe);
             // создаем хост
             // запускаем в виде службы
-
+            ///if (Debugger.IsAttached) { request.Proxy = new WebProxy("http://localhost:8888/", true); }
             if (Debugger.IsAttached || args.Contains("--debug"))
             {
                 var host = WebHost.CreateDefaultBuilder(args)

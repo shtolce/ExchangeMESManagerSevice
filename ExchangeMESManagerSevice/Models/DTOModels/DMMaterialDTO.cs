@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using Newtonsoft.Json;
 
 namespace ExchangeMESManagerSevice.Models.DTOModels
@@ -71,6 +73,16 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     /// </summary>
     public class DMMaterialDTO
     {
+        public static void DapperMapping()
+        {
+            Dapper.SqlMapper.SetTypeMap(typeof(DMMaterialDTO),
+                new CustomPropertyTypeMap(typeof(DMMaterialDTO), (type, columnName) =>
+                    type.GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(false).OfType<ColumnAttribute>()
+                    .Any(attr => attr.Name == columnName)))
+                );
+        }
+
+        [Column("DMMaterial_Id")]
         public string Id { get; set; }
         public string AId { get; set; }
         public Nullable<bool> IsFrozen { get; set; }
@@ -91,6 +103,8 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string EffectivityExpression { get; set; }
         public Nullable<bool> Traceable { get; set; }
         public string Material_Id { get; set; }
+        public string Material_NId { get; set; }
+        public string Material_Name { get; set; }
         public string MaterialClass_Id { get; set; }
         public string Supplier_Id { get; set; }
         public string FunctionalCode_Id { get; set; }

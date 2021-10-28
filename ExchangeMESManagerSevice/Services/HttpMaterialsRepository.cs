@@ -150,6 +150,11 @@ namespace ExchangeMESManagerSevice.Services
             var urlProfile = $"http://localhost/sit-svc/Application/Material/odata/DSMaterial_BoM?$filter=MaterialDefinition/Material_Id eq {Id}";
             return Get<BoMDTO, BoMDTOResponse>(urlProfile);
         }
+        public List<BoMDTO> GetBoMByMatDefNId(string NId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/Material/odata/DSMaterial_BoM?$filter=MaterialDefinition/Material/NId eq '{NId}'";
+            return Get<BoMDTO, BoMDTOResponse>(urlProfile);
+        }
 
         //GET /sit-svc/Application/AppU4DM/odata/BoMItem?$expand=MaterialDefinition($expand=Material),BoMItemBoM,GroupType&$filter=BoM_Id%20eq%20a09bf207-e560-4919-9aac-7774e3eb98e5 HTTP/1.1
 

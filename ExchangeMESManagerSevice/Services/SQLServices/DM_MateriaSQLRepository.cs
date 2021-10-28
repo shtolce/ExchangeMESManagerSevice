@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -52,13 +53,38 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
         }
 
+
+
+
         public IEnumerable<DMMaterialDTO> GetAll()
         {
+            DMMaterialDTO.DapperMapping();
+            MaterialDTO.DapperMapping();
             using (var connection = new SqlConnection(_connectionString))
             {
                 var sql = SQLQueriesDM_Material.GetDMMaterialQuery;
                 connection.Open();
-                var list = connection.Query<DMMaterialDTO>(sql, commandType: CommandType.Text);
+                var list = connection.Query<DMMaterialDTO, MaterialDTO, DMMaterialDTO>(sql, (dmMat, mat) => {
+                    if (mat == null)
+                    {
+                        mat = new MaterialDTO()
+                        {
+                            NId = ""
+                        };
+                    }
+                    dmMat.Material = new MaterialDTO
+                    {
+                        NId = mat.NId
+                        ,Name = mat.Name
+                        ,UId = mat.UId
+                        ,Description = mat.Description
+                        ,UoMNId = mat.UoMNId
+                        ,TemplateNId = mat.TemplateNId
+                        ,EntityType = mat.EntityType
+                    };
+                    return dmMat;
+
+                },splitOn: "MaterialNId");
                 return list;
             };
         }

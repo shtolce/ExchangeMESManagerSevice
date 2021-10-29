@@ -85,6 +85,9 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
                     return dmMat;
 
                 },splitOn: "MaterialNId");
+                DMMaterialDTO.DapperUnMapping();
+                MaterialDTO.DapperUnMapping();
+
                 return list;
             };
         }

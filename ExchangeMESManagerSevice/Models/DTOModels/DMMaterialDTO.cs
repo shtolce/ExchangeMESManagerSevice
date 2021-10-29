@@ -40,14 +40,22 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public bool Traceable;
         public QuantityType Volume;
         public QuantityType Weight;
-        public string MaterialId;
-        public string CorrelationId;
-        public string EffectivityExpression;
-        public string SupplierId;
         public AMPowderPropertiesParameterType AMPowderProperties;
         public string LogisticClassNId;
-        public string MaterialClassId;
-        public string FunctionalCodeId;
+        public string MaterialClassNId;
+        public string FunctionalCodeNId;
+
+        public DMMaterialDTOUpdateParameter(DMMaterialDTO DMMatEl)
+        {
+            Id = DMMatEl.Id;
+            SerialNumberProfile = DMMatEl.SerialNumberProfile.HasValue ? DMMatEl.SerialNumberProfile.Value : false;
+            FirstArticleInspection = DMMatEl.FirstArticleInspection.HasValue ? DMMatEl.FirstArticleInspection.Value : false;
+            IsPhantom = DMMatEl.IsPhantom.HasValue ? DMMatEl.IsPhantom.Value : false;
+            Traceable = DMMatEl.Traceable.HasValue ? DMMatEl.Traceable.Value : false;
+            Volume = DMMatEl.Volume;
+            Weight = DMMatEl.Weight;
+            LogisticClassNId = DMMatEl.LogisticClassNId;
+        }
     }
 
     public class DMMaterialDTOCreateParameter
@@ -63,6 +71,18 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string LogisticClassNId;
         public string MaterialClassId;
         public string FunctionalCodeId;
+
+        public DMMaterialDTOCreateParameter(DMMaterialDTO dmMatEl)
+        {
+            SerialNumberProfile = dmMatEl.SerialNumberProfile.HasValue?dmMatEl.SerialNumberProfile.Value:false;
+            FirstArticleInspection = dmMatEl.FirstArticleInspection.HasValue?dmMatEl.FirstArticleInspection.Value:false;
+            IsPhantom = dmMatEl.IsPhantom.HasValue?dmMatEl.IsPhantom.Value:false;
+            Traceable = dmMatEl.Traceable.HasValue?dmMatEl.Traceable.Value:false;
+            Volume = dmMatEl.Volume;
+            Weight = dmMatEl.Weight;
+            MaterialId = dmMatEl.Material_Id;
+            LogisticClassNId = dmMatEl.LogisticClassNId;
+        }
     }
     public class DMMaterialDTODeleteParameter
     {
@@ -79,6 +99,12 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
                 new CustomPropertyTypeMap(typeof(DMMaterialDTO), (type, columnName) =>
                     type.GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(false).OfType<ColumnAttribute>()
                     .Any(attr => attr.Name == columnName)))
+                );
+        }
+        public static void DapperUnMapping()
+        {
+            Dapper.SqlMapper.SetTypeMap(typeof(DMMaterialDTO),
+                null
                 );
         }
 
@@ -112,5 +138,26 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public QuantityType Volume { get; set; }
         public MaterialDTO Material { get; set; }
         public string[] SegregationTags { get; set; }
+        public void UpdateRecord(DMMaterialDTO newEl)
+        {
+            this.AId = newEl.AId;
+            this.IsFrozen = newEl.IsFrozen;
+            this.ConcurrencyVersion = newEl.ConcurrencyVersion;
+            this.IsDeleted = newEl.IsDeleted;
+            this.CreatedOn = newEl.CreatedOn;
+            this.LastUpdatedOn = newEl.LastUpdatedOn;
+            this.EntityType = newEl.EntityType;
+            this.OptimisticVersion = newEl.OptimisticVersion;
+            this.ConcurrencyToken = newEl.ConcurrencyToken;
+            this.IsLocked = newEl.IsLocked;
+            this.ToBeCleaned = newEl.ToBeCleaned;
+            this.SerialNumberProfile = newEl.SerialNumberProfile;
+            this.IsPhantom = newEl.IsPhantom;
+            this.LogisticClassNId = newEl.LogisticClassNId;
+            this.CorrelationId = newEl.CorrelationId;
+            this.Material = newEl.Material;
+
+        }//UpdateRecord
+
     }
 }

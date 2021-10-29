@@ -32,22 +32,31 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         {
             DMMaterialDTO foundDMMatItem = null;
             foundDMMatItem = mesDMMatRepo.GetByNId(dmMatItem.Material.NId)?.FirstOrDefault();
+            MaterialDTO foundMatItem = mesMatRepo.GetByNId(dmMatItem.Material.NId)?.FirstOrDefault();
+            if (foundMatItem == null)
+                return;
+            MaterialClassDTO foundMatClassItem = mesMatClassRepo.GetByNId("n/a").FirstOrDefault();
+
             if (foundDMMatItem == null)
             {
-                //DMMaterialDTOCreateParameter dmMatCrParameter = new DMMaterialDTOCreateParameter(dmMatItem);
-                //mesDMMatRepo.Create(dmMatCrParameter);
+                DMMaterialDTOCreateParameter dmMatCrParameter = new DMMaterialDTOCreateParameter(dmMatItem);
+                dmMatCrParameter.MaterialId = foundMatItem.Id;
+                dmMatCrParameter.LogisticClassNId = "Default";
+                dmMatCrParameter.MaterialClassId = foundMatClassItem.Id;
+
+                mesDMMatRepo.Create(dmMatCrParameter);
             }//if
             else
             {
-                //foundDMMatItem.UpdateRecord(matItem);
-                //DMMaterialDTOUpdateParameter dmMatUpParameter = new DMMaterialDTOUpdateParameter(foundDMMatItem);
-                //mesMatRepo.Update(dmMatUpParameter);
+                foundDMMatItem.UpdateRecord(dmMatItem);
+                DMMaterialDTOUpdateParameter dmMatUpParameter = new DMMaterialDTOUpdateParameter(foundDMMatItem);
+                dmMatUpParameter.LogisticClassNId = "Default";
+                dmMatUpParameter.MaterialClassNId = foundMatClassItem.NId;
+                dmMatUpParameter.Id = foundDMMatItem.Id;
+                mesDMMatRepo.Update(dmMatUpParameter);
             }//else
 
         }//CreateOrUpdateDMMaterial
-
-
-
 
         private void CreateOrUpdateMatSpec(MaterialSpecificationDTO specEl)
         {
@@ -85,6 +94,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             {
                 CreateOrUpdateMaterial(matItem);
             }//foreach
+            
             //Создаем или обновляем дискретный справочник материалов
             foreach (DMMaterialDTO dmMatItem in dmMatSqlCollection)
             {

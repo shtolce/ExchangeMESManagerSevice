@@ -20,6 +20,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         HttpEquipmentConfigurationRepository mesEqConfRepo;
         HttpMaterialsRepository mesMatRepo;
         HttpDMMaterialsRepository mesDMMatRepo;
+        HttpMaterialClassRepository mesMatClassRepo;
         public BaseReferencesScenarios(MESUoWService MESUoWService, SQLUoWService SQLUoWService)
         {
             _MESUoWService = MESUoWService;
@@ -34,6 +35,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             mesEqRepo = _MESUoWService.EquipmentRepository;
             mesEqConfRepo = _MESUoWService.EquipmentConfigurationRepository;
             mesMatRepo = _MESUoWService.MaterialsRepository;
+            mesMatClassRepo = _MESUoWService.MaterialClassRepository;
             mesDMMatRepo = _MESUoWService.DMMaterialsRepository;
         }
 

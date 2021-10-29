@@ -196,6 +196,13 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
                     .Any(attr => attr.Name == columnName)))
                 );
         }
+        public static void DapperUnMapping()
+        {
+            Dapper.SqlMapper.SetTypeMap(typeof(MaterialDTO),
+                null
+                );
+        }
+
 
         [Column("MaterialId")]
         public string Id { get; set; }

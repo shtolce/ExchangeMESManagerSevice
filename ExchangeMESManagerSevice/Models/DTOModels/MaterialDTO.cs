@@ -25,6 +25,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string @ODataContext;
         public List<BoMDTO> value { get; set; }
         public bool Succeeded;
+        public string Id;
         public string MaterialId;
         public List<string> PropertyIds;
         public object Error;
@@ -51,10 +52,46 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String MaterialDefinition;
         public String BoM;
         public String GroupType;
+        private BoMItemDTO item;
+
+        public BoMItemDTOCreateParameter(BoMItemDTO item)
+        {
+            NId = item.NId;
+            Quantity = item.Quantity;
+            MaterialDefinition = item.MaterialDefinition_Id;
+            GroupType = item.GroupType_Id;
+        }
     }
+
+    public class BoMItemDTOUpdateParameter
+    {
+        public string BillOfMaterialId;
+        public String Id;
+        public Optional_Revision MaterialRevision;
+        public QuantityType MaterialQuantity;
+
+        public BoMItemDTOUpdateParameter(BoMItemDTO el)
+        {
+            BillOfMaterialId = el.BoM_Id;
+            Id = el.Id;
+            MaterialRevision = new Optional_Revision { OptionalRevision="A"};
+            MaterialQuantity = el.Quantity;
+        }
+    }
+
+    public class Optional_Revision
+    {
+        public string OptionalRevision;
+    }
+
     public class BoMItemDTODeleteParameter
     {
         public String[] Ids;
+
+        public BoMItemDTODeleteParameter(BoMItemDTO el)
+        {
+            Ids = new string[] { el.Id };
+        }
     }
 
 

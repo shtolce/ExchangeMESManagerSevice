@@ -46,6 +46,11 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<BoMItemDTOCreateParameter, BoMItemDTOResponse>(com, "CreateBoMItem", "AppU4DM"); ;
         }
+        public BoMItemDTOResponse UpdateBoMItem(BoMItemDTOUpdateParameter com)
+        {
+            return ExecuteCommand<BoMItemDTOUpdateParameter, BoMItemDTOResponse>(com, "UpdateBoMItem", "AppU4DM"); ;
+        }
+
         public BoMItemDTOResponse DeleteBoMItemList(BoMItemDTODeleteParameter com)
         {
             return ExecuteCommand<BoMItemDTODeleteParameter, BoMItemDTOResponse>(com, "DeleteBoMItemList", "AppU4DM"); ;
@@ -153,6 +158,12 @@ namespace ExchangeMESManagerSevice.Services
         public List<BoMDTO> GetBoMByMatDefNId(string NId)
         {
             var urlProfile = $"http://localhost/sit-svc/Application/Material/odata/DSMaterial_BoM?$filter=MaterialDefinition/Material/NId eq '{NId}'";
+            return Get<BoMDTO, BoMDTOResponse>(urlProfile);
+        }
+
+        public List<BoMDTO> GetBoMByNId(string NId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/Material/odata/DSMaterial_BoM?$filter=NId eq '{NId}'";
             return Get<BoMDTO, BoMDTOResponse>(urlProfile);
         }
 

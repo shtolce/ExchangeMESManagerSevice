@@ -58,25 +58,68 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
 
         }//CreateOrUpdateDMMaterial
 
+
+        /// <summary>
+        /// Создание или обновлеие спецификаций к материалам
+        /// </summary>
+        /// <param name="specEl"></param>
         private void CreateOrUpdateMatSpec(BoMDTO specEl)
         {
-            List<BoMDTO> foundMatSpecItem = null;
-            foundMatSpecItem = mesMatRepo.GetBoMByMatDefNId(specEl.NId);
-            if (foundMatSpecItem == null)
+            string bomId = null;
+            bomId = mesMatRepo.GetBoMByNId(specEl.NId)?.FirstOrDefault()?.Id;
+            if (bomId == null)
             {
                 BoMDTOCreateParameter dmMatCrParameter = new BoMDTOCreateParameter(specEl);
-                mesMatRepo.CreateBoM(dmMatCrParameter);
+                var matDefId= mesDMMatRepo.GetByNId(specEl.NId)?.FirstOrDefault();
+                dmMatCrParameter.MaterialDefinition = matDefId?.Id;
+                dmMatCrParameter.Quantity.UoMNId = matDefId?.Material?.UoMNId;
+                bomId = mesMatRepo.CreateBoM(dmMatCrParameter)?.Id;
+                foreach(BoMItemDTO item in specEl.Items)
+                {
+                    BoMItemDTOCreateParameter dmBoMItemCrParameter = new BoMItemDTOCreateParameter(item);
+                    matDefId = mesDMMatRepo.GetByNId(item.NId)?.FirstOrDefault();
+                    dmBoMItemCrParameter.MaterialDefinition = matDefId?.Id;
+                    dmBoMItemCrParameter.Quantity.UoMNId = matDefId?.Material?.UoMNId;
+                    dmBoMItemCrParameter.BoM = bomId;
+                    dmBoMItemCrParameter.NId = null;
+                    mesMatRepo.CreateBoMItem(dmBoMItemCrParameter);
+                }//foreach
+
             }//if
             else
             {
-                /*
-                foundMatSpecItem.UpdateRecord(dmMatItem);
-                DMMaterialDTOUpdateParameter dmMatUpParameter = new DMMaterialDTOUpdateParameter(foundDMMatItem);
-                dmMatUpParameter.LogisticClassNId = "Default";
-                dmMatUpParameter.MaterialClassNId = foundMatSpecItem.NId;
-                dmMatUpParameter.Id = foundMatSpecItem.Id;
-                mesDMMatRepo.Update(dmMatUpParameter);
-                */
+                //Все элементы спецификации по ID BOM 
+                List<BoMItemDTO> bomItemAllList= mesMatRepo.GetAllBoMItemByBoMId(bomId);
+
+                foreach (BoMItemDTO item in specEl.Items)
+                {
+                    var matDefId = mesDMMatRepo.GetByNId(item.NId)?.FirstOrDefault();
+                    //Проверяем если в спецификации уже есть деталь обновляем количество, иначе создаем элемент спецификации
+                    BoMItemDTO foundBomItem = bomItemAllList.FirstOrDefault(x => x.MaterialDefinition_Id == matDefId.Id);
+                    if (foundBomItem == null)
+                    {
+                        BoMItemDTOCreateParameter dmBoMItemCrParameter = new BoMItemDTOCreateParameter(item);
+                        matDefId = mesDMMatRepo.GetByNId(item.NId)?.FirstOrDefault();
+                        dmBoMItemCrParameter.MaterialDefinition = matDefId?.Id;
+                        dmBoMItemCrParameter.Quantity.UoMNId = matDefId?.Material?.UoMNId;
+                        dmBoMItemCrParameter.BoM = bomId;
+                        dmBoMItemCrParameter.NId = null;
+                        mesMatRepo.CreateBoMItem(dmBoMItemCrParameter);
+                    }//if
+                    else
+                    {
+                        BoMItemDTODeleteParameter dmBoMItemDelParameter = new BoMItemDTODeleteParameter(foundBomItem);
+                        mesMatRepo.DeleteBoMItemList(dmBoMItemDelParameter);
+                        BoMItemDTOCreateParameter dmBoMItemCrParameter = new BoMItemDTOCreateParameter(item);
+                        matDefId = mesDMMatRepo.GetByNId(item.NId)?.FirstOrDefault();
+                        dmBoMItemCrParameter.MaterialDefinition = matDefId?.Id;
+                        dmBoMItemCrParameter.Quantity.UoMNId = matDefId?.Material?.UoMNId;
+                        dmBoMItemCrParameter.BoM = bomId;
+                        dmBoMItemCrParameter.NId = null;
+                        mesMatRepo.CreateBoMItem(dmBoMItemCrParameter);
+
+                    }//else
+                }//foreach
             }//else
 
 

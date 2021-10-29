@@ -96,8 +96,13 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
                         {
                             TempDict.Add(specMat.NId, specEntity = specMat);
                         }
-
-
+                        specEntity.Quantity = new QuantityType
+                        {
+                            QuantityValue = 1,
+                            UoMNId = "u"
+                        
+                        };
+                        specEntity.Version = "A";
                         if (mat == null)
                         {
                             mat = new BoMItemDTO()
@@ -112,6 +117,13 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
                         if (mat != null)
                         {
+                            mat.Quantity = new QuantityType
+                            {
+                                QuantityValue = (float)mat.QuantityVal,
+                                UoMNId = "u"
+
+                            };
+
                             if (!specEntity.Items.Any(x => x.NId == mat.NId))
                             {
                                     specEntity.Items.Add(mat);

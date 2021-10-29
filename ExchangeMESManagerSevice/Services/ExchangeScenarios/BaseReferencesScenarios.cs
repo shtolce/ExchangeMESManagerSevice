@@ -45,7 +45,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         public void GetScenario1()
         {
             //ImportEquipmentToMes();
-            ImportMaterialToMes();
+            //ImportMaterialToMes();
             ImportBomToMes();
         }
 

@@ -58,10 +58,26 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
 
         }//CreateOrUpdateDMMaterial
 
-        private void CreateOrUpdateMatSpec(MaterialSpecificationDTO specEl)
+        private void CreateOrUpdateMatSpec(BoMDTO specEl)
         {
             List<BoMDTO> foundMatSpecItem = null;
-            foundMatSpecItem = mesMatRepo.GetBoMByMatDefNId(specEl.AsPlannedBOP_NId);
+            foundMatSpecItem = mesMatRepo.GetBoMByMatDefNId(specEl.NId);
+            if (foundMatSpecItem == null)
+            {
+                BoMDTOCreateParameter dmMatCrParameter = new BoMDTOCreateParameter(specEl);
+                mesMatRepo.CreateBoM(dmMatCrParameter);
+            }//if
+            else
+            {
+                /*
+                foundMatSpecItem.UpdateRecord(dmMatItem);
+                DMMaterialDTOUpdateParameter dmMatUpParameter = new DMMaterialDTOUpdateParameter(foundDMMatItem);
+                dmMatUpParameter.LogisticClassNId = "Default";
+                dmMatUpParameter.MaterialClassNId = foundMatSpecItem.NId;
+                dmMatUpParameter.Id = foundMatSpecItem.Id;
+                mesDMMatRepo.Update(dmMatUpParameter);
+                */
+            }//else
 
 
 
@@ -73,9 +89,9 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         /// </summary>
         private void ImportBomToMes()
         {
-            IEnumerable<MaterialSpecificationDTO> matSpecSqlCollection = sqlMatSpecRepo.GetAll();
+            IEnumerable<BoMDTO> matSpecSqlCollection = sqlMatSpecRepo.GetAllBoM().ToList();
             //Создаем или обновляем справочник материалов спецификаций
-            foreach (MaterialSpecificationDTO matSpecItem in matSpecSqlCollection)
+            foreach (BoMDTO matSpecItem in matSpecSqlCollection)
             {
                 CreateOrUpdateMatSpec(matSpecItem);
             }//foreach

@@ -979,7 +979,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 	          ,idP.Product as Product
               ,[OperationName] as Operation_Name
               ,[OperationNo] as Operation_Number
-              ,[RequiredPartNo] as MaterialNId
+              ,[RequiredPartNo] as NId
 	          ,idRp.Product as requiredProduct
               ,[RequiredQuantity] as QuantityVal
               ,pBom.[BD] as CorrelationId
@@ -992,6 +992,28 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
         ";
         #endregion
+
+
+        #region GetBoMQuery
+        public static string GetBoMQuery = $@"
+            SELECT 
+              pBom.[UID]  as Id
+              ,pBom.[PartNo] as NId
+	          ,idP.Product as Name
+              ,[RequiredPartNo] as ItemNId
+	          ,idRp.Product as ItemName
+              ,[RequiredQuantity] as ItemQuantityVal
+            FROM [RealData].[ProductBoMData] pBom
+            inner join [RealData].[ItemData] idP 
+                on idP.PartNo = pBom.PartNo
+            inner join [RealData].[ItemData] idRp 
+                on idrP.PartNo = pBom.PartNo
+
+
+        ";
+        #endregion
+
+
 
         #region GetMaterialSpecificationQueryByNId
         public static string GetMaterialSpecificationQueryByNId = $@"

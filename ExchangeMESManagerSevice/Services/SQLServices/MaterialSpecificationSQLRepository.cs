@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -74,6 +75,57 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
                 var list = connection.Query<MaterialSpecificationDTO>(sql, commandType: CommandType.Text);
                 return list;
             };
+        }
+
+        public IEnumerable<BoMDTO> GetAllBoM()
+        {
+            BoMItemDTO.DapperMapping();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var sql = SQLQueriesMaterialSpecification.GetBoMQuery;
+                connection.Open();
+                //var list = connection.Query<BoMDTO>(sql, commandType: CommandType.Text);
+
+
+                    var TempDict = new Dictionary<string, BoMDTO>();
+
+                    var list = connection.Query<BoMDTO, BoMItemDTO, BoMDTO>(sql, (specMat, mat) => {
+
+                        BoMDTO specEntity;
+                        if (!TempDict.TryGetValue(specMat.NId, out specEntity))
+                        {
+                            TempDict.Add(specMat.NId, specEntity = specMat);
+                        }
+
+
+                        if (mat == null)
+                        {
+                            mat = new BoMItemDTO()
+                            {
+                                NId = ""
+                            };
+                        }
+                        if (specEntity.Items == null)
+                        {
+                                specEntity.Items = new List<BoMItemDTO>();
+                        }
+
+                        if (mat != null)
+                        {
+                            if (!specEntity.Items.Any(x => x.NId == mat.NId))
+                            {
+                                    specEntity.Items.Add(mat);
+                            }
+                        }
+
+                        return specEntity;
+
+                    }, splitOn: "ItemNId");
+
+                BoMItemDTO.DapperUnMapping();
+                return list.Distinct();
+            };
+
         }
 
         public MaterialSpecificationDTO GetByNId(string NId)

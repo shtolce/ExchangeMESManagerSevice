@@ -69,6 +69,16 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public DateTimeOffset? ValidFrom;
         public DateTimeOffset? ValidTo;
         public String MaterialDefinition;
+
+        public BoMDTOCreateParameter(BoMDTO specEl)
+        {
+            NId = specEl.NId;
+            Version = specEl.Version;
+            Name = specEl.Name;
+            Description = specEl.Description;
+            Quantity = specEl.Quantity;
+            MaterialDefinition = specEl.MaterialDefinition_Id;
+        }
     }
 
     public class BoMDTOChangeStatusParameter
@@ -123,30 +133,49 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class BoMDTO
     {
-        public string Id;
-        public string AId;
-        public bool IsFrozen;
-        public int ConcurrencyVersion;
-        public int IsDeleted;
-        public DateTime CreatedOn;
-        public DateTime LastUpdatedOn;
-        public string EntityType;
-        public string OptimisticVersion;
-        public String ConcurrencyToken;
-        public bool IsLocked;
-        public bool ToBeCleaned;
-        public string Name;
-        public string Description;
-        public int Priority;
-        public DateTimeOffset? ValidityFrom;
-        public DateTimeOffset? ValidityTo;
-        public string Version;
-        public string NId;
-        public String MaterialDefinition_Id;
-        public StatusType Status;
-        public QuantityType Quantity;
-        public string[] SegregationTags;
-        public DMMaterialDTO MaterialDefinition;
+        [Column("Id")]
+        public string Id { get; set; }
+        [Column("Name")]
+        public string Name { get; set; }
+        [Column("NId")]
+        public string NId { get; set; }
+        public ICollection<BoMItemDTO> Items { get; set; }
+        public string AId { get; set; }
+        public bool IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public int IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public bool IsLocked { get; set; }
+        public bool ToBeCleaned { get; set; }
+        public string Description { get; set; }
+        public int Priority { get; set; }
+        public DateTimeOffset? ValidityFrom { get; set; }
+        public DateTimeOffset? ValidityTo { get; set; }
+        public string Version { get; set; }
+        public String MaterialDefinition_Id { get; set; }
+        public StatusType Status { get; set; }
+        public QuantityType Quantity { get; set; }
+        public string[] SegregationTags { get; set; }
+        public DMMaterialDTO MaterialDefinition { get; set; }
+        public static void DapperMapping()
+        {
+            Dapper.SqlMapper.SetTypeMap(typeof(BoMDTO),
+                new CustomPropertyTypeMap(typeof(BoMDTO), (type, columnName) =>
+                    type.GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(false).OfType<ColumnAttribute>()
+                    .Any(attr => attr.Name == columnName)))
+                );
+        }
+        public static void DapperUnMapping()
+        {
+            Dapper.SqlMapper.SetTypeMap(typeof(BoMDTO),
+                null
+                );
+        }
+
     }
     public class BoMItemGroupTypeDTO
     {
@@ -156,27 +185,50 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class BoMItemDTO
     {
-        public string Id;
-        public string AId;
-        public bool IsFrozen;
-        public int ConcurrencyVersion;
-        public int IsDeleted;
-        public DateTime CreatedOn;
-        public DateTime LastUpdatedOn;
-        public string EntityType;
-        public string OptimisticVersion;
-        public String ConcurrencyToken;
-        public bool IsLocked;
-        public bool ToBeCleaned;
-        public string NId;
-        public string BoM_Id;
-        public String BoMItemBoM_Id;
-        public String GroupType_Id;
-        public String MaterialDefinition_Id;
-        public QuantityType Quantity;
-        public DMMaterialDTO MaterialDefinition;
-        public BoMDTO BoMItemBoM;
-        public BoMItemGroupTypeDTO GroupType;
+        public string ItemId { get; set; }
+        public string Id { get; set; }
+        [Column("ItemAId")]
+        public string AId { get; set; }
+        public bool IsFrozen { get; set; }
+        public int ConcurrencyVersion { get; set; }
+        public int IsDeleted { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string EntityType { get; set; }
+        public string OptimisticVersion { get; set; }
+        public String ConcurrencyToken { get; set; }
+        public bool IsLocked { get; set; }
+        public bool ToBeCleaned { get; set; }
+        [Column("ItemNId")]
+        public string NId { get; set; }
+        [Column("ItemName")]
+        public string Name { get; set; }
+
+        public string BoM_Id { get; set; }
+        public String BoMItemBoM_Id { get; set; }
+        public String GroupType_Id { get; set; }
+        public String MaterialDefinition_Id { get; set; }
+
+        [Column("ItemQuantityVal")]
+        public double QuantityVal { get; set; }
+        public QuantityType Quantity { get; set; }
+        public DMMaterialDTO MaterialDefinition{ get; set; }
+        public BoMDTO BoMItemBoM { get; set; }
+        public BoMItemGroupTypeDTO GroupType { get; set; }
+        public static void DapperMapping()
+        {
+            Dapper.SqlMapper.SetTypeMap(typeof(BoMItemDTO),
+                new CustomPropertyTypeMap(typeof(BoMItemDTO), (type, columnName) =>
+                    type.GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(false).OfType<ColumnAttribute>()
+                    .Any(attr => attr.Name == columnName)))
+                );
+        }
+        public static void DapperUnMapping()
+        {
+            Dapper.SqlMapper.SetTypeMap(typeof(BoMItemDTO),
+                null
+                );
+        }
 
     }
 

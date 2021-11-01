@@ -21,6 +21,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public List<AsPlannedBOPDTO> value { get; set;}
         public bool Succeeded;
         public string AsPlannedBOPId;
+        public string Id;
         public List<string> PropertyIds;
         public object Error;
         public object SitUafExecutionDetail;
@@ -166,11 +167,33 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     {
         public string AsPlannedBOPConfigurationId;
     }
+    public class AsPlannedBOPParameterType
+    {
+        private ProcessesDTO procEl;
+
+        public AsPlannedBOPParameterType(ProcessesDTO procEl)
+        {
+            this.BaselineName = procEl.Name;
+            this.BaselineUId = procEl.UId;
+            this.PBOPIdentID = procEl.NId;
+        }
+
+        public string BaselineName { get; set; }
+        public String BaselineUId { get; set; }
+        public string PBOPIdentID { get; set; }
+    }
+
+
 
     public class AsPlannedBOPDTOCreateParameter
     {
-        public AsPlannedBOPDTO AsPlannedBOP;
-
+        public AsPlannedBOPParameterType AsPlannedBOP;
+        public string CorrelationId;
+        public AsPlannedBOPDTOCreateParameter(ProcessesDTO procEl)
+        {
+            CorrelationId = procEl.NId;
+            AsPlannedBOP = new AsPlannedBOPParameterType(procEl);
+        }
     }
     public class AsPlannedBOPDTODeleteParameter
     {
@@ -189,6 +212,17 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public int Sequence;
         public QuantityType Quantity;
         public QuantityType MaxQuantity;
+
+        public ProcessesDTOCreateParameter(ProcessesDTO procEl)
+        {
+            NId = procEl.NId;
+            Name = procEl.Name;
+            Revision = procEl.Revision;
+            Plant = procEl.Plant;
+            FinalMaterialId = procEl.FinalMaterialId?.Id;
+            Quantity = procEl.Quantity;
+            Description = "";
+        }
     }
     
     public class ProcessesDTOUpdateParameter
@@ -202,6 +236,15 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public QuantityType Quantity;
         public QuantityType MaxQuantity;
         public QuantityType MinQuantity;
+
+        public ProcessesDTOUpdateParameter(ProcessesDTO procEl)
+        {
+            Id = procEl.Id;
+            Name = procEl.Name;
+            Plant = procEl.Plant;
+            FinalMaterialId = procEl.FinalMaterialId.Id;
+            Quantity = procEl.Quantity;
+        }
     }
 
     public class ProcessesDTOLinkOperationParameter
@@ -210,6 +253,11 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string OperationId;
         public string ProcessId;
         public int Sequence;
+    }
+    public class ProcessesDTOLinkToAsPlannedBOP
+    {
+        public string AsPlannedBOPId;
+        public string ProcessId;
     }
 
     public class ProcessesDTODeleteParameter
@@ -410,7 +458,21 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public DMMaterialDTO FinalMaterialId { get; set; }
         public string FinalMaterialName { get; set; }
         public string FinalMaterialNId { get; set; }
-
+        public string EntityType { get; set; }
+        public void UpdateRecord(ProcessesDTO procItem)
+        {
+            this.Name = procItem.Name;
+            this.Revision = procItem.Revision;
+            this.NId = procItem.NId;
+            this.UId = procItem.UId;
+            this.Plant = procItem.Plant;
+            this.Quantity = procItem.Quantity;
+            this.Volume = procItem.Volume;
+            this.Material = procItem.Material;
+            this.FinalMaterialId = procItem.FinalMaterialId;
+            this.FinalMaterialName = procItem.FinalMaterialName;
+            this.FinalMaterialNId = procItem.FinalMaterialNId;
+        }
     }
 
 
@@ -419,6 +481,8 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     /// </summary>
     public class AsPlannedBOPDTO
     {
+
+        public string AId { get; set; }
         public string Id { get; set; }
         public Nullable<bool> IsFrozen { get; set; }
         public int ConcurrencyVersion { get; set; }

@@ -12,21 +12,53 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
 
         private void CreateOrUpdateProcess(ProcessesDTO procItem)
         {
+            AsPlannedBOPDTO foundBoPItem = null;
             ProcessesDTO foundProcItem = null;
             foundProcItem = mes_AsPLannedBOPRepo.GetAllProcessByNId(procItem.NId)?.FirstOrDefault();
+            foundBoPItem = mes_AsPLannedBOPRepo.GetByNId(procItem.NId)?.FirstOrDefault();
+            DMMaterialDTO mat = mesDMMatRepo.GetByNId(procItem.FinalMaterialNId)?.FirstOrDefault();
+            //Проверяем есть ли созданый BoP,для привязки к процессу
+            if (foundBoPItem == null)
+            {
+                AsPlannedBOPDTOCreateParameter boPCrParameter = new AsPlannedBOPDTOCreateParameter(procItem);
+                string id = mes_AsPLannedBOPRepo.CreateAsPlannedBOP(boPCrParameter)?.Id;
+                foundBoPItem = mes_AsPLannedBOPRepo.GetById(id)?.FirstOrDefault();
+            }//if
+            if (foundBoPItem == null)
+                return;
             if (foundProcItem == null)
             {
                 ProcessesDTOCreateParameter procCrParameter = new ProcessesDTOCreateParameter(procItem);
-                mes_AsPLannedBOPRepo.CreateProcess(procCrParameter);
+                procCrParameter.AsPlannedBOPId = foundBoPItem.Id;
+                procCrParameter.FinalMaterialId = mat?.Id;
+                procCrParameter.Plant = "Завод";
+                procCrParameter.Quantity = mat.Volume;
+                string procId =mes_AsPLannedBOPRepo.CreateProcess(procCrParameter).Id;
+
+                ProcessesDTOLinkToAsPlannedBOP procLinkBoP = new ProcessesDTOLinkToAsPlannedBOP
+                {
+                    AsPlannedBOPId = foundBoPItem.Id,
+                    ProcessId = procId
+                };
+                mes_AsPLannedBOPRepo.LinkProcessToAsPlannedBOP(procLinkBoP);
             }//if
             else
             {
-//                foundProcItem.UpdateRecord(procItem);
-                //OperationDTOUpdateParameter opUpParameter = new OperationDTOUpdateParameter(foundProcItem);
-                //mes_AsPLannedBOPRepo.UADMUpdateOperation(opUpParameter);
+                foundProcItem.UpdateRecord(procItem);
+                ProcessesDTOUpdateParameter procUpParameter = new ProcessesDTOUpdateParameter(foundProcItem);
+                procUpParameter.FinalMaterialId = mat?.Id;
+                mes_AsPLannedBOPRepo.UpdateProcess(procUpParameter);
+                ProcessesDTOLinkToAsPlannedBOP procLinkBoP = new ProcessesDTOLinkToAsPlannedBOP
+                {
+                    AsPlannedBOPId = foundBoPItem.Id,
+                    ProcessId = foundProcItem.Id
+                };
+                //Мы всегда связываем процесс с БОП , даже если уже связано. Это вызовет возврат ошибки в ответе, не страшно
+                mes_AsPLannedBOPRepo.LinkProcessToAsPlannedBOP(procLinkBoP);
+
             }//else
 
-        }//CreateOrUpdateOperation
+        }//CreateOrUpdateProcess
 
 
 

@@ -80,6 +80,17 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "LinkOperationToProcess"); 
         }
+        /// <summary>
+        /// Присоединяет процесс к BoP
+        /// </summary>
+        /// <param name="com"></param>
+        /// <returns></returns>
+        public ProcessesDTOResponse LinkProcessToAsPlannedBOP(ProcessesDTOLinkToAsPlannedBOP com)
+        {
+            return ExecuteCommand<ProcessesDTOLinkToAsPlannedBOP, ProcessesDTOResponse>(com, "LinkProcessToAsPlannedBOP");
+        }
+        
+
         public ProcessesDTOResponse UnlinkOperation(ProcessesDTOLinkOperationParameter com)
         {
             return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "UnlinkOperationToProcess"); 
@@ -191,9 +202,18 @@ namespace ExchangeMESManagerSevice.Services
 
         public List<AsPlannedBOPDTO> GetByNId(string NId)
         {
-            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/AsPlannedBOP?$count=true&$filter=BaseLineName eq '{NId}' & Processes/any()&$expand=Processes($expand=FinalMaterialId($expand=Material($select=NId)))";
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/AsPlannedBOP?$count=true&$filter=PBOPIdentID eq '{NId}' & Processes/any()&$expand=Processes($expand=FinalMaterialId($expand=Material($select=NId)))";
             return Get<AsPlannedBOPDTO, AsPlannedBOPDTOResponse>(urlProfile);
         }
+        public List<AsPlannedBOPDTO> GetById(string Id)
+        {
+
+            if (Id == null)
+                return null;
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/AsPlannedBOP?$count=true&$filter=Id eq {new Guid(Id)} & Processes/any()&$expand=Processes($expand=FinalMaterialId($expand=Material($select=NId)))";
+            return Get<AsPlannedBOPDTO, AsPlannedBOPDTOResponse>(urlProfile);
+        }
+
         public List<ProcessToOperationLinkDTO> GetAllProcessToOperationLinks()
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ProcessToOperationLink?$count=true&$expand=ChildOperation($expand=WorkOperationId($select=Id,NId),OperationStepCategoryId)";

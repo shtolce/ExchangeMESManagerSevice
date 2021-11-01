@@ -753,10 +753,10 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
               SELECT distinct
                r.[PartNo] as FinalMaterialId_Material_NId
               ,r.[PartNo] as Material_NId
-              ,N'Процесс для детали' + r.[PartNo] as Name
+              ,N'Процесс для детали ' + r.[PartNo] as Name
               ,r.[PartNo] as Revision
-              ,r.[PartNo] as NId
-              ,[ResourceGroup] as Plant
+              ,i.Product collate Cyrillic_General_CI_AS+'_' +r.[PartNo] as NId
+              ,i.Product collate Cyrillic_General_CI_AS+'_' +r.[PartNo] as UId
 			  ,i.Product as FinalMaterialName
               ,r.[PartNo] as FinalMaterialNId
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Processes' as EntityType

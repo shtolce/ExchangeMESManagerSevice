@@ -75,6 +75,7 @@ namespace ExchangeMESManagerSevice.Services
             StreamReader reader = new StreamReader(postStream);
             string responseFromServer = reader.ReadToEnd();
             var serStatus2 = JsonConvert.DeserializeObject<DMMaterialDTOResponse>(responseFromServer);
+            postStream.Close();
             return serStatus2;
         }
 

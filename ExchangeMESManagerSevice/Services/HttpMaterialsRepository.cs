@@ -105,6 +105,8 @@ namespace ExchangeMESManagerSevice.Services
             StreamReader reader = new StreamReader(postStream);
             string responseFromServer = reader.ReadToEnd();
             var serStatus2 = JsonConvert.DeserializeObject<D>(responseFromServer);
+            postStream.Close();
+
             return serStatus2;
         }
 

@@ -599,7 +599,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
     {
         #region GetOperationQuery
         public static string GetOperationQuery = $@"
-         SELECT [PartNo] as CorrelationId
+               SELECT [PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
               ,[OperationName] as Name
               ,[OperationName] as NId
               ,[OperationNo] as Sequence
@@ -607,13 +607,13 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
               ,[RequiredResource]
               ,[SetupTime]
               ,[ProcessTimeType]
-              ,[RunTime]*10000000 as EstimatedDuration_Ticks
+              ,[RunTime] as EstimatedDuration_Ticks
               ,[BD] as Description
-              ,[UID] as UId
+              ,[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+              ,[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Operation' as EntityType
               ,ResourceGroup 
-          FROM [RealData].[RoutingData]
-        ";
+          FROM [RealData].[RoutingData]";
         #endregion
 
         #region GetOperationQueryByNId

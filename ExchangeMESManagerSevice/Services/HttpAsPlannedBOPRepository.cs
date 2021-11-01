@@ -84,17 +84,27 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<ProcessesDTOLinkOperationParameter, ProcessesDTOResponse>(com, "UnlinkOperationToProcess"); 
         }
-        public OperationDTOResponse UADMCreateOperationInCatalogue(OperationDTOCreateParameter com)
+        public OperationDTOResponse UADMCreateOperationInCatalogue(OperationDTOCreateParameterInCatalogue com)
         {
-            return ExecuteCommand<OperationDTOCreateParameter, OperationDTOResponse>(com, "UADMCreateOperationInCatalogue"); 
+            return ExecuteCommand<OperationDTOCreateParameterInCatalogue, OperationDTOResponse>(com, "UADMCreateOperationInCatalogue"); 
         }
-        public OperationDTOResponse UADMUpdateOperationInCatalogue(OperationDTOUpdateParameter com)
+
+        public OperationDTOResponse UADMCreateOperation(OperationDTOCreateParameter com)
         {
-            return ExecuteCommand<OperationDTOUpdateParameter, OperationDTOResponse>(com, "UpdateOperation"); 
+            return ExecuteCommand<OperationDTOCreateParameter, OperationDTOResponse>(com, "UADMCreateOperation");
         }
-        public OperationDTOResponse UADMDeleteOperationInCatalogue(OperationDTODeleteParameter com)
+        public OperationDTOResponse UADMUpdateOperation(OperationDTOUpdateParameter com)
         {
-            return ExecuteCommand<OperationDTODeleteParameter, OperationDTOResponse>(com, "DeleteOperationFromCatalogue"); 
+            return ExecuteCommand<OperationDTOUpdateParameter, OperationDTOResponse>(com, "UADMUpdateOperation");
+        }
+
+        public OperationDTOResponse UADMUpdateOperationInCatalogue(OperationDTOUpdateParameterInCatalogue com)
+        {
+            return ExecuteCommand<OperationDTOUpdateParameterInCatalogue, OperationDTOResponse>(com, "UpdateOperation"); 
+        }
+        public OperationDTOResponse UADMDeleteOperationInCatalogue(OperationDTODeleteParameterInCatalogue com)
+        {
+            return ExecuteCommand<OperationDTODeleteParameterInCatalogue, OperationDTOResponse>(com, "DeleteOperationFromCatalogue"); 
         }
         public ProcessMachineDTOResponse DeleteEquipmentSpecificationList(ProcessMachineDTODeleteParameter com)
         {
@@ -204,6 +214,11 @@ namespace ExchangeMESManagerSevice.Services
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/Operation?$count=true&$expand=WorkOperationId,OperationStepCategoryId&$filter=Id eq {Id}";
             return Get<OperationDTO, OperationDTOResponse>(urlProfile);
         }
+        public List<OperationDTO> GetAllOperationsByNId(string NId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/Operation?$count=true&$expand=WorkOperationId,OperationStepCategoryId&$filter=NId eq '{NId}'";
+            return Get<OperationDTO, OperationDTOResponse>(urlProfile);
+        }
 
         public List<MaterialSpecificationDTO> GetAllMaterialSpecifications()
         {
@@ -223,11 +238,16 @@ namespace ExchangeMESManagerSevice.Services
         }
         public List<EquipmentSpecificationDTO> GetAllEquipmentSpecificationById(string Id)
         {
-            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/EquipmentSpecification$filter=Id eq {Id}";
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/EquipmentSpecification?$filter=Id eq {Id}";
             return Get<EquipmentSpecificationDTO, EquipmentSpecificationDTOResponse>(urlProfile);
         }
 
 
+        public List<ProcessesDTO> GetAllProcessByNId(string NId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/Process?$filter=NId eq '{NId}'";
+            return Get<ProcessesDTO, ProcessesDTOResponse>(urlProfile);
+        }
 
 
         public List<ProcessMachineDTO> GetAllProcessMachines(string OperationId,string AsPlannedBOP_Id)

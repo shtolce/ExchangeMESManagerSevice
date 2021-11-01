@@ -159,9 +159,14 @@ namespace ExchangeMESManagerSevice.Services
             return Get<WorkOrderOperationDTO, WorkOrderOperationDTOResponse>(urlProfile);
         }
 
-        public List<WorkOrderOperationDTO> GetGetWorkOrderOperationsByOrderNId(string NId)
+        public List<WorkOrderOperationDTO> GetWorkOrderOperationsByOrderNId(string NId)
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrderOperation?$count=true&$expand=WorkOrder,ToBeConsumedMaterials,ToBeUsedMachines,WorkOperationType,OperationStepCategoryId&$filter=WorkOrder/NId eq '{NId}'";
+            return Get<WorkOrderOperationDTO, WorkOrderOperationDTOResponse>(urlProfile);
+        }
+        public List<WorkOrderOperationDTO> GetWorkOrderOperationsByNId(string NId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrderOperation?$count=true&$expand=WorkOrder,ToBeConsumedMaterials,ToBeUsedMachines,WorkOperationType,OperationStepCategoryId&$filter=NId eq '{NId}'";
             return Get<WorkOrderOperationDTO, WorkOrderOperationDTOResponse>(urlProfile);
         }
 

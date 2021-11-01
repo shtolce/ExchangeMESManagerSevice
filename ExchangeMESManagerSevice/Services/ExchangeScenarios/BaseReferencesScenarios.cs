@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ExchangeMESManagerSevice.Models.DTOModels;
 using ExchangeMESManagerSevice.Services.SQLServices;
@@ -16,11 +17,16 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         MaterialSpecificationSQLRepository sqlMatSpecRepo;
         EquipmentSQLRepository sqlEqRepo;
         EquipmentConfigurationSQLRepository sqlEqConfRepo;
+        OperationSQLRepository sqlOpRepo;
+        ProcessesSQLRepository sqlProcRepo;
         HttpEquipmentRepository mesEqRepo;
         HttpEquipmentConfigurationRepository mesEqConfRepo;
         HttpMaterialsRepository mesMatRepo;
         HttpDMMaterialsRepository mesDMMatRepo;
         HttpMaterialClassRepository mesMatClassRepo;
+        HttpWorkOrdersRepository mesWORepo;
+        HttpAsPlannedBOPRepository mes_AsPLannedBOPRepo;
+
         public BaseReferencesScenarios(MESUoWService MESUoWService, SQLUoWService SQLUoWService)
         {
             _MESUoWService = MESUoWService;
@@ -31,12 +37,16 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             sqlMatRepo = _SQLUoWService.MateriaSQLRepository;
             sqlMatSpecRepo = _SQLUoWService.MaterialSpecificationSQLRepository;
             sqlDMMatRepo = _SQLUoWService.DM_MateriaSQLRepository;
+            sqlOpRepo = _SQLUoWService.OperationSQLRepository;
+            sqlProcRepo = _SQLUoWService.ProcessesSQLRepository;
             //Инициализация репозиториев на стороне MES
             mesEqRepo = _MESUoWService.EquipmentRepository;
             mesEqConfRepo = _MESUoWService.EquipmentConfigurationRepository;
             mesMatRepo = _MESUoWService.MaterialsRepository;
             mesMatClassRepo = _MESUoWService.MaterialClassRepository;
             mesDMMatRepo = _MESUoWService.DMMaterialsRepository;
+            mesWORepo = _MESUoWService.WorkOrdersRepository;
+            mes_AsPLannedBOPRepo = _MESUoWService.AsPlannedBOPRepository;
         }
 
         /// <summary>
@@ -46,7 +56,8 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         {
             //ImportEquipmentToMes();
             //ImportMaterialToMes();
-            ImportBomToMes();
+            //ImportBomToMes();
+            ImportOperationToMes();
         }
 
     }

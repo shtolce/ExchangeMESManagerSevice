@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using Newtonsoft.Json;
 
 namespace ExchangeMESManagerSevice.Models.DTOModels
@@ -215,7 +216,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     {
         public string Id;
     }
-    public class OperationDTODeleteParameter
+    public class OperationDTODeleteParameterInCatalogue
     {
         public string Id;
     }
@@ -248,20 +249,43 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public Nullable<bool> ElectronicSignatureStart;
         public Nullable<bool> ElectronicSignaturePause;
         public Nullable<bool> ElectronicSignatureComplete;
-        public String RequiredInspectionRole;
-        public String RequiredCertificateNId;
+        public bool RequiredInspectionRole;
+        public bool RequiredCertificateNId;
         public String EffectivityExpression;
         public String OperationStepCategoryId;
-    
+
+        public OperationParameterTypeDTO(OperationDTO opEl)
+        {
+            NId = opEl.NId;
+            Name = opEl.Name;
+            Revision = opEl.Revision;
+            Sequence = opEl.Sequence;
+            Description = opEl.Description;
+            Optional = opEl.Optional;
+            WorkOperationId = opEl.WorkOperationId_Id;
+            UId = opEl.UId;
+            ElectronicSignatureStart = opEl.ElectronicSignatureStart;
+            ElectronicSignaturePause = opEl.ElectronicSignaturePause;
+            ElectronicSignatureComplete = opEl.ElectronicSignatureComplete;
+            RequiredInspectionRole = opEl.RequiredInspectionRole;
+            RequiredCertificateNId = opEl.RequiredCertificateNId;
+            EffectivityExpression = opEl.EffectivityExpression;
+            OperationStepCategoryId = opEl.OperationStepCategoryId_Id;
+        }
     }
 
-    public class OperationDTOUpdateParameter
+    public class OperationDTOUpdateParameterInCatalogue
     {
         public string Id;
         public Nullable<bool> ToBeCollectedDocument;
         public OperationParameterTypeDTO Operation;
+        public OperationDTOUpdateParameterInCatalogue(OperationDTO foundOpItem)
+        {
+            this.Id = foundOpItem.Id;
+            this.Operation = new OperationParameterTypeDTO(foundOpItem);
+        }
     }
-    public class OperationDTOCreateParameter
+    public class OperationDTOCreateParameterInCatalogue
     {
         public string UID;
         public string NId;
@@ -275,6 +299,99 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public Nullable<bool> RequiredCertificateNId;
         public string WorkOperationTypeNId;
         public string OperationStepCategoryId;
+
+        public OperationDTOCreateParameterInCatalogue(OperationDTO opEl)
+        {
+            UID = opEl.UId;
+            NId = opEl.NId;
+            Name = opEl.Name;
+            Description = opEl.UId;
+            Revision = opEl.Revision;
+            RequiredInspectionRole = false;
+        }
+    }
+
+    public class OperationDTOCreateParameter
+    {
+        public string NId;
+        public string Name;
+        public int Sequence;
+        public string Description;
+        public String EstimatedDuration;
+        public Nullable<bool> Optional;
+        public String CreateDependency;
+        public string DependencyType;
+        public string ProcessId;
+        public String RequiredInspectionRole;
+        public Nullable<bool> ElectronicSignatureStart;
+        public Nullable<bool> ElectronicSignaturePause;
+        public Nullable<bool> ElectronicSignatureComplete;
+        public String RequiredCertificateNId;
+        public string WorkOperationId;
+        public string OperationStepCategoryId;
+        public string MasterPlanId;
+        public string AsPlannedBOPId;
+
+        public OperationDTOCreateParameter(OperationDTO opEl)
+        {
+            NId = opEl.NId;
+            Name = opEl.Name;
+            Sequence = opEl.Sequence.Value;
+            Description = opEl.Description;
+            EstimatedDuration = XmlConvert.ToString(TimeSpan.FromSeconds(opEl.EstimatedDuration_Ticks.Value));
+            Optional = opEl.Optional;
+            CreateDependency = "false";
+            RequiredInspectionRole = opEl.RequiredInspectionRole.ToString();
+            ElectronicSignatureStart = opEl.ElectronicSignatureStart;
+            ElectronicSignaturePause = opEl.ElectronicSignaturePause;
+            ElectronicSignatureComplete = opEl.ElectronicSignatureComplete;
+            RequiredCertificateNId = opEl.RequiredCertificateNId.ToString();
+            WorkOperationId = opEl.WorkOperationId_Id;
+            OperationStepCategoryId = opEl.OperationStepCategoryId_Id;
+        }
+    }
+
+    public class OperationDTOUpdateParameter
+    {
+        
+        public string OperationId;
+        public string NId;
+        public string Name;
+        public int Sequence;
+        public string Description;
+        public TimeSpan EstimatedDuration;
+        public bool Optional;
+        public bool CreateDependency;
+        public string DependencyType;
+        public string ProcessId;
+        public Nullable<bool> RequiredInspectionRole;
+        public Nullable<bool> ElectronicSignatureStart;
+        public Nullable<bool> ElectronicSignaturePause;
+        public Nullable<bool> ElectronicSignatureComplete;
+        public Nullable<bool> RequiredCertificateNId;
+        public string WorkOperationId;
+        public string OperationStepCategoryId;
+        public string OperationStepMasterPlanIdCategoryId;
+        public string AsPlannedBOPId;
+
+        public OperationDTOUpdateParameter(OperationDTO opEl)
+        {
+            OperationId = opEl.Id;
+            NId = opEl.NId;
+            Name = opEl.Name;
+            Sequence = opEl.Sequence.Value;
+            Description = opEl.Description;
+            EstimatedDuration = opEl.EstimatedDuration;
+            Optional = opEl.Optional.Value;
+            CreateDependency = false;
+            RequiredInspectionRole = opEl.RequiredInspectionRole;
+            ElectronicSignatureStart = opEl.ElectronicSignatureStart;
+            ElectronicSignaturePause = opEl.ElectronicSignaturePause;
+            ElectronicSignatureComplete = opEl.ElectronicSignatureComplete;
+            RequiredCertificateNId = opEl.RequiredCertificateNId;
+            WorkOperationId = opEl.WorkOperationId_Id;
+            OperationStepCategoryId = opEl.OperationStepCategoryId_Id;
+        }
     }
 
 
@@ -373,19 +490,25 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public Nullable<bool> ElectronicSignatureStart { get; set; }
         public Nullable<bool> ElectronicSignaturePause { get; set; }
         public Nullable<bool> ElectronicSignatureComplete { get; set; }
-        public String RequiredInspectionRole { get; set; }
-        public String RequiredCertificateNId { get; set; }
+        public bool RequiredInspectionRole { get; set; }
+        public bool RequiredCertificateNId { get; set; }
         public Nullable<bool> ToBeCollectedDocument { get; set; }
         public String EffectivityExpression { get; set; }
         public Int64? EstimatedDuration_Ticks { get; set; }
-        public String EstimatedDuration { get; set; }
+        public TimeSpan EstimatedDuration { get; set; }
         public String WorkOperationId_Id { get; set; }
         public String OperationStepCategoryId_Id { get; set; }
         public WorkOperationTypeDTO WorkOperationId { get; set; }
         public OperationStepCategoryDTO OperationStepCategoryId { get; set; }
         //для совместимости с скл
         public String ResourceGroup { get; set; }
+        public void UpdateRecord(OperationDTO opEl)
+        {
+            Name = opEl.Name;
+            Description = opEl.UId;
+            Revision = opEl.Revision;
 
+        }
     }
 
     public class ProcessToOperationLinkDTO

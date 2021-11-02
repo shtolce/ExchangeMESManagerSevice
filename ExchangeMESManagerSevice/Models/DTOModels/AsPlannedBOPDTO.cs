@@ -645,6 +645,8 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string ProcessName;
         public string ProcessNId;
         public string PartNo;
+        public string PrevNId;
+        
     }
 
 
@@ -652,7 +654,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class OperationDTOCreateDependencyParameter
     {
-        OperationStructureDependencyParameterType OperationStructureDependency;
+        public OperationStructureDependencyParameterType OperationStructureDependency;
 
         public OperationDTOCreateDependencyParameter(OperationStructureDependencyParameterType opEl)
         {

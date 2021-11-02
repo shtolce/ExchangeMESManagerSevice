@@ -616,7 +616,9 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
                ,r.PartNo
           FROM [RealData].[RoutingData] r
 		  		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo
-          ";
+				  order by r.PartNo,r.OperationNo
+
+            ";
         #endregion
 
         #region GetOperationQueryByNId
@@ -768,7 +770,9 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
               ,ProcessName
               ,ProcessNId
               ,PartNo
-               ,[PartNo] collate Cyrillic_General_CI_AS+'_'+[Name]+'_'+Cast(Lag(Sequence) over (Partition by partNo order by partNo,rn) as nvarchar(20)) as prevNId
+               ,[PartNo] collate Cyrillic_General_CI_AS+'_'
+                    +Cast(Lag(Name) over (Partition by partNo order by partNo,rn) as nvarchar(199))
+                    +'_'+Cast(Lag(Sequence) over (Partition by partNo order by partNo,rn) as nvarchar(20)) as PrevNId
 
 
 from(

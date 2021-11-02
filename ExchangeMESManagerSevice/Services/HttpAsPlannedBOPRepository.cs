@@ -225,6 +225,13 @@ namespace ExchangeMESManagerSevice.Services
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ProcessToOperationLink?$count=true&$expand=ChildOperation($expand=WorkOperationId($select=Id,NId),OperationStepCategoryId)";
             return Get<ProcessToOperationLinkDTO, ProcessToOperationLinkDTOResponse>(urlProfile);
         }
+
+        public List<ProcessToOperationLinkDTO> GetAllProcessToOperationLinksByOperationNId(string opNId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ProcessToOperationLink?$count=true&$expand=ChildOperation($expand=WorkOperationId($select=Id,NId),OperationStepCategoryId)&$filter=ChildOperation/NId eq '{opNId}'";
+            return Get<ProcessToOperationLinkDTO, ProcessToOperationLinkDTOResponse>(urlProfile);
+        }
+
         public List<ProcessToOperationLinkDTO> GetAllProcessToOperationLinksByBOPId(string ProcessId,string BOPId)
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ProcessToOperationLink?$count=true&$expand=ChildOperation($expand=WorkOperationId($select=Id,NId),OperationStepCategoryId)&$filter=AsPlannedBOP_Id eq {BOPId} and ParentProcess_Id eq {ProcessId}";

@@ -67,18 +67,24 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         {
             ProcessesDTO foundProcItem = null;
             AsPlannedBOPDTO foundBoPItem = null;
+            ProcessToOperationLinkDTO fOpItemPrev = null;
+            ProcessToOperationLinkDTO fOpItem = null;
+            OperationDTO foundOpItem = null;
+            OperationStructureDependencySQLDTO prevOpRec = sqlOpRepo.GetPreviousOperationByPartNo_OpNo(opItem.PartNo, opItem.Sequence.Value);
+            int? prevOpN = prevOpRec?.prevSeq;
 
             foundProcItem = mes_AsPLannedBOPRepo.GetAllProcessByNId(opItem.ProcessNId)?.FirstOrDefault();
             foundBoPItem = mes_AsPLannedBOPRepo.GetByNId(opItem.ProcessNId)?.FirstOrDefault();
+            fOpItem = mes_AsPLannedBOPRepo.GetAllProcessToOperationLinksByOperationNId(prevOpRec?.NId)?.FirstOrDefault();
+            fOpItemPrev = mes_AsPLannedBOPRepo.GetAllProcessToOperationLinksByOperationNId(prevOpRec?.PrevNId)?.FirstOrDefault();
 
-            OperationDTO foundOpItem = null;
             foundOpItem = mes_AsPLannedBOPRepo.GetAllOperationsByNId(opItem.NId)?.FirstOrDefault();
             if (foundOpItem == null)
             {
                 OperationDTOCreateParameter opCrParameter = new OperationDTOCreateParameter(opItem);
                 opCrParameter.ProcessId = foundProcItem?.Id;
                 opCrParameter.AsPlannedBOPId = foundBoPItem?.Id;
-                string foundOpItemId = mes_AsPLannedBOPRepo.UADMCreateOperation(opCrParameter).Id;
+                string foundOpItemId = mes_AsPLannedBOPRepo.UADMCreateOperation(opCrParameter)?.Id;
                 foundOpItem = mes_AsPLannedBOPRepo.GetAllOperationsById(foundOpItemId)?.FirstOrDefault();
 
             }//if
@@ -91,7 +97,9 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                     Sequence = opItem.Sequence.Value,
                     AsPlannedBopId = foundBoPItem?.Id
                 };
-                mes_AsPLannedBOPRepo.LinkOperation(pr_opLink);
+                //Связь операция процесс уже есть по этому NID
+                if (fOpItem==null)
+                    mes_AsPLannedBOPRepo.LinkOperation(pr_opLink);
                 foundOpItem.UpdateRecord(opItem);
                 OperationDTOUpdateParameter opUpParameter = new OperationDTOUpdateParameter(foundOpItem);
                 opUpParameter.ProcessId = foundProcItem?.Id;
@@ -99,27 +107,18 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 mes_AsPLannedBOPRepo.UADMUpdateOperation(opUpParameter);
             }//else
             //Вычисление предыдущей операции от текущей
-            OperationStructureDependencySQLDTO prevOpRec = sqlOpRepo.GetPreviousOperationByPartNo_OpNo(opItem.PartNo, opItem.Sequence.Value);
-            int? prevOpN = prevOpRec?.prevSeq;
-            if (prevOpN == null)
+            if (prevOpN == null|| prevOpN == 0|| prevOpRec==null)
                 return;
-            OperationDTO fOpItem = null;
-            fOpItem = mes_AsPLannedBOPRepo.GetAllOperationsByNId(opItem.prevNId)?.FirstOrDefault();
-
-
             //Создаем зависимые связи между операциями, паралельные или последовательные
             OperationStructureDependencyParameterType structDepParameter = new OperationStructureDependencyParameterType
             {
-                FromLinkId = fOpItem?.Id,
-                ToLinkId = foundOpItem?.Id,
+                FromLinkId = fOpItemPrev?.Id,
+                ToLinkId = fOpItem?.Id,
                 DependencyTypeId = "c6d21b93-ab2a-ec11-ba87-000c29a5c633",
                 AsPlannedBOPId = foundBoPItem?.Id
-
             };
             OperationDTOCreateDependencyParameter opDepCrParameter = new OperationDTOCreateDependencyParameter(structDepParameter);
             mes_AsPLannedBOPRepo.CreateOperationStructureDependency(opDepCrParameter);
-
-
 
         }//CreateOrUpdateOperation
 

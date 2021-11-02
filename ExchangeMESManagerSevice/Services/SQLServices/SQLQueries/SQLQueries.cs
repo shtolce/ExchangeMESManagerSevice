@@ -623,20 +623,20 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
         #region GetOperationQueryByNId
         public static string GetOperationQueryByNId = $@"
-         SELECT [PartNo] as CorrelationId
+         SELECT r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
               ,[OperationName] as Name
-              ,[OperationName] as NId
               ,[OperationNo] as Sequence
               ,[ResourceGroup]
               ,[RequiredResource]
               ,[SetupTime]
               ,[ProcessTimeType]
-              ,[RunTime]*10000000 as EstimatedDuration_Ticks
+              ,[RunTime] as EstimatedDuration_Ticks
               ,[BD] as Description
-              ,[UID] as UId
+              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Operation' as EntityType
               ,ResourceGroup 
-          FROM [RealData].[RoutingData]
+          FROM [RealData].[RoutingData] r
        Where PartNo = @NId";
         #endregion
 
@@ -1037,20 +1037,25 @@ from(
     {
         #region GetMaterialSpecificationQuery
         public static string GetMaterialSpecificationQuery = $@"
-            SELECT pBom.[PartNo] as AsPlannedBOP_NId
+            SELECT   
+               idP.Product collate Cyrillic_General_CI_AS+'_' +PBom.[PartNo] as AsPlannedBOP_NId
 	          ,idP.Product as Product
+              --,pBom.[PartNo] as MaterialNId
               ,[OperationName] as Operation_Name
               ,[OperationNo] as Operation_Number
-              ,[RequiredPartNo] as NId
+              ,[RequiredPartNo] as MaterialNId
 	          ,idRp.Product as requiredProduct
               ,[RequiredQuantity] as QuantityVal
-              ,pBom.[BD] as CorrelationId
+              ,pBom.[UID] as CorrelationId
               ,pBom.[UID] 
+              ,pBom.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+              ,pBom.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as OperationNId
+
             FROM [RealData].[ProductBoMData] pBom
             inner join [RealData].[ItemData] idP 
                 on idP.PartNo = pBom.PartNo
             inner join [RealData].[ItemData] idRp 
-                on idrP.PartNo = pBom.PartNo
+                on idrP.PartNo = pBom.RequiredPartNo
 
         ";
         #endregion

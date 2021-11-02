@@ -123,6 +123,46 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         }//CreateOrUpdateOperation
 
 
+        private void CreateOrUpdateMaterialSpecification(MaterialSpecificationDTO matSpecItem)
+        {
+            OperationDTO foundOpItem = null;
+            foundOpItem = mes_AsPLannedBOPRepo.GetAllOperationsByNId(matSpecItem.OperationNId)?.FirstOrDefault();
+            DMMaterialDTO mat = mesDMMatRepo.GetByNId(matSpecItem.MaterialNId)?.FirstOrDefault();
+            AsPlannedBOPDTO foundBoPItem = null;
+            foundBoPItem = mes_AsPLannedBOPRepo.GetByNId(matSpecItem.AsPlannedBOP_NId)?.FirstOrDefault();
+            if (mat == null || foundOpItem == null)
+                return;
+            MaterialSpecificationDTO foundMatSpecItem = mes_AsPLannedBOPRepo.GetAllMaterialSpecificationByOpId(foundOpItem?.Id)?
+                .FirstOrDefault(x=>x.DM_MaterialId_Id==mat.Id);
+            if (foundMatSpecItem == null)
+            {
+                MaterialSpecificationDTOCreateParameter matSpecCrPar = new MaterialSpecificationDTOCreateParameter(matSpecItem);
+                matSpecCrPar.MaterialSpecification.OperationId = foundOpItem?.Id;
+                matSpecCrPar.MaterialSpecification.DMMaterialId = mat?.Id;
+                matSpecCrPar.MaterialSpecification.AsPlannedBopId = foundBoPItem?.Id;
+                matSpecCrPar.MaterialSpecification.Quantity = new QuantityType { UoMNId = mat.Material?.UoMNId, QuantityValue = (float)matSpecItem.QuantityVal };
+                mes_AsPLannedBOPRepo.CreateMaterialSpecification(matSpecCrPar);
+
+            }//if
+            else
+            {
+                MaterialSpecificationDTOUpdateParameter matSpecUpPar = new MaterialSpecificationDTOUpdateParameter {
+                    Id = foundMatSpecItem?.Id,
+                    Quantity = new QuantityType {QuantityValue=(float)matSpecItem.QuantityVal  ,UoMNId=mat.Material?.UoMNId }
+                };
+                mes_AsPLannedBOPRepo.UpdateMaterialSpecification(matSpecUpPar);
+
+            }
+
+
+
+
+
+
+
+        }//CreateOrUpdateMaterialSpecification
+
+
         /// <summary>
         /// Скрипт загрузки Процессов и операций из скл в MES
         /// </summary>
@@ -130,6 +170,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         {
             IEnumerable<OperationDTO> opSqlCollection = sqlOpRepo.GetAll();
             IEnumerable<ProcessesDTO> procSqlCollection = sqlProcRepo.GetAll();
+            IEnumerable<MaterialSpecificationDTO> metSpecCollection =  sqlMatSpecRepo.GetAll();
             //Создаем или обновляем справочник процессов
             foreach (ProcessesDTO procItem in procSqlCollection)
             {
@@ -141,6 +182,14 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             {
                 CreateOrUpdateOperation(opItem);
             }//foreach
+
+            foreach (MaterialSpecificationDTO matSpecItem in metSpecCollection)
+            {
+                CreateOrUpdateMaterialSpecification(matSpecItem);
+            }//foreach
+
+
+
 
         }//ImportOperationToMes
 

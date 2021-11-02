@@ -112,9 +112,18 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public object SitUafExecutionDetail;
     }
 
-
-
     public class MaterialSpecificationDTOCreateParameter
+    {
+        public MaterialSpecificationParameterType MaterialSpecification;
+
+        public MaterialSpecificationDTOCreateParameter(MaterialSpecificationDTO matEl)
+        {
+            MaterialSpecification = new MaterialSpecificationParameterType(matEl);
+        }
+    }
+        
+
+    public class MaterialSpecificationParameterType
     {
         public String DMMaterialId;
         public QuantityType Quantity;
@@ -127,6 +136,26 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String EffectivityExpression;
         public String AsPlannedBopId;
         public String UId;
+        //public string OperationNId;
+        //public string MaterialNId;
+        public MaterialSpecificationParameterType(MaterialSpecificationDTO matEl)
+        {
+            DMMaterialId = matEl.DM_MaterialId_Id;
+            Quantity = matEl.Quantity;
+            OperationId = matEl.Operation_Id;
+            LogicalPosition = matEl.LogicalPosition;
+            StepId = matEl.Step_Id;
+            MaterialSpecificationTypeId = matEl.MaterialTypeNId_Id;
+            GroupId = matEl.GroupId;
+            AlternativeSelected = matEl.AlternativeSelected;
+            EffectivityExpression = matEl.EffectivityExpression;
+            AsPlannedBopId = matEl.AsPlannedBOP_Id;
+            UId = matEl.UId;
+            //OperationNId = matEl.OperationNId;
+            //MaterialNId = matEl.MaterialNId;
+            //NormalPart
+            MaterialSpecificationTypeId = "ced21b93-ab2a-ec11-ba87-000c29a5c633";
+        }
     }
     public class MaterialSpecificationDTOUpdateParameter
     {
@@ -136,7 +165,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public bool? AlternativeSelected;
     }
 
-    public class MaterialSpecificationParameterType
+    public class MaterialSpecificationParameterType2
     {
         public String DMMaterialId;
         public QuantityType Quantity;
@@ -700,7 +729,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public int Operation_Number { get; set; }
         public String Operation_Name { get; set; }
         public String AsPlannedBOP_NId { get; set; }
-
+        public string OperationNId { get; set; }
     }
 
     public class ProcessMachinesParameterType

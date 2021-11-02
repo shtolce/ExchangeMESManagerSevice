@@ -599,21 +599,24 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
     {
         #region GetOperationQuery
         public static string GetOperationQuery = $@"
-               SELECT [PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
+               SELECT r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
               ,[OperationName] as Name
-              ,[OperationName] as NId
               ,[OperationNo] as Sequence
               ,[ResourceGroup]
               ,[RequiredResource]
               ,[SetupTime]
               ,[ProcessTimeType]
               ,[RunTime] as EstimatedDuration_Ticks
-              ,[BD] as Description
-              ,[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
-              ,[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
+              ,r.[BD] as Description
+              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Operation' as EntityType
-              ,ResourceGroup 
-          FROM [RealData].[RoutingData]";
+              ,N'Процесс для детали ' + r.[PartNo] as ProcessName
+              ,i.Product collate Cyrillic_General_CI_AS+'_' +r.[PartNo] as ProcessNId
+               ,r.PartNo
+          FROM [RealData].[RoutingData] r
+		  		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo
+          ";
         #endregion
 
         #region GetOperationQueryByNId
@@ -742,8 +745,63 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 		   [PartNo]= @NId
         ";
         #endregion
+        #region GetPreviousOperationByPartNo_OpNo
+        public static string GetPreviousOperationByPartNo_OpNo = @"
+
+            select * from 
+            (
+            Select  
+			   rn
+			   ,CorrelationId
+              ,Name
+              ,Sequence
+			  ,Lag(Sequence) over (Partition by partNo order by partNo,rn)  as prevSeq
+              ,[ResourceGroup]
+              ,[RequiredResource]
+              ,[SetupTime]
+              ,[ProcessTimeType]
+              ,EstimatedDuration_Ticks
+              ,Description
+              ,UId
+              ,NId
+              ,EntityType
+              ,ProcessName
+              ,ProcessNId
+              ,PartNo
+               ,[PartNo] collate Cyrillic_General_CI_AS+'_'+[Name]+'_'+Cast(Lag(Sequence) over (Partition by partNo order by partNo,rn) as nvarchar(20)) as prevNId
 
 
+from(
+               SELECT 
+			   ROW_NUMBER() over (partition by r.PartNo order by r.Partno,OperationNo ) as rn
+			   ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
+              ,[OperationName] as Name
+              ,[OperationNo] as Sequence
+              ,[ResourceGroup]
+              ,[RequiredResource]
+              ,[SetupTime]
+              ,[ProcessTimeType]
+              ,[RunTime] as EstimatedDuration_Ticks
+              ,r.[BD] as Description
+              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
+              ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Operation' as EntityType
+              ,N'Процесс для детали ' + r.[PartNo] as ProcessName
+              ,i.Product collate Cyrillic_General_CI_AS+'_' +r.[PartNo] as ProcessNId
+              ,r.PartNo
+			   FROM [RealData].[RoutingData] r
+		  		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo
+			   ) as innerT
+				
+				  
+            ) outerT
+				  where outerT.PartNo =@PartNo and outerT.Sequence = @OpNo
+				  
+				  order by outerT.PartNo,outerT.Sequence
+        ";
+
+
+        #endregion
     }
 
     public static class SQLQueriesProcesses

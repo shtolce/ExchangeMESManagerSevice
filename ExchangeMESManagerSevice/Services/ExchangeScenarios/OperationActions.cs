@@ -65,19 +65,61 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         //Создание базового справочника операций. но не базовых опреаций в каталоге, т.к. последние не привязаны к последовательности в прцоессах
         private void CreateOrUpdateOperation(OperationDTO opItem)
         {
+            ProcessesDTO foundProcItem = null;
+            AsPlannedBOPDTO foundBoPItem = null;
+
+            foundProcItem = mes_AsPLannedBOPRepo.GetAllProcessByNId(opItem.ProcessNId)?.FirstOrDefault();
+            foundBoPItem = mes_AsPLannedBOPRepo.GetByNId(opItem.ProcessNId)?.FirstOrDefault();
+
             OperationDTO foundOpItem = null;
             foundOpItem = mes_AsPLannedBOPRepo.GetAllOperationsByNId(opItem.NId)?.FirstOrDefault();
             if (foundOpItem == null)
             {
                 OperationDTOCreateParameter opCrParameter = new OperationDTOCreateParameter(opItem);
-                mes_AsPLannedBOPRepo.UADMCreateOperation(opCrParameter);
+                opCrParameter.ProcessId = foundProcItem?.Id;
+                opCrParameter.AsPlannedBOPId = foundBoPItem?.Id;
+                string foundOpItemId = mes_AsPLannedBOPRepo.UADMCreateOperation(opCrParameter).Id;
+                foundOpItem = mes_AsPLannedBOPRepo.GetAllOperationsById(foundOpItemId)?.FirstOrDefault();
+
             }//if
             else
             {
+                ProcessesDTOLinkOperationParameter pr_opLink = new ProcessesDTOLinkOperationParameter
+                {
+                    OperationId = foundOpItem?.Id,
+                    ProcessId = foundProcItem?.Id,
+                    Sequence = opItem.Sequence.Value,
+                    AsPlannedBopId = foundBoPItem?.Id
+                };
+                mes_AsPLannedBOPRepo.LinkOperation(pr_opLink);
                 foundOpItem.UpdateRecord(opItem);
                 OperationDTOUpdateParameter opUpParameter = new OperationDTOUpdateParameter(foundOpItem);
+                opUpParameter.ProcessId = foundProcItem?.Id;
+                opUpParameter.AsPlannedBOPId = foundBoPItem?.Id;
                 mes_AsPLannedBOPRepo.UADMUpdateOperation(opUpParameter);
             }//else
+            //Вычисление предыдущей операции от текущей
+            OperationStructureDependencySQLDTO prevOpRec = sqlOpRepo.GetPreviousOperationByPartNo_OpNo(opItem.PartNo, opItem.Sequence.Value);
+            int? prevOpN = prevOpRec?.prevSeq;
+            if (prevOpN == null)
+                return;
+            OperationDTO fOpItem = null;
+            fOpItem = mes_AsPLannedBOPRepo.GetAllOperationsByNId(opItem.prevNId)?.FirstOrDefault();
+
+
+            //Создаем зависимые связи между операциями, паралельные или последовательные
+            OperationStructureDependencyParameterType structDepParameter = new OperationStructureDependencyParameterType
+            {
+                FromLinkId = fOpItem?.Id,
+                ToLinkId = foundOpItem?.Id,
+                DependencyTypeId = "c6d21b93-ab2a-ec11-ba87-000c29a5c633",
+                AsPlannedBOPId = foundBoPItem?.Id
+
+            };
+            OperationDTOCreateDependencyParameter opDepCrParameter = new OperationDTOCreateDependencyParameter(structDepParameter);
+            mes_AsPLannedBOPRepo.CreateOperationStructureDependency(opDepCrParameter);
+
+
 
         }//CreateOrUpdateOperation
 
@@ -95,12 +137,10 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 CreateOrUpdateProcess(procItem);
             }//foreach
 
-
-
             //Создаем или обновляем справочник операций
             foreach (OperationDTO opItem in opSqlCollection)
             {
-                //CreateOrUpdateOperation(opItem);
+                CreateOrUpdateOperation(opItem);
             }//foreach
 
         }//ImportOperationToMes

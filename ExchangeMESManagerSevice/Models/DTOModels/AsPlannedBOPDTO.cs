@@ -249,7 +249,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class ProcessesDTOLinkOperationParameter
     {
-        public string AsPlannedBOPId;
+        public string AsPlannedBopId;
         public string OperationId;
         public string ProcessId;
         public int Sequence;
@@ -387,8 +387,11 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
             Sequence = opEl.Sequence.Value;
             Description = opEl.Description;
             EstimatedDuration = XmlConvert.ToString(TimeSpan.FromSeconds(opEl.EstimatedDuration_Ticks.Value));
-            Optional = opEl.Optional;
-            CreateDependency = "false";
+            if (opEl.Optional.HasValue)
+                Optional = opEl.Optional;
+            CreateDependency = true.ToString();
+            //после завершения
+            DependencyType = "c6d21b93-ab2a-ec11-ba87-000c29a5c633";
             RequiredInspectionRole = opEl.RequiredInspectionRole.ToString();
             ElectronicSignatureStart = opEl.ElectronicSignatureStart;
             ElectronicSignaturePause = opEl.ElectronicSignaturePause;
@@ -404,39 +407,46 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         
         public string OperationId;
         public string NId;
+        public string UId;
         public string Name;
         public int Sequence;
+        public int OriginalSequence;
         public string Description;
-        public TimeSpan EstimatedDuration;
-        public bool Optional;
-        public bool CreateDependency;
+        public String EstimatedDuration;
+        public Nullable<bool> Optional;
+        public String CreateDependency;
         public string DependencyType;
         public string ProcessId;
-        public Nullable<bool> RequiredInspectionRole;
+        public String RequiredInspectionRole;
         public Nullable<bool> ElectronicSignatureStart;
         public Nullable<bool> ElectronicSignaturePause;
         public Nullable<bool> ElectronicSignatureComplete;
-        public Nullable<bool> RequiredCertificateNId;
+        public String RequiredCertificateNId;
         public string WorkOperationId;
         public string OperationStepCategoryId;
-        public string OperationStepMasterPlanIdCategoryId;
+        //public string MasterPlanId;
         public string AsPlannedBOPId;
 
         public OperationDTOUpdateParameter(OperationDTO opEl)
         {
             OperationId = opEl.Id;
             NId = opEl.NId;
+            UId = opEl.NId;
             Name = opEl.Name;
             Sequence = opEl.Sequence.Value;
+            OriginalSequence = opEl.Sequence.Value;
             Description = opEl.Description;
             EstimatedDuration = opEl.EstimatedDuration;
-            Optional = opEl.Optional.Value;
-            CreateDependency = false;
-            RequiredInspectionRole = opEl.RequiredInspectionRole;
+            if (opEl.Optional.HasValue)
+                Optional = opEl.Optional.Value;
+            CreateDependency = true.ToString();
+            //после завершения
+            DependencyType = "c6d21b93-ab2a-ec11-ba87-000c29a5c633";
+            RequiredInspectionRole = opEl.RequiredInspectionRole.ToString();
             ElectronicSignatureStart = opEl.ElectronicSignatureStart;
             ElectronicSignaturePause = opEl.ElectronicSignaturePause;
             ElectronicSignatureComplete = opEl.ElectronicSignatureComplete;
-            RequiredCertificateNId = opEl.RequiredCertificateNId;
+            RequiredCertificateNId = opEl.RequiredCertificateNId.ToString();
             WorkOperationId = opEl.WorkOperationId_Id;
             OperationStepCategoryId = opEl.OperationStepCategoryId_Id;
         }
@@ -559,18 +569,26 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public Nullable<bool> ToBeCollectedDocument { get; set; }
         public String EffectivityExpression { get; set; }
         public Int64? EstimatedDuration_Ticks { get; set; }
-        public TimeSpan EstimatedDuration { get; set; }
+        public String EstimatedDuration { get; set; }
         public String WorkOperationId_Id { get; set; }
         public String OperationStepCategoryId_Id { get; set; }
         public WorkOperationTypeDTO WorkOperationId { get; set; }
         public OperationStepCategoryDTO OperationStepCategoryId { get; set; }
         //для совместимости с скл
         public String ResourceGroup { get; set; }
+        public String ProcessNId { get; set; }
+        public String ProcessName { get; set; }
+        public string PartNo { get; set; }
+        public string prevNId { get; set; }
+
+        //--------------
         public void UpdateRecord(OperationDTO opEl)
         {
             Name = opEl.Name;
             Description = opEl.UId;
             Revision = opEl.Revision;
+            Sequence = opEl.Sequence;
+            EstimatedDuration = XmlConvert.ToString(TimeSpan.FromSeconds(opEl.EstimatedDuration_Ticks.Value));
 
         }
     }
@@ -604,6 +622,46 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String ChildOperation_Name { get; set; }
         public String Plant { get; set; }
     }
+    public class OperationStructureDependencyParameterType
+    {
+        public string FromLinkId;
+        public string ToLinkId;
+        public string DependencyTypeId;
+        public string AsPlannedBOPId;
+        public string MasterPlanId;
+    }
+
+    public class OperationStructureDependencySQLDTO
+    {
+        public int rn;
+        public string CorrelationId;
+        public string Name;
+        public int Sequence;
+        public int prevSeq;
+        public string ResourceGroup;
+        public string RequiredResource;
+        public string NId;
+        public string UId;
+        public string ProcessName;
+        public string ProcessNId;
+        public string PartNo;
+    }
+
+
+
+
+    public class OperationDTOCreateDependencyParameter
+    {
+        OperationStructureDependencyParameterType OperationStructureDependency;
+
+        public OperationDTOCreateDependencyParameter(OperationStructureDependencyParameterType opEl)
+        {
+            OperationStructureDependency = opEl;
+        }
+    }
+
+
+
 
     public class MaterialSpecificationDTO
     {

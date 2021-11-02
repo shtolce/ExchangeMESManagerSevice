@@ -63,6 +63,20 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
             };
         }
 
+
+        public OperationStructureDependencySQLDTO GetPreviousOperationByPartNo_OpNo(string PartNo,int OpNo)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var sql = SQLQueriesOperation.GetPreviousOperationByPartNo_OpNo;
+                connection.Open();
+                var list = connection.QueryFirst<OperationStructureDependencySQLDTO>(sql, new { PartNo, OpNo }, commandType: CommandType.Text);
+                return list;
+            };
+
+
+        }
+
         public OperationDTO GetByNId(string NId)
         {
             using (var connection = new SqlConnection(_connectionString))

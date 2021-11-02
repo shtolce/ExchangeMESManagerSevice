@@ -99,6 +99,7 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<OperationDTOCreateParameterInCatalogue, OperationDTOResponse>(com, "UADMCreateOperationInCatalogue"); 
         }
+       
 
         public OperationDTOResponse UADMCreateOperation(OperationDTOCreateParameter com)
         {
@@ -128,6 +129,11 @@ namespace ExchangeMESManagerSevice.Services
         public EquipmentSpecificationDTOResponse LinkEquipmentSpecificationToOperation(EquipmentSpecificationDTOLinkParameter com)
         {
             return ExecuteCommand<EquipmentSpecificationDTOLinkParameter, EquipmentSpecificationDTOResponse>(com, "LinkEquipmentSpecificationToOperation");
+        }
+        //---Зависимости операций в процессе
+        public OperationDTOResponse CreateOperationStructureDependency(OperationDTOCreateDependencyParameter com)
+        {
+            return ExecuteCommand<OperationDTOCreateDependencyParameter, OperationDTOResponse>(com, "CreateOperationStructureDependency");
         }
 
 

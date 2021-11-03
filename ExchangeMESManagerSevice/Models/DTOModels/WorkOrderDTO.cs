@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using Newtonsoft.Json;
 
 namespace ExchangeMESManagerSevice.Models.DTOModels
@@ -117,8 +118,21 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public Nullable<bool> ToBeCollectedDocument;
         public String WorkOperationTypeId;
         public String OperationStepCategoryId;
-        public TimeSpan? EstimatedDuration;
+        public string EstimatedDuration;
 
+        public WorkOrderOperationDTOUpdateParameter(WorkOrderOperationDTO woOpEl)
+        {
+            Id = woOpEl.Id;
+            EstimatedEndTime = woOpEl.EstimatedEndTime;
+            EstimatedStartTime = woOpEl.EstimatedStartTime;
+            Description = woOpEl.Description;
+            Name = woOpEl.Name;
+            RequiredCertificateNId = woOpEl.RequiredCertificateNId;
+            RequiredInspectionRole = woOpEl.RequiredInspectionRole;
+            WorkOperationTypeId = woOpEl.WorkOperationType_Id;
+            OperationStepCategoryId = woOpEl.OperationStepCategoryId_Id;
+            EstimatedDuration = XmlConvert.ToString(TimeSpan.FromSeconds(woOpEl.EstimatedDuration_Ticks.Value));
+        }
     }
 
     /// <summary>
@@ -129,6 +143,12 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string WorkOrderId;
         public WorkOrderOperationParameterDTO WorkOrderOperation;
         public String DependencyType;
+
+        public WorkOrderOperationDTOCreateParameter(WorkOrderOperationDTO woOpEl)
+        {
+            WorkOrderId = woOpEl.WorkOrder_Id;
+            WorkOrderOperation = new WorkOrderOperationParameterDTO(woOpEl);
+        }
     }
     /// <summary>
     /// Для записи массива операций
@@ -464,6 +484,11 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public StatusDTO PreviousStatus;
         public List<ToBeConsumedMaterialDTO> ToBeConsumedMaterials;
         public ToBeUsedMachineDTO[] ToBeUsedMachines;
+
+        internal void UpdateRecord(WorkOrderOperationDTO opEl)
+        {
+            this.EstimatedDuration_Ticks = opEl.EstimatedDuration_Ticks;
+        }
     }
 
     public class WorkOrderOperationParameterDTO
@@ -472,7 +497,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public DateTimeOffset? EstimatedStartTime;
         public DateTimeOffset? EstimatedEndTime;
         public int Priority;
-        public string Description;
+        //public string Description;
         public string Name;
         public String OperationId;
         public String WorkOperationTypeId;
@@ -483,8 +508,28 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public Nullable<bool> ElectronicSignatureComplete;
         public Nullable<bool> ToBeCollectedDocument;
         public int Sequence;
-        public TimeSpan? EstimatedDuration;
+        public String EstimatedDuration;
         public String OperationStepCategoryId;
+
+        public WorkOrderOperationParameterDTO(WorkOrderOperationDTO woOpEl)
+        {
+            NId = woOpEl.OperationNId;
+            EstimatedStartTime = woOpEl.EstimatedStartTime;
+            EstimatedEndTime = woOpEl.EstimatedEndTime;
+            Priority = woOpEl.Priority;
+            Name = woOpEl.OperationName;
+            OperationId = woOpEl.Operation_Id;
+            WorkOperationTypeId = woOpEl.WorkOperationType_Id;
+            Sequence = woOpEl.Sequence;
+            EstimatedDuration = XmlConvert.ToString(TimeSpan.FromSeconds(woOpEl.EstimatedDuration_Ticks.Value));
+            ToBeCollectedDocument = false;
+            ElectronicSignatureStart = false;
+            ElectronicSignaturePause = false;
+            ElectronicSignatureComplete = false;
+
+
+
+        }
     }
 
     public class WorkOOperationDependencyParameterDTO

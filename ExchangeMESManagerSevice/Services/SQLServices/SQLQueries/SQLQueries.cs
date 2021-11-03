@@ -1293,8 +1293,10 @@ from(
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
                   ,f.[PartNo] as Material_NId
                   ,[Description] Material_Name
-				  ,rd.OperationNo OperationNId
-				  ,rd.OperationName OperationName
+                  ,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+				  ,rd.OperationNo as Sequence
+                  ,rd.OperationName OperationName
+				  ,rd.RunTime as EstimatedDuration_Ticks
 
                 FROM [RealData].[FirmOrdersData] f
 			  left join [RealData].[RoutingData] rd
@@ -1320,8 +1322,10 @@ from(
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
                   ,f.[PartNo] as Material_NId
                   ,[Description] Material_Name
-				  ,rd.OperationNo OperationNId
+				  ,rd.OperationNo as Sequence
+                  ,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
 				  ,rd.OperationName OperationName
+				  ,rd.RunTime as EstimatedDuration_Ticks
               FROM [RealData].[FirmOrdersData] f
 			  left join [RealData].[RoutingData] rd
 			  on rd.PartNo = f.PartNo

@@ -60,8 +60,6 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
 
         }//CreateOrUpdateProcess
 
-
-
         //Создание базового справочника операций. но не базовых опреаций в каталоге, т.к. последние не привязаны к последовательности в прцоессах
         private void CreateOrUpdateOperation(OperationDTO opItem)
         {

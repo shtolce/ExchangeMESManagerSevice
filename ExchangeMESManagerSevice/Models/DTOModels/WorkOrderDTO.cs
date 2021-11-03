@@ -159,6 +159,20 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public int Sequence;
         public string BatchId;
         public string ERPOrder;
+
+        public WorkOrderDTOCreateParameter(WorkOrderDTO woEl)
+        {
+            NId = woEl.NId;
+            ProductionTypeNId = woEl.ProductionType_NId;
+            InitialQuantity = woEl.InitialQuantity.Value;
+            PlannedTargetQuantity = woEl.InitialQuantity.Value;
+            FinalMaterialId = woEl.FinalMaterial_Id;
+            Plant = "Завод";
+            Name = woEl.Name;
+            Sequence = 0;//woEl.Sequence.Value;
+            BatchId = woEl.ParentBatch;
+            ERPOrder = woEl.ERPOrder;
+        }
     }
 
     public class WorkOrderDTOCreateFromAsPlannedBOPParameter
@@ -194,7 +208,23 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public DateTimeOffset? EstimatedEndTime;
         public double? InitialQuantity;
         public string FinalMaterialId;
-}
+
+        public WorkOrderDTOUpdateParameter(WorkOrderDTO woEl)
+        {
+            NId = woEl.NId;
+            Name = woEl.Name;
+            ParentBatch = woEl.ParentBatch;
+            ProductionTypeNId = woEl.ProductionType_NId;
+            ERPOrder = woEl.ERPOrder;
+            BatchId = woEl.ParentBatch;
+            PlannedTargetQuantity = woEl.PlannedTargetQuantity;
+            DueDate = woEl.DueDate;
+            Id = woEl.Id;
+            EstimatedEndTime = woEl.EstimatedEndTime;
+            InitialQuantity = woEl.InitialQuantity;
+            FinalMaterialId = woEl.FinalMaterial_Id;
+        }
+    }
 
     public class WorkOrderDTODeleteParameter
     {
@@ -296,7 +326,8 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string ERPOrder;
         public DateTimeOffset? EstimatedEndTime;
         public DateTimeOffset? EstimatedStartTime;
-        public double? InitialQuantity;
+        public double? InitialQuantity { get; set; }
+        public double InitialQuantity_Val { get; set; }
         public string NId;
         public string ProcessNId;
         public string ProcessRevision;
@@ -323,6 +354,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String ReworkOfOrder_Id;
         public String ParentOrder_Id;
         public string ProductionType_Id;
+        public string ProductionType_NId;
         public StatusDTO Status;
         public StatusDTO PreviousStatus;
         public DMMaterialDTO FinalMaterial;
@@ -331,6 +363,20 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string[] SegregationTags;
         public ProducedMaterialItemDTO[] ProducedMaterialItems;
 
+        internal void UpdateRecord(WorkOrderDTO woItem)
+        {
+            this.Name = woItem.Name;
+            this.ERPOrder = woItem.ERPOrder;
+            this.NId = woItem.NId;
+            this.FinalMaterial = woItem.FinalMaterial;
+            this.InitialQuantity = woItem.InitialQuantity;
+            this.CreationDate = woItem.CreationDate;
+            this.DueDate = woItem.DueDate;
+            this.Priority = woItem.Priority;
+            this.ParentBatch = woItem.ParentBatch;
+            this.AId = woItem.AId;
+            this.ProcessNId = woItem.ProcessNId;
+        }
     }
     public class ToBeUsedMachineDTO
     {

@@ -1282,10 +1282,6 @@ from(
             SELECT [OrderNo] Name
                    ,[OrderNo] ERPOrder
 	               ,OrderNo NId
-                  ,f.[PartNo] as Material_NId
-                  ,[Description] Material_Name
-				  ,rd.OperationNo OperationNId
-				  ,rd.OperationName OperationName
                   ,[Quantity] InitialQuantity
                   ,[ReleaseDate]  CreationDate
                   ,[DueDate] DueDate
@@ -1295,7 +1291,12 @@ from(
                   ,f.[uid] as AId
                   ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
-              FROM [RealData].[FirmOrdersData] f
+                  ,f.[PartNo] as Material_NId
+                  ,[Description] Material_Name
+				  ,rd.OperationNo OperationNId
+				  ,rd.OperationName OperationName
+
+                FROM [RealData].[FirmOrdersData] f
 			  left join [RealData].[RoutingData] rd
 			  on rd.PartNo = f.PartNo
 		  left join [RealData].[ItemData] i on i.PartNo = f.PartNo
@@ -1308,10 +1309,6 @@ from(
             SELECT [OrderNo] Name
                    ,[OrderNo] ERPOrder
 	               ,OrderNo NId
-                  ,f.[PartNo] as Material_NId
-                  ,[Description] Material_Name
-				  ,rd.OperationNo OperationNId
-				  ,rd.OperationName OperationName
                   ,[Quantity] InitialQuantity
                   ,[ReleaseDate]  CreationDate
                   ,[DueDate] DueDate
@@ -1321,6 +1318,10 @@ from(
                   ,f.[uid] as AId
                   ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
+                  ,f.[PartNo] as Material_NId
+                  ,[Description] Material_Name
+				  ,rd.OperationNo OperationNId
+				  ,rd.OperationName OperationName
               FROM [RealData].[FirmOrdersData] f
 			  left join [RealData].[RoutingData] rd
 			  on rd.PartNo = f.PartNo

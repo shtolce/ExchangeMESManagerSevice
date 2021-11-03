@@ -59,7 +59,6 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
                 var sql = SQLQueriesWO.GetWOQuery;
                 connection.Open();
                 var TempDict = new Dictionary<string, WorkOrderDTO>();
-
                 var list = connection.Query<WorkOrderDTO,DMMaterialDTO, WorkOrderOperationDTO, WorkOrderDTO>(sql, (wo, mat,woOp) => {
 
                     WorkOrderDTO specEntity;
@@ -117,8 +116,55 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
             {
                 var sql = SQLQueriesWO.GetWOQueryByNId;
                 connection.Open();
-                var list = connection.QueryFirst<WorkOrderDTO>(sql,new {NId}, commandType: CommandType.Text);
-                return list;
+                var TempDict = new Dictionary<string, WorkOrderDTO>();
+                var list = connection.Query<WorkOrderDTO, DMMaterialDTO, WorkOrderOperationDTO, WorkOrderDTO>(sql, (wo, mat, woOp) => {
+
+                    WorkOrderDTO specEntity;
+                    if (!TempDict.TryGetValue(wo.NId, out specEntity))
+                    {
+                        TempDict.Add(wo.NId, specEntity = wo);
+                    }
+
+                    if (specEntity.WorkOrderOperations == null)
+                    {
+                        specEntity.WorkOrderOperations = new List<WorkOrderOperationDTO>();
+                    }
+
+                    if (woOp == null)
+                    {
+                        woOp = new WorkOrderOperationDTO()
+                        {
+                            OperationNId = ""
+                        };
+                    }
+
+                    if (woOp != null)
+                    {
+                        if (!specEntity.WorkOrderOperations.Any(x => x.OperationNId == woOp.OperationNId))
+                        {
+                            specEntity.WorkOrderOperations.Add(woOp);
+                        }
+                    }
+
+
+                    if (mat == null)
+                    {
+                        mat = new DMMaterialDTO()
+                        {
+                            Material_NId = ""
+                        };
+                    }
+                    specEntity.FinalMaterial = new DMMaterialDTO
+                    {
+                        Material_NId = mat.Material_NId
+                        ,
+                        Material_Name = mat.Material_Name
+                    };
+
+                    return specEntity;
+
+                }, new { NId }, splitOn: "Material_NId,OperationNId");
+                return list.FirstOrDefault();
             };
 
         }

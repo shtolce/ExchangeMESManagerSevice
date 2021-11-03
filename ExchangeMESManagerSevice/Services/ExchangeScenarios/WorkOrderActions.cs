@@ -17,6 +17,8 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         private void ImportWorkOrdersToMes()
         {
             IEnumerable<WorkOrderDTO> woSqlCollection = sqlWORepo.GetAll();
+            var test = sqlWORepo.GetByNId("000000044_16");
+
             //Создаем или обновляем справочник процессов
             foreach (WorkOrderDTO woItem in woSqlCollection)
             {

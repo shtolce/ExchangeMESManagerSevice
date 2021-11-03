@@ -37,6 +37,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             foreach (WorkOrderOperationDTO opEl in woItem.WorkOrderOperations)
             {
                 WorkOrderOperationDTO foundWoOp = mesWORepo.GetWorkOrderOperationsByNId(opEl.OperationNId).FirstOrDefault();
+                string woOpId = foundWoOp?.Id;
                 if (foundWoOp == null )
                 {
                     if (opEl == null || opEl?.OperationNId == "")
@@ -45,7 +46,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                     //woOpCrParameter.DependencyType = "AfterEnd";
                     woOpCrParameter.WorkOrderId = woId;
                     var test = woOpCrParameter.WorkOrderOperation;
-                    string woOpId = mesWORepo.CreateWorkOrderOperation(woOpCrParameter)?.Id;
+                    woOpId = mesWORepo.CreateWorkOrderOperation(woOpCrParameter)?.Id;
                 }
                 else
                 {
@@ -54,6 +55,46 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                     //woOpUpParameter.FinalMaterialId = mat?.Id;
                     mesWORepo.UpdateWorkOrderOperation(woOpUpParameter);
                 }
+
+
+                //Теперь нужно проставить связи с пред. операцией
+                OperationStructureDependencySQLDTO prevOpRec = sqlWORepo.GetPreviousWOOperationByOrderNo_OpNo(opEl.Sequence, woItem.NId);
+                int? prevOpN = prevOpRec?.prevSeq;
+
+                //Есть ли уже созданная зависимость
+                WorkOOperationDependencyDTO woOpDepPrev = mesWORepo.GetAllWorkOOperationDependencyByFromWOId(prevOpRec.PrevNId).FirstOrDefault();
+                //Мы проверяем только на пред. операцию, что связь существует, если будут паралельные связи, то такую проверку нужно убрать
+                if (woOpDepPrev != null)
+                    continue;
+
+                
+                
+                //Создаем зависимые связи между операциями, паралельные или последовательные
+                string prevWoOpId = mesWORepo.GetWorkOrderOperationsByNId(prevOpRec.PrevNId)?.FirstOrDefault()?.Id;
+                if (prevWoOpId == null)
+                    continue;
+
+                WorkOrderOperationDependenciesDTOCreateParameter woOpDepCrParameter = new WorkOrderOperationDependenciesDTOCreateParameter
+                {
+                    Dependencies = new List<WorkOOperationDependencyParameterDTO>()
+                    {
+                        new WorkOOperationDependencyParameterDTO
+                        {
+                            FromId = prevWoOpId,
+                            OperationDependencyType = "AfterEnd",
+                            ToId =woOpId
+
+
+                        }
+                    }
+
+
+                };
+                mesWORepo.CreateWorkOrderOperationDependencies(woOpDepCrParameter);
+
+
+
+
 
             }//foreach
 

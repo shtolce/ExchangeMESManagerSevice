@@ -197,6 +197,11 @@ namespace ExchangeMESManagerSevice.Services
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOOperationDependency?$count=true&$expand=FromWOO($expand=WorkOrder),ToWOO($expand=WorkOrder)&$filter=ToWOO/Id eq '{Id}'";
             return Get<WorkOOperationDependencyDTO, WorkOOperationDependencyDTOResponse>(urlProfile);
         }
+        public List<WorkOOperationDependencyDTO> GetAllWorkOOperationDependencyByFromWOId(string NId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/WorkOOperationDependency?$count=true&$expand=FromWOO($expand=WorkOrder),ToWOO($expand=WorkOrder)&$filter=FromWOO/NId eq '{NId}'";
+            return Get<WorkOOperationDependencyDTO, WorkOOperationDependencyDTOResponse>(urlProfile);
+        }
 
 
 

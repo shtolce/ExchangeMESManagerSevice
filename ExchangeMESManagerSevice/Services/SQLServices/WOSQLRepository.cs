@@ -169,6 +169,20 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
         }
 
+        public OperationStructureDependencySQLDTO GetPreviousWOOperationByOrderNo_OpNo(int OpNo,string OrderNo)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var sql = SQLQueriesWO.GetPreviousWOOperationByOrderNo_OpNo;
+                connection.Open();
+                var list = connection.QueryFirst<OperationStructureDependencySQLDTO>(sql, new { OpNo,OrderNo }, commandType: CommandType.Text);
+                return list;
+            };
+
+
+        }
+
+
 
         public void Dispose()
         {

@@ -1335,6 +1335,59 @@ from(
         ";
         #endregion
 
+
+        #region GetPreviousWOOperationByOrderNo_OpNo
+        public static string GetPreviousWOOperationByOrderNo_OpNo = @"
+
+             select * from 
+            (
+			select
+			*
+			,Lag(Sequence) over (Partition by NId order by NId,rn)  as prevSeq
+			               ,NId collate Cyrillic_General_CI_AS+'_'+Material_NId+'_'
+                    +Cast(Lag(OperationName) over (Partition by NId order by NId,rn) as nvarchar(199))
+                    +'_'+Cast(Lag(Sequence) over (Partition by NId order by NId,rn) as nvarchar(20)) as PrevNId
+
+			from
+			(
+			SELECT 
+    			   ROW_NUMBER() over (partition by [OrderNo] order by [OrderNo],rd.OperationNo ) as rn
+				  ,[OrderNo] Name
+                  ,[OrderNo] ERPOrder
+	              ,OrderNo NId
+                  ,[Quantity] InitialQuantity
+                  ,[ReleaseDate]  CreationDate
+                  ,[DueDate] DueDate
+                  ,[Priority] Priority
+                  ,[EarliestStartDate]
+                  ,[ParentDemand] ParentBatch
+                  ,f.[uid] as AId
+                  ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
+	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
+                  ,f.[PartNo] as Material_NId
+                  ,[Description] Material_Name
+				  ,rd.OperationNo as Sequence
+                  ,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+				  ,rd.OperationName OperationName
+				  ,rd.RunTime as EstimatedDuration_Ticks
+              FROM [RealData].[FirmOrdersData] f
+			  left join [RealData].[RoutingData] rd
+			  on rd.PartNo = f.PartNo
+		  left join [RealData].[ItemData] i on i.PartNo = f.PartNo
+		  )innerT
+		  )outerT
+		  		  where outerT.Sequence = @OpNo
+				  and outerT.ERPOrder=@OrderNo
+				  
+				  order by outerT.Material_NId,outerT.Sequence
+        ";
+
+
+        #endregion
+
+
+
+
         #region CreateWOQuery
         public static string CreateWOQuery = $@"
 

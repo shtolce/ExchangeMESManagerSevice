@@ -382,6 +382,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Name;
         public string NId;
         public String OperationNId;
+        public String OperationName;
         public String OperationRevision;
         public String OperationUId;
         public double? PartialWorkedQuantity;

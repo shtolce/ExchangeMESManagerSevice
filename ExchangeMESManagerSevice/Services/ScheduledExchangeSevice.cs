@@ -35,7 +35,10 @@ namespace ExchangeMESManagerSevice.Services
         /// <param name="state"></param>
         private void GetNewData(object state)
         {
-            _scenarios.GetScenario1();
+            //Базовые справочники
+            //_scenarios.GetScenario1();
+            //Runtime ордера
+            _scenarios.GetScenario2();
 
 
 

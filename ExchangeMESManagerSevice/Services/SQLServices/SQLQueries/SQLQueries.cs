@@ -1275,4 +1275,59 @@ from(
 
     }
 
+    public static class SQLQueriesWO
+    {
+        #region GetWOQuery
+        public static string GetWOQuery = $@"
+            SELECT [OrderNo] Name
+                   ,[OrderNo] ERPOrder
+	               ,OrderNo NId
+                  ,f.[PartNo] as Material_NId
+                  ,[Description] Material_Name
+				  ,rd.OperationNo OperationNId
+				  ,rd.OperationName OperationName
+                  ,[Quantity] InitialQuantity
+                  ,[ReleaseDate]  CreationDate
+                  ,[DueDate] DueDate
+                  ,[Priority] Priority
+                  ,[EarliestStartDate]
+                  ,[ParentDemand] ParentBatch
+                  ,f.[uid] as AId
+                  ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
+	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
+              FROM [RealData].[FirmOrdersData] f
+			  left join [RealData].[RoutingData] rd
+			  on rd.PartNo = f.PartNo
+		  left join [RealData].[ItemData] i on i.PartNo = f.PartNo
+
+            ";
+        #endregion
+
+        #region GetWOQueryByNId
+        public static string GetWOQueryByNId = $@"
+        ";
+        #endregion
+
+        #region CreateWOQuery
+        public static string CreateWOQuery = $@"
+
+        ";
+        #endregion
+
+        #region UpdateWOQuery
+        public static string UpdateWOQuery = $@"
+
+
+       ";
+        #endregion
+
+        #region DeleteWOQuery
+        public static string DeleteWOQuery = $@"
+        ";
+        #endregion
+
+    }
+
+
+
 }

@@ -23,11 +23,22 @@ namespace ExchangeMESManagerSevice.Services
         private ProcessToOperationLinkSQLRepository _ProcessToOperationLinkSQLRepository;
         private MaterialSpecificationSQLRepository _MaterialSpecificationSQLRepository;
         private EquipmentSpecificationSQLRepository _EquipmentSpecificationSQLRepository;
+        private WOSQLRepository _WOSQLRepository;
         
         public string ConnectionString = @"Data Source=WIN-RI0FKDRK5SJ;Integrated Security=True;Initial Catalog=pbdstock;";
         public SQLUoWService()
         {
         }
+        public WOSQLRepository WOSQLRepository
+        {
+            get
+            {
+                if (_WOSQLRepository == null)
+                    _WOSQLRepository = new WOSQLRepository(ConnectionString);
+                return _WOSQLRepository;
+            }
+        }
+
         public EquipmentSpecificationSQLRepository EquipmentSpecificationSQLRepository
         {
             get

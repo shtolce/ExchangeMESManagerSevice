@@ -19,7 +19,8 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         EquipmentConfigurationSQLRepository sqlEqConfRepo;
         OperationSQLRepository sqlOpRepo;
         ProcessesSQLRepository sqlProcRepo;
-        HttpEquipmentRepository mesEqRepo;
+        WOSQLRepository sqlWORepo;
+                HttpEquipmentRepository mesEqRepo;
         HttpEquipmentConfigurationRepository mesEqConfRepo;
         HttpMaterialsRepository mesMatRepo;
         HttpDMMaterialsRepository mesDMMatRepo;
@@ -39,6 +40,8 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             sqlDMMatRepo = _SQLUoWService.DM_MateriaSQLRepository;
             sqlOpRepo = _SQLUoWService.OperationSQLRepository;
             sqlProcRepo = _SQLUoWService.ProcessesSQLRepository;
+            sqlWORepo = _SQLUoWService.WOSQLRepository;
+
             //Инициализация репозиториев на стороне MES
             mesEqRepo = _MESUoWService.EquipmentRepository;
             mesEqConfRepo = _MESUoWService.EquipmentConfigurationRepository;
@@ -54,10 +57,17 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         /// </summary>
         public void GetScenario1()
         {
-            //ImportEquipmentToMes();
-            //ImportMaterialToMes();
-            //ImportBomToMes();
+            ImportEquipmentToMes();
+            ImportMaterialToMes();
+            ImportBomToMes();
             ImportOperationToMes();
+        }
+        /// <summary>
+        /// Закачка RunTime
+        /// </summary>
+        public void GetScenario2()
+        {
+            ImportWorkOrdersToMes();
         }
 
     }

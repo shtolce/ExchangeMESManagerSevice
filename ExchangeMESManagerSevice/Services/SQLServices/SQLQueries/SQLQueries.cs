@@ -1333,6 +1333,37 @@ from(
             where OrderNo=@NId
 
         ";
+
+
+
+        #region GetWOBoMQuery
+        public static string GetWOBoMQuery = $@"
+            SELECT f.[OrderNo] Name
+                   ,f.[OrderNo] ERPOrder
+                  ,f.OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20))+'_'+bom.RequiredPartNo as NId
+                  ,[Quantity] InitialQuantity
+				  ,bom.RequiredPartNo MaterialNId
+				  ,bom.RequiredQuantity QuantityVal
+                  ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
+                  ,f.OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+				  ,rd.OperationNo as Sequence
+                  ,rd.OperationName OperationName
+				  ,rd.RunTime as EstimatedDuration_Ticks
+	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrderBoM' EntityType
+                FROM [RealData].[FirmOrdersData] f
+			  left join [RealData].[RoutingData] rd
+				on rd.PartNo = f.PartNo
+			  left join [RealData].[ItemData] i 
+				on i.PartNo = f.PartNo
+			  inner join [RealData].FirmOrdersBoMData bom
+				on bom.OrderNo  collate Cyrillic_General_CI_AS= f.OrderNo and bom.OperationNo =rd.OperationNo
+            ";
+        #endregion
+
+
+
+
+
         #endregion
 
 

@@ -730,6 +730,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String Operation_Name { get; set; }
         public String AsPlannedBOP_NId { get; set; }
         public string OperationNId { get; set; }
+        public string NId { get; set; }
     }
 
     public class ProcessMachinesParameterType

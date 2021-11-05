@@ -36,7 +36,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             //Проверяем есть ли у него созданые операции
             foreach (WorkOrderOperationDTO opEl in woItem.WorkOrderOperations)
             {
-                WorkOrderOperationDTO foundWoOp = mesWORepo.GetWorkOrderOperationsByNId(opEl.OperationNId).FirstOrDefault();
+                WorkOrderOperationDTO foundWoOp = mesWORepo.GetWorkOrderOperationsByNId(opEl.OperationNId)?.FirstOrDefault();
                 string woOpId = foundWoOp?.Id;
                 if (foundWoOp == null )
                 {
@@ -62,7 +62,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 int? prevOpN = prevOpRec?.prevSeq;
 
                 //Есть ли уже созданная зависимость
-                WorkOOperationDependencyDTO woOpDepPrev = mesWORepo.GetAllWorkOOperationDependencyByFromWOId(prevOpRec.PrevNId).FirstOrDefault();
+                WorkOOperationDependencyDTO woOpDepPrev = mesWORepo.GetAllWorkOOperationDependencyByFromWOId(prevOpRec.PrevNId)?.FirstOrDefault();
                 //Мы проверяем только на пред. операцию, что связь существует, если будут паралельные связи, то такую проверку нужно убрать
                 if (woOpDepPrev != null)
                     continue;
@@ -83,26 +83,58 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                             FromId = prevWoOpId,
                             OperationDependencyType = "AfterEnd",
                             ToId =woOpId
-
-
                         }
                     }
-
-
                 };
                 mesWORepo.CreateWorkOrderOperationDependencies(woOpDepCrParameter);
 
-
-
-
-
             }//foreach
 
-
-
-
-
         }//CreateOrUpdateProcess
+
+
+        private void CreateOrUpdateMaterialSpecificationWO(IEnumerable<MaterialSpecificationDTO> matSpecItems)
+        {
+            WorkOrderOperationDTO foundOpItem = null;
+            IEnumerable<IGrouping<string,MaterialSpecificationDTO>> woOpGroup = matSpecItems.GroupBy(x => x.OperationNId);
+            foreach (var grp in woOpGroup)
+            {
+                string opNId = grp.Key;
+                foundOpItem = mesWORepo.GetWorkOrderOperationsByNId(opNId)?.FirstOrDefault();
+                if (foundOpItem==null)
+                    continue;
+
+                List<ToBeConsumedMaterialParameter> toBeConsumedMaterials = new List<ToBeConsumedMaterialParameter>();
+                foreach (MaterialSpecificationDTO matSpecItem in grp)
+                {
+                    DMMaterialDTO mat = mesDMMatRepo.GetByNId(matSpecItem.MaterialNId)?.FirstOrDefault();
+                    if (mat == null || foundOpItem == null)
+                        continue;
+                    var tBCMFoundItem = mesWORepo.GetAllToBeConsumedMaterialDTOById(foundOpItem.Id)?.FirstOrDefault(x => mat.Id == x.MaterialDefinition_Id);
+
+                    if (tBCMFoundItem != null )
+                        continue;
+
+                    ToBeConsumedMaterialParameter tBCMItem = new ToBeConsumedMaterialParameter
+                    {
+                        MaterialDefinitionId = mat?.Id,
+                        Quantity = matSpecItem.QuantityVal,
+                        Name = matSpecItem.NId,
+                        NId = matSpecItem.NId,
+                        MaterialSpecificationType = "Normal Part"
+                    };
+                    toBeConsumedMaterials.Add(tBCMItem);
+
+                }//foreach
+                ToBeConsumedMaterialsDTOCreateParameter matSpecCrPar = new ToBeConsumedMaterialsDTOCreateParameter();
+                matSpecCrPar.WorkOrderOperationId = foundOpItem?.Id;
+                matSpecCrPar.ToBeConsumedMaterials = toBeConsumedMaterials;
+                mesWORepo.CreateToBeConsumedMaterials(matSpecCrPar);
+
+
+            }
+
+        }//CreateOrUpdateMaterialSpecificationWO
 
 
         /// <summary>
@@ -111,15 +143,17 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         private void ImportWorkOrdersToMes()
         {
             IEnumerable<WorkOrderDTO> woSqlCollection = sqlWORepo.GetAll();
+            IEnumerable<MaterialSpecificationDTO> metSpecCollection =  sqlMatSpecRepo.GetAllForWO();
+
             //Создаем или обновляем справочник процессов
             foreach (WorkOrderDTO woItem in woSqlCollection)
             {
                 CreateOrUpdateWO(woItem);
-
             }//foreach
 
-        }//ImportWorkOrdersToMes
+            CreateOrUpdateMaterialSpecificationWO(metSpecCollection);
 
+        }//ImportWorkOrdersToMes
 
     }
 }

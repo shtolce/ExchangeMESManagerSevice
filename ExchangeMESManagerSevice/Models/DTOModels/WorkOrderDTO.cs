@@ -201,6 +201,31 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string ProductionTypeNId;
         public string ERPOrder;
     }
+    public class ToBeConsumedMaterialParameter
+    {
+        public bool? AlternativeSelected;
+        public int Sequence;
+        public string GroupId;
+        public string MaterialSpecificationType;
+        public string NId;
+        public string Name;
+        public string LogicalPosition;
+        public string MaterialDefinitionId;
+        public double Quantity;
+    }
+
+    public class ToBeConsumedMaterialsDTOCreateParameter
+    {
+        public string WorkOrderOperationId;
+        public List<ToBeConsumedMaterialParameter> ToBeConsumedMaterials;
+    }
+    public class ToBeConsumedMaterialsDTODeleteParameter
+    {
+        public string ToBeConsumedMaterialId;
+    }
+
+    
+
     public class WorkOrderDTOCreateFromProcessParameter
     {
         public string ERPOrder;

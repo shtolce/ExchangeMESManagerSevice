@@ -30,6 +30,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
             };
         }
 
+
         public int Update(MaterialSpecificationDTO obj)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -71,6 +72,16 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
             using (var connection = new SqlConnection(_connectionString))
             {
                 var sql = SQLQueriesMaterialSpecification.GetMaterialSpecificationQuery;
+                connection.Open();
+                var list = connection.Query<MaterialSpecificationDTO>(sql, commandType: CommandType.Text);
+                return list;
+            };
+        }
+        public IEnumerable<MaterialSpecificationDTO> GetAllForWO()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var sql = SQLQueriesWO.GetWOBoMQuery;
                 connection.Open();
                 var list = connection.Query<MaterialSpecificationDTO>(sql, commandType: CommandType.Text);
                 return list;

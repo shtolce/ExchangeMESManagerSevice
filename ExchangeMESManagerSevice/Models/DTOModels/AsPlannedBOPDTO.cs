@@ -695,8 +695,17 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
             OperationStructureDependency = opEl;
         }
     }
+    public class OperationDTOCompleteBOPParameter
+    {
+        public Guid Id;
 
+        public OperationDTOCompleteBOPParameter(String Id)
+        {
+            this.Id = new Guid(Id);
+        }
+    }
 
+    
 
 
     public class MaterialSpecificationDTO

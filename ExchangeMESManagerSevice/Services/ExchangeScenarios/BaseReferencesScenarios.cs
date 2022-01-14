@@ -68,8 +68,8 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         /// </summary>
         public void GetScenario2()
         {
+            ImportOperationToMes();
             ImportWorkOrdersToMes();
-            //ImportOperationToMes();
         }
 
     }

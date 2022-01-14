@@ -135,8 +135,15 @@ namespace ExchangeMESManagerSevice.Services
         {
             return ExecuteCommand<OperationDTOCreateDependencyParameter, OperationDTOResponse>(com, "CreateOperationStructureDependency");
         }
+        //---Статус завершенной загрузки по процессу,процесс считается рабочим
+        public OperationDTOResponse CompleteAsPlannedBOP(OperationDTOCompleteBOPParameter com)
+        {
+            return ExecuteCommand<OperationDTOCompleteBOPParameter, OperationDTOResponse>(com, "CompleteAsPlannedBOP ");
+        }
 
 
+
+        //
         private D ExecuteCommand<T,D>(T com,string commandName)
             where D : class
         {

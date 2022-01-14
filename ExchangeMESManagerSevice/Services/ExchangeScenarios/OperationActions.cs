@@ -10,6 +10,19 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
     public partial class BaseReferencesScenarios
     {
 
+        private void CompleteAsPlannedBoP(ProcessesDTO procItem)
+        {
+            AsPlannedBOPDTO foundBoPItem = null;
+            foundBoPItem = mes_AsPLannedBOPRepo.GetByNId(procItem.NId)?.FirstOrDefault();
+            //Проверяем есть ли созданый BoP,для привязки к процессу
+            if (foundBoPItem == null)
+                return;
+
+            OperationDTOCompleteBOPParameter procCrParameter = new OperationDTOCompleteBOPParameter(foundBoPItem.Id);
+            string procId = mes_AsPLannedBOPRepo.CompleteAsPlannedBOP(procCrParameter).Id;
+
+        }//CompleteAsPlannedBoP
+
         private void CreateOrUpdateProcess(ProcessesDTO procItem)
         {
             AsPlannedBOPDTO foundBoPItem = null;
@@ -213,7 +226,11 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             {
                 CreateOrUpdateEquipmentSpecification(eqSpecItem);
             }//foreach
-
+            //CompleteAsPlannedBoP
+            foreach (ProcessesDTO procItem in procSqlCollection)
+            {
+                CompleteAsPlannedBoP(procItem);
+            }//foreach
 
 
 

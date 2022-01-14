@@ -9,32 +9,33 @@
         Настройки автообмена
     </h4>
 </center>
-
-<div class="input-group container form-control" style="background-color:beige">
-    <label for="loginTextBox" class="form-label">Экземпляр SQLServer</label>
-    <p style="margin:10px">
-        @Html.DropDownList("sqlInstance", @Model, "Выберите SQL server Instance")
-    </p>
-    <div class="mb-3">
-        <p>
-            <label for="loginTextBox" class="form-label">Логин пользователя в системе MES</label>
-            <input type="text" class="form-control" id="loginTextBox" aria-describedby="Login MES">
+<form method="post">
+    <div class="input-group container form-control" style="background-color:beige">
+        <label for="loginTextBox" class="form-label">Экземпляр SQLServer</label>
+        <p style="margin:10px">
+            @Html.DropDownList("sqlInstance", @Model, "Выберите SQL server Instance")
         </p>
-        <p>
-            <label for="passwordTextBox" class="form-label">Пароль пользователя в системе MES</label>
-            <input type="password" class="form-control" id="passwordTextBox" aria-describedby="Password MES">
-        </p>
-    </div>
-</div>
-<p class="pb-3">
-</p>
-<div class="input-group">
-    <div class="container">
-        <div class="row">
-            <input type="button" class="btn btn-primary" id="startButton" aria-describedby="Start Button Exchange MES" value="Start Service">
-            <input type="button" class="btn btn-warning" id="stopButton" aria-describedby="Stop Button Exchange MES" value="Stop Service">
+        <div class="mb-3">
+            <p>
+                <label for="loginTextBox" class="form-label">Логин пользователя в системе MES</label>
+                <input type="text" class="form-control" id="loginTextBox" aria-describedby="Login MES" name ="login" value="@ViewData["login"]">
+            </p>
+            <p>
+                <label for="passwordTextBox" class="form-label">Пароль пользователя в системе MES</label>
+                <input type="password" class="form-control" id="passwordTextBox" aria-describedby="Password MES" name="password" value="@ViewData["password"]">
+            </p>
         </div>
     </div>
-</div>
+    <p class="pb-3">
+    </p>
+    <div class="input-group">
+        <div class="container">
+            <div class="row">
+                <input type="button" class="btn btn-primary" id="startButton" aria-describedby="Start Button Exchange MES" value="Start Service">
+                <input type="button" class="btn btn-warning" id="stopButton" aria-describedby="Stop Button Exchange MES" value="Stop Service">
+                <input type="submit" class="btn btn-warning" id="SaveSettings" aria-describedby="Save settings" value="Save Settings">
+            </div>
+        </div>
+    </div>
 
-
+ </form>

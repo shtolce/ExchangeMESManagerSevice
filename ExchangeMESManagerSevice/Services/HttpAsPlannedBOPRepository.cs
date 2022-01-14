@@ -166,7 +166,7 @@ namespace ExchangeMESManagerSevice.Services
             }
             catch (WebException ex)
             {
-                using (var reader1 = new StreamReader(ex.Response.GetResponseStream()))
+                using (var reader1 = new StreamReader(ex.Response?.GetResponseStream()))
                 {
                     var testErr = reader1.ReadToEnd();
                     var serStatusErr = JsonConvert.DeserializeObject<D>(testErr);
@@ -272,6 +272,11 @@ namespace ExchangeMESManagerSevice.Services
         public List<EquipmentSpecificationDTO> GetAllEquipmentSpecificationById(string Id)
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/EquipmentSpecification?$filter=Id eq {Id}";
+            return Get<EquipmentSpecificationDTO, EquipmentSpecificationDTOResponse>(urlProfile);
+        }
+        public List<EquipmentSpecificationDTO> GetAllEquipmentSpecificationByOpNId(string OpNId)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/EquipmentSpecification?$expand=ParentOperation&$filter=ParentOperation/NId eq '{OpNId}'";
             return Get<EquipmentSpecificationDTO, EquipmentSpecificationDTOResponse>(urlProfile);
         }
 

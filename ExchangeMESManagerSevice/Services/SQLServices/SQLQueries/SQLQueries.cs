@@ -615,7 +615,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
               ,i.Product collate Cyrillic_General_CI_AS+'_' +r.[PartNo] as ProcessNId
                ,r.PartNo
           FROM [RealData].[RoutingData] r
-		  		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo
+		  		  inner join [RealData].[ItemData] i on i.PartNo = r.PartNo
 				  order by r.PartNo,r.OperationNo
 
             ";
@@ -794,7 +794,7 @@ from(
               ,i.Product collate Cyrillic_General_CI_AS+'_' +r.[PartNo] as ProcessNId
               ,r.PartNo
 			   FROM [RealData].[RoutingData] r
-		  		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo
+		  		  inner join [RealData].[ItemData] i on i.PartNo = r.PartNo
 			   ) as innerT
 				
 				  
@@ -823,7 +823,7 @@ from(
               ,r.[PartNo] as FinalMaterialNId
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Processes' as EntityType
           FROM [RealData].[RoutingData] r
-		  left join [RealData].[ItemData] i on i.PartNo = r.PartNo
+		  inner join [RealData].[ItemData] i on i.PartNo = r.PartNo
         ";
         #endregion
 
@@ -1039,7 +1039,8 @@ from(
         public static string GetMaterialSpecificationQuery = $@"
             SELECT   
                idP.Product collate Cyrillic_General_CI_AS+'_' +PBom.[PartNo] as AsPlannedBOP_NId
-	          ,idP.Product as Product
+               --PBom.[PartNo] as AsPlannedBOP_NId	          
+              ,idP.Product as Product
               --,pBom.[PartNo] as MaterialNId
               ,[OperationName] as Operation_Name
               ,[OperationNo] as Operation_Number
@@ -1084,7 +1085,8 @@ from(
 
         #region GetMaterialSpecificationQueryByNId
         public static string GetMaterialSpecificationQueryByNId = $@"
-            SELECT pBom.[PartNo] as AsPlannedBOP_NId
+            SELECT 
+               idP.Product collate Cyrillic_General_CI_AS+'_' +pBom.[PartNo] as AsPlannedBOP_NId
 	          ,idP.Product as Product
               ,[OperationName] as Operation_Name
               ,[OperationNo] as Operation_Number
@@ -1159,8 +1161,9 @@ from(
         #region GetEquipmentSpecificationQuery
         public static string GetEquipmentSpecificationQuery = $@"
             SELECT 
-	               rd.[PartNo] as AsPlannedBOP_NId
-                  ,rd.[OperationName] as ParentOperation_NId
+                   i.Product collate Cyrillic_General_CI_AS+'_' +rd.[PartNo] as AsPlannedBOP_NId
+                    --rd.[PartNo] as AsPlannedBOP_NId
+                  ,rd.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as ParentOperation_NId
                   ,rd.[OperationName] as ParentOperation_Name
                   ,rd.[OperationNo] as ParentOperation_Sequence
                   ,rd.[ResourceGroup]  as EquipmentGroupNId
@@ -1174,13 +1177,15 @@ from(
             FROM [RealData].[RoutingData] rd
             inner join [RealData].[ResourceGroupData] rg
             on rg.Name = ResourceGroup
+    	    inner join [RealData].[ItemData] i on i.PartNo = rd.PartNo
+
         ";
         #endregion
 
         #region GetEquipmentSpecificationQueryByNId
         public static string GetEquipmentSpecificationQueryByNId = $@"
             SELECT 
-	               rd.[PartNo] as AsPlannedBOP_NId
+                   i.Product collate Cyrillic_General_CI_AS+'_' +rd.[PartNo] as AsPlannedBOP_NId
                   ,rd.[OperationName] as ParentOperation_NId
                   ,rd.[OperationName] as ParentOperation_Name
                   ,rd.[OperationNo] as ParentOperation_Sequence
@@ -1194,6 +1199,8 @@ from(
             FROM [RealData].[RoutingData] rd
             inner join [RealData].[ResourceGroupData] rg
             on rg.Name = ResourceGroup
+    	    inner join [RealData].[ItemData] i on i.PartNo = rd.PartNo
+
            Where PartNo = @NId";
         #endregion
 

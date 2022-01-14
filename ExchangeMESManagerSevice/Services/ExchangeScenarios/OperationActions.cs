@@ -155,6 +155,34 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         }//CreateOrUpdateMaterialSpecification
 
 
+        private void CreateOrUpdateEquipmentSpecification(EquipmentSpecificationDTO eqSpecItem)
+        {
+            OperationDTO foundOpItem = null;
+            foundOpItem = mes_AsPLannedBOPRepo.GetAllOperationsByNId(eqSpecItem.ParentOperation_NId)?.FirstOrDefault();
+            AsPlannedBOPDTO foundBoPItem = null;
+            foundBoPItem = mes_AsPLannedBOPRepo.GetByNId(eqSpecItem.AsPlannedBOP_NId)?.FirstOrDefault();
+            if (foundBoPItem == null || foundOpItem == null)
+                return;
+            EquipmentSpecificationDTO foundEqSpecItem = mes_AsPLannedBOPRepo.GetAllEquipmentSpecificationByOpNId(foundOpItem?.NId)?
+                .FirstOrDefault(x => x.EquipmentNId == eqSpecItem.EquipmentNId);
+            if (foundEqSpecItem == null)
+            {
+                CreateEquipmentSpecificationDTOCreateParameter eqSpecCrPar = new CreateEquipmentSpecificationDTOCreateParameter(eqSpecItem);
+                eqSpecCrPar.EquipmentSpecification.OperationID = foundOpItem?.Id;
+                eqSpecCrPar.EquipmentSpecification.EquipmentNId = eqSpecItem.EquipmentNId;
+                eqSpecCrPar.EquipmentSpecification.AsPlannedBopId = foundBoPItem?.Id;
+                mes_AsPLannedBOPRepo.CreateEquipmentSpecification(eqSpecCrPar);
+
+            }//if
+            else
+            {
+
+            }
+
+        }//CreateOrUpdateEquipmentSpecification
+
+
+
         /// <summary>
         /// Скрипт загрузки Процессов и операций из скл в MES
         /// </summary>
@@ -163,6 +191,8 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             IEnumerable<OperationDTO> opSqlCollection = sqlOpRepo.GetAll();
             IEnumerable<ProcessesDTO> procSqlCollection = sqlProcRepo.GetAll();
             IEnumerable<MaterialSpecificationDTO> metSpecCollection =  sqlMatSpecRepo.GetAll();
+            IEnumerable<EquipmentSpecificationDTO> eqSpecCollection = sqlEqSpecRepo.GetAll();
+
             //Создаем или обновляем справочник процессов
             foreach (ProcessesDTO procItem in procSqlCollection)
             {
@@ -178,6 +208,10 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             foreach (MaterialSpecificationDTO matSpecItem in metSpecCollection)
             {
                 CreateOrUpdateMaterialSpecification(matSpecItem);
+            }//foreach
+            foreach (EquipmentSpecificationDTO eqSpecItem in eqSpecCollection)
+            {
+                CreateOrUpdateEquipmentSpecification(eqSpecItem);
             }//foreach
 
 

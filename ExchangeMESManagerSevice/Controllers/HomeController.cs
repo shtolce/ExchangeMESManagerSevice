@@ -24,6 +24,8 @@ using System.Net.Http;
 using ExchangeMESManagerSevice.Models.DTOModels;
 using ExchangeMESManagerSevice.Models.CommandModels;
 using Microsoft.Extensions.Hosting;
+using MSSQLClasses;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExchangeMESManagerSevice.Controllers
 {
@@ -38,23 +40,53 @@ namespace ExchangeMESManagerSevice.Controllers
             _MESUoWService = MESUoWService;
             _SQLUoWService = SQLUoWService;
         }
+        [HttpGet]
         public IActionResult Index()
         {
-            List<string> list = WMISevice.GetSQLInstances().ToList();
-            SelectList listOptionRes = new SelectList(list, list[0]);
-//            var test = _SQLUoWService.EquipmentSpecificationSQLRepository.GetAll();
-            /*
-            var obj = new MaterialSpecificationDTOUpdateParameter
+            List<string> list = SqlLocator.GetServers().ToList();
+            //WMISevice.GetSQLInstances().ToList();
+
+            ExchangeSettings settingsPrev = db.Settings.FirstOrDefault();
+            if (settingsPrev != null)
             {
-                LogicalPosition="123"
-                ,Id="92584f1b-d6a7-42d9-a251-da7a79d75df6"
-                ,Quantity  =new QuantityType{UoMNId="n/a",QuantityValue=42}
-            };
-            var test = _SQLUoWService.EquipmentSpecificationSQLRepository.GetAll();
-            //var test = _MESUoWService.AsPlannedBOPRepository.UpdateMaterialSpecification(obj);
-            //ProcessesSQL,ASPLannedBOPSQL - не доделаны
-            */
+                ViewData["login"] = settingsPrev.User;
+                ViewData["password"] = settingsPrev.Password;
+                ViewData["sqlInstance"] = settingsPrev.SQLServerInstance;
+
+            }
+
+            SelectList listOptionRes = new SelectList(list, list.FirstOrDefault(x=>x== settingsPrev.SQLServerInstance));
             return View(listOptionRes);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> Index(string login,string password, string sqlInstance)
+        {
+            List<string> list = SqlLocator.GetServers().ToList();
+            //WMISevice.GetSQLInstances().ToList();
+            ExchangeSettings settingsPrev = db.Settings.FirstOrDefault();
+
+            SelectList listOptionRes = new SelectList(list, list.FirstOrDefault(x => x == settingsPrev.SQLServerInstance));
+            ExchangeSettings settings = new ExchangeSettings
+            {
+                Password = password,
+                SQLServerInstance = sqlInstance,
+                User =login
+            };
+
+            if (settingsPrev != null)
+            {
+                settingsPrev.User = login;
+                settingsPrev.Password = password;
+                settingsPrev.SQLServerInstance = sqlInstance;
+                db.Settings.Update(settingsPrev);
+
+            }
+            else
+                db.Settings.Add(settings);
+            await db.SaveChangesAsync();
+
+            return RedirectToAction("Index");
 
         }
 

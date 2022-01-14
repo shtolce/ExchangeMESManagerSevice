@@ -118,7 +118,7 @@ namespace ExchangeMESManagerSevice.Services
             }
             catch (WebException ex)
             {
-                using (var reader1 = new StreamReader(ex.Response.GetResponseStream()))
+                using (var reader1 = new StreamReader(ex.Response?.GetResponseStream()))
                 {
                     var testErr = reader1.ReadToEnd();
                     var serStatusErr = JsonConvert.DeserializeObject<D>(testErr);

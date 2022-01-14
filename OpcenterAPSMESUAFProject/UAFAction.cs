@@ -99,7 +99,6 @@ namespace OpcenterAPSMESUAFProject
             List<ScheduledOperation> operations;
             preactor = PreactorFactory.CreatePreactorObject(preactorComObject);
             IRestResponse response;
-
             try
             {
                 // Use method GetAuthorizationBearerToken to retrive token if Certificate stored in specific path protected with password
@@ -114,7 +113,9 @@ namespace OpcenterAPSMESUAFProject
             }
             try
             {
+                preactor.Load("Orders", "Schedule");
                 operations = GetScheduledOperations();
+                preactor.Commit("Orders");
             }
             catch (Exception e)
             {
@@ -138,7 +139,6 @@ namespace OpcenterAPSMESUAFProject
             MessageBox.Show(ResultSuccessMessage, ResultMessageHeader);
             return ResultMessageHeader + " " + ResultSuccessMessage;
         }
-
 
         #region Supporting methods to accomplish SetInScheduled
         /// <summary>

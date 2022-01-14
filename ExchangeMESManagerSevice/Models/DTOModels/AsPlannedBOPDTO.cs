@@ -305,6 +305,11 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     {
         public EquipmentSpecificationParameterType EquipmentSpecification;
         public string CorrelationId;
+
+        public CreateEquipmentSpecificationDTOCreateParameter(EquipmentSpecificationDTO eqSp)
+        {
+            EquipmentSpecification = new EquipmentSpecificationParameterType(eqSp);
+        }
     }
     public class EquipmentSpecificationDTOLinkParameter
     {
@@ -793,6 +798,18 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
 
     public class EquipmentSpecificationParameterType
     {
+        public EquipmentSpecificationParameterType(EquipmentSpecificationDTO eqSp)
+        {
+            Type = "Unit";
+            OperationID = eqSp.ParentOperation_Id;
+            PartProgram = eqSp.PartProgram;
+            EquipmentNId = eqSp.EquipmentNId;
+            EquipmentTypeNId = eqSp.EquipmentTypeNId;
+            EffectivityExpression = eqSp.EffectivityExpression;
+            AsPlannedBopId = eqSp.AsPlannedBOP_Id;
+            UId = eqSp.UId;
+        }
+
         public String Type { get; set; }
         public String OperationID { get; set; }
         public String PartProgram { get; set; }

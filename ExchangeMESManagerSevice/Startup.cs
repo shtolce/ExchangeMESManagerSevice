@@ -36,8 +36,10 @@ namespace ExchangeMESManagerSevice
             });
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
+            string ConnectionSettingsString = Configuration.GetConnectionString("SettingsConnection");
+
             //connection = "Server=(localdb)\\mssqllocaldb;Database=settingsstoredb;Trusted_Connection=True;MultipleActiveResultSets=true";
-            services.AddDbContext<ExchangeSettingsContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<ExchangeSettingsContext>(options => options.UseSqlServer(ConnectionSettingsString));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             //services.AddSingleton<AuthorizationMesService>();
             services.AddSingleton<AuthorizationMesService>();

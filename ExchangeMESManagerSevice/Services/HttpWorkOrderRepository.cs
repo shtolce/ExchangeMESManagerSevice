@@ -79,12 +79,18 @@ namespace ExchangeMESManagerSevice.Services
         }
         public ToBeConsumedMaterialDTOResponse DeleteToBeConsumedMaterials(ToBeConsumedMaterialsDTODeleteParameter com)
         {
-            return ExecuteCommand<ToBeConsumedMaterialsDTODeleteParameter, ToBeConsumedMaterialDTOResponse>(com, "DeleteToBeConsumedMateria"); ;
+            return ExecuteCommand<ToBeConsumedMaterialsDTODeleteParameter, ToBeConsumedMaterialDTOResponse>(com, "DeleteToBeConsumedMaterial"); ;
         }
-
-
-
-
+        //TobeUsedMachineCommand
+        public ToBeUsedMachineDTOResponse CreateToBeUsedMachine(ToBeUsedMachineDTOCreateParameter com)
+        {
+            return ExecuteCommand<ToBeUsedMachineDTOCreateParameter, ToBeUsedMachineDTOResponse>(com, "CreateToBeUsedMachine"); ;
+        }
+        public ToBeUsedMachineDTOResponse DeleteToBeUsedMachine(ToBeUsedMachineDTODeleteParameter com)
+        {
+            return ExecuteCommand<ToBeUsedMachineDTODeleteParameter, ToBeUsedMachineDTOResponse>(com, "DeleteToBeUsedMachine"); ;
+        }
+        //----------------------------
         public MaterialBatchDTOResponse GenerateMaterialBatchId(MaterialBatchDTOGenerateParameter com)
         {
             return ExecuteCommand<MaterialBatchDTOGenerateParameter, MaterialBatchDTOResponse>(com, "GenerateMaterialBatchId"); ;
@@ -185,6 +191,19 @@ namespace ExchangeMESManagerSevice.Services
             var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/ToBeConsumedMaterial?$count=true&$expand=WorkOrderOperation,MaterialDefinition";
             return Get<ToBeConsumedMaterialDTO, ToBeConsumedMaterialDTOResponse>(urlProfile);
         }
+        //ToBeUsedMachine
+        public List<ToBeUsedMachineDTO> GetAllToBeUsedMachineDTO()
+        {
+            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/ToBeUsedMachine?$count=true&$expand=WorkOrderOperation";
+            return Get<ToBeUsedMachineDTO, ToBeUsedMachineDTOResponse>(urlProfile);
+        }
+        public List<ToBeUsedMachineDTO> GetAllToBeUsedMachineDTOById(string Id)
+        {
+            var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ToBeUsedMachine?$count=true&$expand=WorkOrderOperation&$filter=WorkOrderOperation/Id eq {new Guid(Id)}";
+            return Get<ToBeUsedMachineDTO, ToBeUsedMachineDTOResponse>(urlProfile);
+        }
+
+        //-------------------
         public List<ToBeConsumedMaterialDTO> GetAllToBeConsumedMaterialDTOById(string Id)
         {
             var urlProfile = $"http://localhost/sit-svc/Application/AppU4DM/odata/ToBeConsumedMaterial?$count=true&$expand=WorkOrderOperation,MaterialDefinition&$filter=WorkOrderOperation_Id eq {new Guid(Id)}";

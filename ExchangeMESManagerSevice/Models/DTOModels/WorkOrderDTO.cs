@@ -223,8 +223,30 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
     {
         public string ToBeConsumedMaterialId;
     }
+    //ToBeUsedMachine
+    public class ToBeUsedMachineDTOResponse : IResponse<ToBeUsedMachineDTO>
+    {
+        public string ToBeUsedMachineId;
+        public List<ToBeUsedMachineDTO> value { get; set; }
 
-    
+
+    }
+
+    public class ToBeUsedMachineDTOCreateParameter
+    {
+        public string WorkOrderOperationNId;
+        public string EquipmentNId;
+        public string EquipmentTypeNId;
+        public string PartProgram;
+        public Guid PrintJobFile;
+        public bool IsForEgPhase;
+    }
+    public class ToBeUsedMachineDTODeleteParameter
+    {
+        public string ToBeUsedMachineId;
+    }
+
+
 
     public class WorkOrderDTOCreateFromProcessParameter
     {
@@ -444,7 +466,14 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public String PrintJobFile;
         public bool? Preferred;
         public String WorkOrderOperation_Id;
+        public String WorkOrderOperation_NId;
+        public String Equipment_NId;
+
+
     }
+
+
+
     public class WorkOrderOperationDTO
     {
         public string Id;

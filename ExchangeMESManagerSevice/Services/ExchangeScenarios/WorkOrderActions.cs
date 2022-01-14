@@ -126,6 +126,8 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                     toBeConsumedMaterials.Add(tBCMItem);
 
                 }//foreach
+                if (toBeConsumedMaterials.Count <= 0)
+                    continue;
                 ToBeConsumedMaterialsDTOCreateParameter matSpecCrPar = new ToBeConsumedMaterialsDTOCreateParameter();
                 matSpecCrPar.WorkOrderOperationId = foundOpItem?.Id;
                 matSpecCrPar.ToBeConsumedMaterials = toBeConsumedMaterials;
@@ -136,6 +138,42 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
 
         }//CreateOrUpdateMaterialSpecificationWO
 
+        private void CreateOrUpdateEquipmentSpecificationWO(IEnumerable<ToBeUsedMachineDTO> eqSpecItems)
+        {
+            WorkOrderOperationDTO foundOpItem = null;
+            IEnumerable<IGrouping<string, ToBeUsedMachineDTO>> woOpGroup = eqSpecItems.GroupBy(x => x.WorkOrderOperation_NId);
+            foreach (var grp in woOpGroup)
+            {
+                string opNId = grp.Key;
+                foundOpItem = mesWORepo.GetWorkOrderOperationsByNId(opNId)?.FirstOrDefault();
+                if (foundOpItem == null)
+                    continue;
+
+                foreach (ToBeUsedMachineDTO eqSpecItem in grp)
+                {
+                    EquipmentDTO eq = mesEqRepo.GetByNId(eqSpecItem.Equipment_NId)?.FirstOrDefault();
+                    if (eq == null)
+                        continue;
+
+
+                    var tBCMFoundItem = mesWORepo.GetAllToBeUsedMachineDTOById(foundOpItem.Id)?.FirstOrDefault(x => eq.NId == x.Machine);
+                    if (tBCMFoundItem != null)
+                        continue;
+                    ToBeUsedMachineDTOCreateParameter eqSpecCrPar = new ToBeUsedMachineDTOCreateParameter();
+                    eqSpecCrPar.WorkOrderOperationNId = foundOpItem?.NId;
+                    eqSpecCrPar.EquipmentNId = eqSpecItem.Equipment_NId;
+                    mesWORepo.CreateToBeUsedMachine(eqSpecCrPar);
+
+
+                }//foreach
+
+
+            }// foreach grp
+
+        }//CreateOrUpdateEquipmentSpecificationWO
+
+
+
 
         /// <summary>
         /// Скрипт загрузки ордеров и операций из скл в MES
@@ -144,6 +182,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         {
             IEnumerable<WorkOrderDTO> woSqlCollection = sqlWORepo.GetAll();
             IEnumerable<MaterialSpecificationDTO> metSpecCollection =  sqlMatSpecRepo.GetAllForWO();
+            IEnumerable<ToBeUsedMachineDTO> eqSpecCollection = sqlWORepo.GetAllToBeUsedMachine();
 
             //Создаем или обновляем справочник процессов
             foreach (WorkOrderDTO woItem in woSqlCollection)
@@ -152,7 +191,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             }//foreach
 
             CreateOrUpdateMaterialSpecificationWO(metSpecCollection);
-
+            CreateOrUpdateEquipmentSpecificationWO(eqSpecCollection);
         }//ImportWorkOrdersToMes
 
     }

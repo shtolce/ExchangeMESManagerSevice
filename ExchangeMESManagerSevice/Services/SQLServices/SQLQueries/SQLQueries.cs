@@ -1284,6 +1284,23 @@ from(
 
     public static class SQLQueriesWO
     {
+        #region GetWOToBeUsedQuery
+        public static string GetWOToBeUsedQuery = $@"
+            SELECT 
+	               OrderNo+'_'+rd.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as WorkOrderOperation_NId
+	              ,rg.Resource Machine
+	              ,rg.Resource Equipment_NId
+              FROM [RealData].[FirmOrdersData] fod
+              left join [RealData].[RoutingData] rd
+		              on rd.PartNo = fod.PartNo
+
+              inner join RealData.ResourceGroupData rg
+              on rg.Name =rd.ResourceGroup            ";
+        #endregion
+
+
+
+
         #region GetWOQuery
         public static string GetWOQuery = $@"
             SELECT [OrderNo] Name
@@ -1358,9 +1375,9 @@ from(
 				  ,rd.RunTime as EstimatedDuration_Ticks
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrderBoM' EntityType
                 FROM [RealData].[FirmOrdersData] f
-			  left join [RealData].[RoutingData] rd
+			  inner join [RealData].[RoutingData] rd
 				on rd.PartNo = f.PartNo
-			  left join [RealData].[ItemData] i 
+			  inner join [RealData].[ItemData] i 
 				on i.PartNo = f.PartNo
 			  inner join [RealData].FirmOrdersBoMData bom
 				on bom.OrderNo  collate Cyrillic_General_CI_AS= f.OrderNo and bom.OperationNo =rd.OperationNo

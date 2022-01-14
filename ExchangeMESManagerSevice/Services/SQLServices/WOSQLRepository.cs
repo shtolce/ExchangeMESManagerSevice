@@ -181,9 +181,19 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
 
         }
+        //tobeusedMachine
+        public IEnumerable<ToBeUsedMachineDTO> GetAllToBeUsedMachine()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var sql = SQLQueriesWO.GetWOToBeUsedQuery;
+                connection.Open();
+                var list = connection.Query<ToBeUsedMachineDTO>(sql);
+                return list;
+            };
+        }
 
-
-
+        //
         public void Dispose()
         {
             throw new NotImplementedException();

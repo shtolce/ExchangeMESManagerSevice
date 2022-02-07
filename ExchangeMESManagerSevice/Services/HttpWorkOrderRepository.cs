@@ -124,6 +124,8 @@ namespace ExchangeMESManagerSevice.Services
             }
             catch (WebException ex)
             {
+                if (ex.Response == null)
+                    return null;
                 using (var reader1 = new StreamReader(ex.Response?.GetResponseStream()))
                 {
                     var testErr = reader1.ReadToEnd();
@@ -161,6 +163,12 @@ namespace ExchangeMESManagerSevice.Services
         {
             var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrder?$expand=FinalMaterial($expand = Material),ProductionType($select= NId),WorkOrderOperations($expand=ToBeConsumedMaterials),SegregationTags, ProducedMaterialItems($expand= DM_MaterialTrackingUnit($expand = MaterialTrackingUnit($select = code)))";
             return Get<WorkOrderDTO, WorkOrderDTOResponse>(urlProfile); 
+        }
+
+        public List<WorkOrderDTO> GetAllEdit()
+        {
+            var urlProfile = "http://localhost/sit-svc/Application/AppU4DM/odata/WorkOrder?$expand=FinalMaterial($expand = Material),ProductionType($select= NId),WorkOrderOperations($expand=ToBeConsumedMaterials),SegregationTags, ProducedMaterialItems($expand= DM_MaterialTrackingUnit($expand = MaterialTrackingUnit($select = code)))&$filter=Status/StatusNId eq 'Edit'";
+            return Get<WorkOrderDTO, WorkOrderDTOResponse>(urlProfile);
         }
 
         public List<WorkOrderDTO> GetByNId(string NId)

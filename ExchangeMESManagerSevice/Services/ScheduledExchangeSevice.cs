@@ -25,8 +25,9 @@ namespace ExchangeMESManagerSevice.Services
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+
             _timer = new Timer(GetNewData, null, TimeSpan.Zero,
-                        TimeSpan.FromSeconds(30));
+                            TimeSpan.FromSeconds(30));
             return Task.CompletedTask;
         }
         /// <summary>
@@ -35,6 +36,9 @@ namespace ExchangeMESManagerSevice.Services
         /// <param name="state"></param>
         private void GetNewData(object state)
         {
+            if (AuthStateHelper.AuthState == false)
+                return;
+            
             //Базовые справочники
             //_scenarios.GetScenario1();
             //Runtime ордера

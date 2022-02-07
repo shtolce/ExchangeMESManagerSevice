@@ -37,7 +37,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 string id = mes_AsPLannedBOPRepo.CreateAsPlannedBOP(boPCrParameter)?.Id;
                 foundBoPItem = mes_AsPLannedBOPRepo.GetById(id)?.FirstOrDefault();
             }//if
-            if (foundBoPItem == null)
+            if (foundBoPItem == null || mat==null)
                 return;
             if (foundProcItem == null)
             {

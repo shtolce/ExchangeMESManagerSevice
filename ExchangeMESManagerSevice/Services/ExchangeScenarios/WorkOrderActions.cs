@@ -173,17 +173,41 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
         }//CreateOrUpdateEquipmentSpecificationWO
 
 
-
-
         /// <summary>
-        /// Скрипт загрузки ордеров и операций из скл в MES
+        /// проверяет на наличие статуса Edit и отсутствие в ПБД, и удаляет найденые
         /// </summary>
-        private void ImportWorkOrdersToMes()
+        /// <param name="woItem"></param>
+        private void CheckAndDeleteOldWO()
+        {
+            WorkOrderDTO woFoundSql = null;
+
+            List<WorkOrderDTO>mesOrderList = mesWORepo.GetAllEdit().ToList();
+            foreach (var item in mesOrderList)
+            {
+                woFoundSql = sqlWORepo.GetByNId(item.NId);
+                if (woFoundSql==null)
+                {
+                    WorkOrderDTODeleteParameter woDelPar = new WorkOrderDTODeleteParameter();
+                    woDelPar.Id = item.Id;
+                    mesWORepo.DeleteWorkOrder(woDelPar);
+                }
+
+            }//foreach
+
+
+        }//CheckAndDeleteOldWO
+
+    /// <summary>
+    /// Скрипт загрузки ордеров и операций из скл в MES
+    /// </summary>
+    private void ImportWorkOrdersToMes()
         {
             IEnumerable<WorkOrderDTO> woSqlCollection = sqlWORepo.GetAll();
             IEnumerable<MaterialSpecificationDTO> metSpecCollection =  sqlMatSpecRepo.GetAllForWO();
             IEnumerable<ToBeUsedMachineDTO> eqSpecCollection = sqlWORepo.GetAllToBeUsedMachine();
 
+            CheckAndDeleteOldWO();
+            return;
             //Создаем или обновляем справочник процессов
             foreach (WorkOrderDTO woItem in woSqlCollection)
             {

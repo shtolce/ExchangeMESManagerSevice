@@ -53,6 +53,7 @@ namespace ExchangeMESManagerSevice.Services
             string responseFromServer = reader.ReadToEnd();
             OAuthResponseModel serStatus = JsonConvert.DeserializeObject<OAuthResponseModel>(responseFromServer);
             StateOAuth = serStatus;
+            AuthStateHelper.AuthState = serStatus==null?false:true;
             var test = TimeSpan.FromSeconds(StateOAuth == null ? 10 : StateOAuth.expiresSec);
             _timer.Change(Timeout.Infinite, Timeout.Infinite);
             _timer.Change(test, test);

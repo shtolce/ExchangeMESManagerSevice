@@ -35,7 +35,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             MaterialDTO foundMatItem = mesMatRepo.GetByNId(dmMatItem.Material.NId)?.FirstOrDefault();
             if (foundMatItem == null)
                 return;
-            MaterialClassDTO foundMatClassItem = mesMatClassRepo.GetByNId("n/a").FirstOrDefault();
+            MaterialClassDTO foundMatClassItem = mesMatClassRepo.GetByNId("n/a")?.FirstOrDefault();
 
             if (foundDMMatItem == null)
             {
@@ -95,7 +95,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 {
                     var matDefId = mesDMMatRepo.GetByNId(item.NId)?.FirstOrDefault();
                     //Проверяем если в спецификации уже есть деталь обновляем количество, иначе создаем элемент спецификации
-                    BoMItemDTO foundBomItem = bomItemAllList?.FirstOrDefault(x => x.MaterialDefinition_Id == matDefId.Id);
+                    BoMItemDTO foundBomItem = bomItemAllList?.FirstOrDefault(x => x.MaterialDefinition_Id == matDefId?.Id);
                     if (foundBomItem == null)
                     {
                         BoMItemDTOCreateParameter dmBoMItemCrParameter = new BoMItemDTOCreateParameter(item);

@@ -61,14 +61,14 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             ImportEquipmentToMes();
             ImportMaterialToMes();
             ImportBomToMes();
-            ImportOperationToMes();
+            //ImportOperationToMes();
         }
         /// <summary>
         /// Закачка RunTime
         /// </summary>
         public void GetScenario2()
         {
-            ImportOperationToMes();
+            //ImportOperationToMes();
             ImportWorkOrdersToMes();
         }
 

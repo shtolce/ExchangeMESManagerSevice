@@ -12,6 +12,12 @@ using Microsoft.Extensions.Logging;
 
 namespace ExchangeMESManagerSevice
 {
+    public static class AuthStateHelper
+    {
+        public static bool AuthState;
+    }
+
+
     public class Program
     {
         public static void Main(string[] args)

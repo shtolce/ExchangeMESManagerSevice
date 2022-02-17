@@ -22,12 +22,12 @@ namespace ExchangeMESManagerSevice.Services
             _SQLUoWService = sQLUoWService;
             _scenarios = new BaseReferencesScenarios(_MESUoWService, _SQLUoWService);
         }
-
+        private int interval=10;
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
 
             _timer = new Timer(GetNewData, null, TimeSpan.Zero,
-                            TimeSpan.FromSeconds(30));
+                            TimeSpan.FromSeconds(interval));
             return Task.CompletedTask;
         }
         /// <summary>
@@ -38,12 +38,13 @@ namespace ExchangeMESManagerSevice.Services
         {
             if (AuthStateHelper.AuthState == false)
                 return;
-            
+            interval = 600;
+            _timer.Change(Timeout.Infinite, Timeout.Infinite);
+            _timer.Change(TimeSpan.FromSeconds(interval), TimeSpan.FromSeconds(interval));
             //Базовые справочники
             //_scenarios.GetScenario1();
             //Runtime ордера
             _scenarios.GetScenario2();
-
 
 
         }

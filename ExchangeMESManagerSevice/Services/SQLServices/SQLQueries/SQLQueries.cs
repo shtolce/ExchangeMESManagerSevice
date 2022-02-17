@@ -1323,9 +1323,9 @@ from(
 				  ,rd.RunTime as EstimatedDuration_Ticks
 
                 FROM [RealData].[FirmOrdersData] f
-			  left join [RealData].[RoutingData] rd
+			  inner join [RealData].[RoutingData] rd
 			  on rd.PartNo = f.PartNo
-		  left join [RealData].[ItemData] i on i.PartNo = f.PartNo
+		  inner join [RealData].[ItemData] i on i.PartNo = f.PartNo
 
             ";
         #endregion
@@ -1351,7 +1351,7 @@ from(
 				  ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
               FROM [RealData].[FirmOrdersData] f
-			  left join [RealData].[RoutingData] rd
+			  inner join [RealData].[RoutingData] rd
 			  on rd.PartNo = f.PartNo
 		  left join [RealData].[ItemData] i on i.PartNo = f.PartNo
             where OrderNo=@NId

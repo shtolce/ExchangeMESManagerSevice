@@ -205,12 +205,14 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             IEnumerable<WorkOrderDTO> woSqlCollection = sqlWORepo.GetAll();
             IEnumerable<MaterialSpecificationDTO> metSpecCollection =  sqlMatSpecRepo.GetAllForWO();
             IEnumerable<ToBeUsedMachineDTO> eqSpecCollection = sqlWORepo.GetAllToBeUsedMachine();
-
+            //Удаляем старые ордера,отсутствующие в пбд, имеющие статус редактирования
             CheckAndDeleteOldWO();
-            return;
             //Создаем или обновляем справочник процессов
             foreach (WorkOrderDTO woItem in woSqlCollection)
             {
+                if (woItem.NId == "000000056_32")
+                {
+                }
                 CreateOrUpdateWO(woItem);
             }//foreach
 

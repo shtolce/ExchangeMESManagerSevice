@@ -81,6 +81,9 @@ namespace ExchangeMESManagerSevice.Services
             }
             catch (WebException ex)
             {
+                if (ex.Response == null)
+                    return null;
+
                 using (var reader1 = new StreamReader(ex.Response.GetResponseStream()))
                 {
                     var testErr = reader1.ReadToEnd();

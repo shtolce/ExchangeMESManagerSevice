@@ -95,6 +95,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="UAFActionOrdersDue.cs" />
     <Compile Include="UAFAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

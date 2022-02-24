@@ -22,12 +22,14 @@ namespace OpcenterAPSMESUAFProject
     public interface IUAFAction
     {
         int Run(ref PreactorObj preactorComObject, ref object pespComObject);
+        int RunOrdersDue(ref PreactorObj preactorComObject, ref object pespComObject);
+
     }
 
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     [Guid("ca8cfb7a-743c-4f3c-b966-be9eb8411e9f")]
-    public class UAFAction : IUAFAction
+    public partial class UAFAction : IUAFAction
     {
         private IPreactor preactor;
         private string token;

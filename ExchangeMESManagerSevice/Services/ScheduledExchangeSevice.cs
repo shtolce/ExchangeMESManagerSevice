@@ -42,7 +42,7 @@ namespace ExchangeMESManagerSevice.Services
             _timer.Change(Timeout.Infinite, Timeout.Infinite);
             _timer.Change(TimeSpan.FromSeconds(interval), TimeSpan.FromSeconds(interval));
             //Базовые справочники
-            //_scenarios.GetScenario1();
+            _scenarios.GetScenario1();
             //Runtime ордера
             _scenarios.GetScenario2();
 

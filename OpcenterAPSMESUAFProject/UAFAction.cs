@@ -40,7 +40,7 @@ namespace OpcenterAPSMESUAFProject
         #region Customer specific information
         // Asterisks indicate where user inputted data is to go
         private const string CertificateIssuer = "shtolce";
-        private const string CertificatePassword = "shtolce11021980";
+        private const string CertificatePassword = "berkut555676";
         private const string CertificatePath = @"";
         private const string ServiceLayerUrl = @"http://localhost/sit-svc/Application/AppU4DM/odata/";
         #endregion
@@ -263,7 +263,7 @@ namespace OpcenterAPSMESUAFProject
             //Web Request OAuth2 перенести в библиотеку сервиса
             string grant_type = "password";
             string username = @"shtolce";
-            string password = "shtolce11021980";
+            string password = "berkut555676";
 
             HttpWebRequest webRequest = HttpWebRequest.Create("http://localhost/sit-auth/OAuth/Token") as HttpWebRequest;
             webRequest.Method = "POST";

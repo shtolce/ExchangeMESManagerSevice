@@ -38,9 +38,12 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             }//if
             else
             {
+                
                 foundEqItem.UpdateRecord(eqItem);
                 EquipmentDTOUpdateParameter eqUpParameter = new EquipmentDTOUpdateParameter(foundEqItem);
                 mesEqRepo.Update(eqUpParameter);
+                
+                
             }//else
 
         }

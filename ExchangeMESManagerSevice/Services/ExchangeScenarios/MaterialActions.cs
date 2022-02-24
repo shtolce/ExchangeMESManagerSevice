@@ -42,7 +42,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 DMMaterialDTOCreateParameter dmMatCrParameter = new DMMaterialDTOCreateParameter(dmMatItem);
                 dmMatCrParameter.MaterialId = foundMatItem.Id;
                 dmMatCrParameter.LogisticClassNId = "Default";
-                dmMatCrParameter.MaterialClassId = foundMatClassItem.Id;
+                dmMatCrParameter.MaterialClassId = foundMatClassItem?.Id;
 
                 mesDMMatRepo.Create(dmMatCrParameter);
             }//if
@@ -51,7 +51,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 foundDMMatItem.UpdateRecord(dmMatItem);
                 DMMaterialDTOUpdateParameter dmMatUpParameter = new DMMaterialDTOUpdateParameter(foundDMMatItem);
                 dmMatUpParameter.LogisticClassNId = "Default";
-                dmMatUpParameter.MaterialClassNId = foundMatClassItem.NId;
+                dmMatUpParameter.MaterialClassNId = foundMatClassItem?.NId;
                 dmMatUpParameter.Id = foundDMMatItem.Id;
                 mesDMMatRepo.Update(dmMatUpParameter);
             }//else

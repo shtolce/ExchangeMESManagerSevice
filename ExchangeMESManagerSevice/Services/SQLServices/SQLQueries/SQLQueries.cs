@@ -157,7 +157,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string GetEquipmentConfigurationQuery = $@"
           SELECT 
 	           [Name] as Name
-	          ,[Name] as NId
+	          ,UID as NId
 	          ,N'u' as UoMNId
 	          ,N'ProductionUnit' as LevelNId
               ,[BD] as Description
@@ -173,7 +173,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string GetEquipmentConfigurationQueryByNId = $@"Select       
           SELECT 
 	           [Name] as Name
-	          ,[Name] as NId
+	          ,[UID] as NId
 	          ,N'u' as UoMNId
 	          ,N'ProductionUnit' as LevelNId
               ,[BD] as Description
@@ -241,7 +241,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string GetEquipmentQuery = $@"
           SELECT 
 	           [Name] as Name
-	          ,[Name] as NId
+	          ,[UID] as NId
 	          ,N'u' as UoMNId
 	          ,N'ProductionUnit' as LevelNId
               ,[BD] as Description
@@ -256,7 +256,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string GetEquipmentQueryByNId = $@"Select       
           SELECT 
 	           [Name] as Name
-	          ,[Name] as NId
+	          ,[UID] as NId
 	          ,N'u' as UoMNId
 	          ,N'ProductionUnit' as LevelNId
               ,[BD] as Description
@@ -310,7 +310,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string DeleteEquipmentQuery = $@"
         Delete from [RealData].[ResourceData]
 	       where
-		   [Name]= @NId
+		   [UID]= @NId
         ";
         #endregion
 
@@ -599,7 +599,9 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
     {
         #region GetOperationQuery
         public static string GetOperationQuery = $@"
-               SELECT r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
+               SELECT
+                --r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
+                UID as CorrelationId
               ,[OperationName] as Name
               ,[OperationNo] as Sequence
               ,[ResourceGroup]
@@ -623,7 +625,9 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 
         #region GetOperationQueryByNId
         public static string GetOperationQueryByNId = $@"
-         SELECT r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
+         SELECT 
+                --r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
+                UID as CorrelationId
               ,[OperationName] as Name
               ,[OperationNo] as Sequence
               ,[ResourceGroup]
@@ -1305,13 +1309,13 @@ from(
         public static string GetWOQuery = $@"
             SELECT [OrderNo] Name
                    ,[OrderNo] ERPOrder
-	               ,OrderNo NId
+	               ,UID NId
                   ,[Quantity] InitialQuantity
                   ,[ReleaseDate]  CreationDate
                   ,[DueDate] DueDate
                   ,[Priority] Priority
                   ,[EarliestStartDate]
-                  ,[ParentDemand] ParentBatch
+                  ,OrderNo+'_'+f.partno ParentBatch
                   ,f.[uid] as AId
                   ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
@@ -1334,13 +1338,13 @@ from(
         public static string GetWOQueryByNId = $@"
             SELECT [OrderNo] Name
                    ,[OrderNo] ERPOrder
-	               ,OrderNo NId
+	               ,UID NId
                   ,[Quantity] InitialQuantity
                   ,[ReleaseDate]  CreationDate
                   ,[DueDate] DueDate
                   ,[Priority] Priority
                   ,[EarliestStartDate]
-                  ,[ParentDemand] ParentBatch
+                  ,OrderNo+'_'+f.partno ParentBatch
                   ,f.[uid] as AId
                   ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
@@ -1409,7 +1413,7 @@ from(
     			   ROW_NUMBER() over (partition by [OrderNo] order by [OrderNo],rd.OperationNo ) as rn
 				  ,[OrderNo] Name
                   ,[OrderNo] ERPOrder
-	              ,OrderNo NId
+	              ,UID NId
                   ,[Quantity] InitialQuantity
                   ,[ReleaseDate]  CreationDate
                   ,[DueDate] DueDate

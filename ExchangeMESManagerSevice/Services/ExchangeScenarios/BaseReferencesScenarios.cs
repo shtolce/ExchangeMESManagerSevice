@@ -61,7 +61,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
             ImportEquipmentToMes();
             ImportMaterialToMes();
             ImportBomToMes();
-            //ImportOperationToMes();
+            
         }
         /// <summary>
         /// Закачка RunTime

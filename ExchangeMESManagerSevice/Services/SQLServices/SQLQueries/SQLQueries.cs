@@ -265,7 +265,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
 	          ,GetDate() as LastUpdatedOn
 	          ,N'Siemens.SimaticIT.MasterData.EQU_MS.MSModel.DataModel.Equipment' as EntityType
           FROM [RealData].[ResourceData]
-          Where NId = @NId";
+          Where UID = @NId";
         #endregion
 
         #region CreateEquipmentQuery
@@ -455,7 +455,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
           SELECT 
 	           [Name] as Name
 	          ,[Name] as NId
-	          ,[Name] as EquipmentNId
+	          ,UID as EquipmentNId
 	          ,[Name] as EquipmentName
               ,[BD] as Description
               ,[UID] as AID
@@ -470,7 +470,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
           SELECT 
 	           [Name] as Name
 	          ,[Name] as NId
-	          ,[Name] as EquipmentNId
+	          ,UID as EquipmentNId
 	          ,[Name] as EquipmentName
               ,[BD] as Description
               ,[UID] as AID
@@ -601,7 +601,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string GetOperationQuery = $@"
                SELECT
                 --r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
-                UID as CorrelationId
+                r.UID as CorrelationId
               ,[OperationName] as Name
               ,[OperationNo] as Sequence
               ,[ResourceGroup]
@@ -610,8 +610,10 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
               ,[ProcessTimeType]
               ,[RunTime] as EstimatedDuration_Ticks
               ,r.[BD] as Description
-              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
-              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
+              --,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+              ,r.UID as UID
+              --,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
+              ,r.UID as NId
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Operation' as EntityType
               ,N'Процесс для детали ' + r.[PartNo] as ProcessName
               ,i.Product collate Cyrillic_General_CI_AS+'_' +r.[PartNo] as ProcessNId
@@ -627,7 +629,7 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
         public static string GetOperationQueryByNId = $@"
          SELECT 
                 --r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as CorrelationId
-                UID as CorrelationId
+                r.UID as CorrelationId
               ,[OperationName] as Name
               ,[OperationNo] as Sequence
               ,[ResourceGroup]
@@ -636,8 +638,12 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
               ,[ProcessTimeType]
               ,[RunTime] as EstimatedDuration_Ticks
               ,[BD] as Description
-              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
-              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
+              --,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+              ,r.UID as UId
+
+              --,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
+              ,r.UID as NId
+
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Operation' as EntityType
               ,ResourceGroup 
           FROM [RealData].[RoutingData] r
@@ -774,9 +780,12 @@ namespace ExchangeMESManagerSevice.Services.SQLServices
               ,ProcessName
               ,ProcessNId
               ,PartNo
-               ,[PartNo] collate Cyrillic_General_CI_AS+'_'
+/*               
+,[PartNo] collate Cyrillic_General_CI_AS+'_'
                     +Cast(Lag(Name) over (Partition by partNo order by partNo,rn) as nvarchar(199))
                     +'_'+Cast(Lag(Sequence) over (Partition by partNo order by partNo,rn) as nvarchar(20)) as PrevNId
+*/
+            ,Lag(NId) over (Partition by partNo order by partNo,rn) as PrevNId
 
 
 from(
@@ -791,8 +800,10 @@ from(
               ,[ProcessTimeType]
               ,[RunTime] as EstimatedDuration_Ticks
               ,r.[BD] as Description
-              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
-              ,r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
+              --r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+			  ,r.UID
+              --r.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as NId
+			  ,r.UID NId
               ,'Siemens.SimaticIT.U4DM.MasterData.FB_MS_BOP.MSModel.DataModel.Operation' as EntityType
               ,N'Процесс для детали ' + r.[PartNo] as ProcessName
               ,i.Product collate Cyrillic_General_CI_AS+'_' +r.[PartNo] as ProcessNId
@@ -1046,19 +1057,23 @@ from(
                --PBom.[PartNo] as AsPlannedBOP_NId	          
               ,idP.Product as Product
               --,pBom.[PartNo] as MaterialNId
-              ,[OperationName] as Operation_Name
-              ,[OperationNo] as Operation_Number
+              ,rd.[OperationName] as Operation_Name
+              ,rd.[OperationNo] as Operation_Number
               ,[RequiredPartNo] as MaterialNId
 	          ,idRp.Product as requiredProduct
               ,[RequiredQuantity] as QuantityVal
               ,pBom.[UID] as CorrelationId
               ,pBom.[UID] 
-              ,pBom.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
-              ,pBom.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as OperationNId
+              --,pBom.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+              --,pBom.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as OperationNId
+			  ,rd.UId
+			  ,rd.UID as OperationNId
 
             FROM [RealData].[ProductBoMData] pBom
             inner join [RealData].[ItemData] idP 
                 on idP.PartNo = pBom.PartNo
+			inner join [RealData].[RoutingData] rd
+			on rd.PartNo = pBom.PartNo and pBom.OperationNo=rd.OperationNo
             inner join [RealData].[ItemData] idRp 
                 on idrP.PartNo = pBom.RequiredPartNo
 
@@ -1089,21 +1104,30 @@ from(
 
         #region GetMaterialSpecificationQueryByNId
         public static string GetMaterialSpecificationQueryByNId = $@"
-            SELECT 
-               idP.Product collate Cyrillic_General_CI_AS+'_' +pBom.[PartNo] as AsPlannedBOP_NId
-	          ,idP.Product as Product
-              ,[OperationName] as Operation_Name
-              ,[OperationNo] as Operation_Number
+ SELECT   
+               idP.Product collate Cyrillic_General_CI_AS+'_' +PBom.[PartNo] as AsPlannedBOP_NId
+               --PBom.[PartNo] as AsPlannedBOP_NId	          
+              ,idP.Product as Product
+              --,pBom.[PartNo] as MaterialNId
+              ,rd.[OperationName] as Operation_Name
+              ,rd.[OperationNo] as Operation_Number
               ,[RequiredPartNo] as MaterialNId
 	          ,idRp.Product as requiredProduct
               ,[RequiredQuantity] as QuantityVal
-              ,pBom.[BD] as CorrelationId
+              ,pBom.[UID] as CorrelationId
               ,pBom.[UID] 
+              --,pBom.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as UId
+              --,pBom.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as OperationNId
+			  ,rd.UId
+			  ,rd.UID as OperationNId
+
             FROM [RealData].[ProductBoMData] pBom
             inner join [RealData].[ItemData] idP 
                 on idP.PartNo = pBom.PartNo
+			inner join [RealData].[RoutingData] rd
+			on rd.PartNo = pBom.PartNo and pBom.OperationNo=rd.OperationNo
             inner join [RealData].[ItemData] idRp 
-                on idrP.PartNo = pBom.PartNo
+                on idrP.PartNo = pBom.RequiredPartNo
             Where PartNo = @NId";
         #endregion
 
@@ -1167,7 +1191,8 @@ from(
             SELECT 
                    i.Product collate Cyrillic_General_CI_AS+'_' +rd.[PartNo] as AsPlannedBOP_NId
                     --rd.[PartNo] as AsPlannedBOP_NId
-                  ,rd.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as ParentOperation_NId
+                  --,rd.[PartNo] collate Cyrillic_General_CI_AS+'_'+[OperationName]+'_'+Cast(OperationNo as nvarchar(20)) as ParentOperation_NId
+                  ,rd.UID as ParentOperation_NId
                   ,rd.[OperationName] as ParentOperation_Name
                   ,rd.[OperationNo] as ParentOperation_Sequence
                   ,rd.[ResourceGroup]  as EquipmentGroupNId
@@ -1177,10 +1202,12 @@ from(
                   ,rd.[BD] 
                   --,rd.[UID] 
                   ,'' as UID 
-	              ,rg.Resource as EquipmentNId
+	              ,r.UId as EquipmentNId
             FROM [RealData].[RoutingData] rd
             inner join [RealData].[ResourceGroupData] rg
             on rg.Name = ResourceGroup
+            inner join [RealData].[ResourceData] r
+			on r.Name=rg.Resource
     	    inner join [RealData].[ItemData] i on i.PartNo = rd.PartNo
 
         ";
@@ -1190,7 +1217,8 @@ from(
         public static string GetEquipmentSpecificationQueryByNId = $@"
             SELECT 
                    i.Product collate Cyrillic_General_CI_AS+'_' +rd.[PartNo] as AsPlannedBOP_NId
-                  ,rd.[OperationName] as ParentOperation_NId
+                  --,rd.[OperationName] as ParentOperation_NId
+                    ,rd.UID as ParentOperation_NId
                   ,rd.[OperationName] as ParentOperation_Name
                   ,rd.[OperationNo] as ParentOperation_Sequence
                   ,rd.[ResourceGroup] as  EquipmentGroupNId
@@ -1199,10 +1227,12 @@ from(
                   ,rd.[RunTime] 
                   ,rd.[BD] 
                   ,rd.[UID] 
-	              ,rg.Resource as EquipmentNId
+	              ,r.UId as EquipmentNId
             FROM [RealData].[RoutingData] rd
             inner join [RealData].[ResourceGroupData] rg
             on rg.Name = ResourceGroup
+            inner join [RealData].[ResourceData] r
+			on r.Name=rg.Resource
     	    inner join [RealData].[ItemData] i on i.PartNo = rd.PartNo
 
            Where PartNo = @NId";
@@ -1291,15 +1321,19 @@ from(
         #region GetWOToBeUsedQuery
         public static string GetWOToBeUsedQuery = $@"
             SELECT 
-	               OrderNo+'_'+rd.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as WorkOrderOperation_NId
+	               --OrderNo+'_'+rd.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as WorkOrderOperation_NId
+                  rd.UID as WorkOrderOperation_NId 
+
 	              ,rg.Resource Machine
-	              ,rg.Resource Equipment_NId
+	              ,r.UID Equipment_NId
               FROM [RealData].[FirmOrdersData] fod
               left join [RealData].[RoutingData] rd
 		              on rd.PartNo = fod.PartNo
 
               inner join RealData.ResourceGroupData rg
-              on rg.Name =rd.ResourceGroup            ";
+              on rg.Name =rd.ResourceGroup            
+			              inner join [RealData].[ResourceData] r
+			on r.Name=rg.Resource";
         #endregion
 
 
@@ -1309,7 +1343,7 @@ from(
         public static string GetWOQuery = $@"
             SELECT [OrderNo] Name
                    ,[OrderNo] ERPOrder
-	               ,UID NId
+	               ,f.UID NId
                   ,[Quantity] InitialQuantity
                   ,[ReleaseDate]  CreationDate
                   ,[DueDate] DueDate
@@ -1321,11 +1355,12 @@ from(
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
                   ,f.[PartNo] as Material_NId
                   ,[Description] Material_Name
-                  ,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+                  --,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+                  ,rd.UID as OperationNId 
 				  ,rd.OperationNo as Sequence
                   ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
-
+                   ,'TransferBatch' ProductionType_NId
                 FROM [RealData].[FirmOrdersData] f
 			  inner join [RealData].[RoutingData] rd
 			  on rd.PartNo = f.PartNo
@@ -1338,7 +1373,7 @@ from(
         public static string GetWOQueryByNId = $@"
             SELECT [OrderNo] Name
                    ,[OrderNo] ERPOrder
-	               ,UID NId
+	               ,f.UID NId
                   ,[Quantity] InitialQuantity
                   ,[ReleaseDate]  CreationDate
                   ,[DueDate] DueDate
@@ -1351,14 +1386,18 @@ from(
                   ,f.[PartNo] as Material_NId
                   ,[Description] Material_Name
 				  ,rd.OperationNo as Sequence
-                  ,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+                  --,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+                  ,rd.UID as OperationNId 
+
 				  ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
+                   ,'TransferBatch' ProductionType_NId
+
               FROM [RealData].[FirmOrdersData] f
 			  inner join [RealData].[RoutingData] rd
 			  on rd.PartNo = f.PartNo
 		  left join [RealData].[ItemData] i on i.PartNo = f.PartNo
-            where OrderNo=@NId
+            where f.UID=@NId
 
         ";
 
@@ -1373,7 +1412,9 @@ from(
 				  ,bom.RequiredPartNo MaterialNId
 				  ,bom.RequiredQuantity QuantityVal
                   ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
-                  ,f.OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+                  --,f.OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+                  ,rd.UID as OperationNId 
+
 				  ,rd.OperationNo as Sequence
                   ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
@@ -1403,17 +1444,19 @@ from(
 			select
 			*
 			,Lag(Sequence) over (Partition by NId order by NId,rn)  as prevSeq
-			               ,NId collate Cyrillic_General_CI_AS+'_'+Material_NId+'_'
-                    +Cast(Lag(OperationName) over (Partition by NId order by NId,rn) as nvarchar(199))
-                    +'_'+Cast(Lag(Sequence) over (Partition by NId order by NId,rn) as nvarchar(20)) as PrevNId
-
+            /*
+            ,NId collate Cyrillic_General_CI_AS+'_'+Material_NId+'_'
+                                +Cast(Lag(OperationName) over (Partition by NId order by NId,rn) as nvarchar(199))
+                                +'_'+Cast(Lag(Sequence) over (Partition by NId order by NId,rn) as nvarchar(20)) as PrevNId
+            */
+            ,Lag(OperationNId) over (Partition by NId order by NId,rn) as PrevNId
 			from
 			(
 			SELECT 
     			   ROW_NUMBER() over (partition by [OrderNo] order by [OrderNo],rd.OperationNo ) as rn
 				  ,[OrderNo] Name
                   ,[OrderNo] ERPOrder
-	              ,UID NId
+	              ,f.UID NId
                   ,[Quantity] InitialQuantity
                   ,[ReleaseDate]  CreationDate
                   ,[DueDate] DueDate
@@ -1426,7 +1469,8 @@ from(
                   ,f.[PartNo] as Material_NId
                   ,[Description] Material_Name
 				  ,rd.OperationNo as Sequence
-                  ,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+                  --,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
+                ,rd.UID as OperationNId
 				  ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
               FROM [RealData].[FirmOrdersData] f
@@ -1436,7 +1480,7 @@ from(
 		  )innerT
 		  )outerT
 		  		  where outerT.Sequence = @OpNo
-				  and outerT.ERPOrder=@OrderNo
+				  and outerT.AId=@OrderNo
 				  
 				  order by outerT.Material_NId,outerT.Sequence
         ";

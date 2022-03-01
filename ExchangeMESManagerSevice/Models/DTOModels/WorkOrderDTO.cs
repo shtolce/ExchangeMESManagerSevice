@@ -26,6 +26,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public List<WorkOrderDTO> value { get; set; }
         public bool Succeeded;
         public string WorkOrderId;
+        public string Id;
         public List<string> PropertyIds;
         public object Error;
         public object SitUafExecutionDetail;
@@ -192,6 +193,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
             Sequence = 0;//woEl.Sequence.Value;
             BatchId = woEl.ParentBatch;
             ERPOrder = woEl.ERPOrder;
+            //ProductionTypeNId = "Материал";
         }
     }
 

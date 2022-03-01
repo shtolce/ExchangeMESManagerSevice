@@ -24,7 +24,8 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 WorkOrderDTOCreateParameter woCrParameter = new WorkOrderDTOCreateParameter(woItem);
                 woCrParameter.FinalMaterialId = mat?.Id;
                 woCrParameter.Plant = "Завод";
-                woId = mesWORepo.CreateWorkOrder(woCrParameter)?.WorkOrderId;
+                woCrParameter.ProductionTypeNId = woItem.ProductionType_NId;
+                woId = mesWORepo.CreateWorkOrder(woCrParameter)?.Id;
             }//if
             else
             {
@@ -34,14 +35,14 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 mesWORepo.UpdateWorkOrder(woUpParameter);
             }//else
             //Проверяем есть ли у него созданые операции
-            foreach (WorkOrderOperationDTO opEl in woItem.WorkOrderOperations)
+            foreach (WorkOrderOperationDTO opEl in woItem.WorkOrderOperations.OrderBy(x=>x.Sequence).ToList())
             {
                 WorkOrderOperationDTO foundWoOp = mesWORepo.GetWorkOrderOperationsByNId(opEl.OperationNId)?.FirstOrDefault();
                 string woOpId = foundWoOp?.Id;
                 if (foundWoOp == null )
                 {
                     if (opEl == null || opEl?.OperationNId == "")
-                        return;
+                       continue;
                     WorkOrderOperationDTOCreateParameter woOpCrParameter = new WorkOrderOperationDTOCreateParameter(opEl);
                     //woOpCrParameter.DependencyType = "AfterEnd";
                     woOpCrParameter.WorkOrderId = woId;
@@ -213,6 +214,7 @@ namespace ExchangeMESManagerSevice.Services.ExchangeScenarios
                 if (woItem.NId == "000000056_32")
                 {
                 }
+                woItem.ProductionType_NId= "TransferBatch";
                 CreateOrUpdateWO(woItem);
             }//foreach
 

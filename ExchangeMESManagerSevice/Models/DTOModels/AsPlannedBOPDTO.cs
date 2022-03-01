@@ -154,7 +154,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
             //OperationNId = matEl.OperationNId;
             //MaterialNId = matEl.MaterialNId;
             //NormalPart
-            MaterialSpecificationTypeId = "ced21b93-ab2a-ec11-ba87-000c29a5c633";
+            MaterialSpecificationTypeId = "35B5F8FF-F593-EC11-BA8E-000C29A5C633";
         }
     }
     public class MaterialSpecificationDTOUpdateParameter

@@ -1322,7 +1322,7 @@ from(
         public static string GetWOToBeUsedQuery = $@"
             SELECT 
 	               --OrderNo+'_'+rd.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as WorkOrderOperation_NId
-                  rd.UID as WorkOrderOperation_NId 
+                  fod.UID+'_'+rd.UID as WorkOrderOperation_NId 
 
 	              ,rg.Resource Machine
 	              ,r.UID Equipment_NId
@@ -1356,7 +1356,7 @@ from(
                   ,f.[PartNo] as Material_NId
                   ,[Description] Material_Name
                   --,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
-                  ,rd.UID as OperationNId 
+                  ,f.UID+'_'+rd.UID as OperationNId 
 				  ,rd.OperationNo as Sequence
                   ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
@@ -1387,7 +1387,7 @@ from(
                   ,[Description] Material_Name
 				  ,rd.OperationNo as Sequence
                   --,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
-                  ,rd.UID as OperationNId 
+                  ,f.UID+'_'+rd.UID as OperationNId 
 
 				  ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
@@ -1413,7 +1413,7 @@ from(
 				  ,bom.RequiredQuantity QuantityVal
                   ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
                   --,f.OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
-                  ,rd.UID as OperationNId 
+                  ,f.UID+'_'+rd.UID as OperationNId 
 
 				  ,rd.OperationNo as Sequence
                   ,rd.OperationName OperationName
@@ -1470,7 +1470,7 @@ from(
                   ,[Description] Material_Name
 				  ,rd.OperationNo as Sequence
                   --,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
-                ,rd.UID as OperationNId
+                ,f.UID+'_'+rd.UID as OperationNId
 				  ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
               FROM [RealData].[FirmOrdersData] f

@@ -45,7 +45,7 @@ namespace OpcenterAPSMESUAFProject
                 return 0;
             }
             //------------------------------------------------
-            var client = CreateRestClientObjectOD(@"WorkOrder?$expand=FinalMaterial($expand = Material),ProductionType($select= NId),WorkOrderOperations($expand=ToBeConsumedMaterials),SegregationTags, ProducedMaterialItems($expand= DM_MaterialTrackingUnit($expand = MaterialTrackingUnit($select = code)))");
+            var client = CreateRestClientObjectOD(@"WorkOrder?$expand=FinalMaterial($expand = Material),ProductionType($select= NId),WorkOrderOperations($expand=ToBeConsumedMaterials,ToBeUsedMachines),SegregationTags, ProducedMaterialItems($expand= DM_MaterialTrackingUnit($expand = MaterialTrackingUnit($select = code)))");
             var request = CreateRestRequestObject();
             Thread.Sleep(1500);
             var responseR = client.ExecuteAsGet(request,"GET");

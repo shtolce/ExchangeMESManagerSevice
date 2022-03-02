@@ -154,9 +154,11 @@ namespace OpcenterAPSMESUAFProject
             {
                 Values = new List<ApsOrderOperation>()
             };
-
+            
             foreach (var scheduledOperation in list)
             {
+                if (scheduledOperation.NId == "" || scheduledOperation.PreferredMachine == "")
+                    continue;
                 var apsOrderOperation = new ApsOrderOperation
                 {
                     AssignedResourceNId = scheduledOperation.PreferredMachine,

@@ -1341,29 +1341,35 @@ from(
 
         #region GetWOQuery
         public static string GetWOQuery = $@"
-            SELECT [OrderNo] Name
-                   ,[OrderNo] ERPOrder
+            SELECT f.[OrderNo] Name
+                   ,f.[OrderNo] ERPOrder
 	               ,f.UID NId
-                  ,[Quantity] InitialQuantity
-                  ,[ReleaseDate]  CreationDate
-                  ,[DueDate] DueDate
-                  ,[Priority] Priority
-                  ,[EarliestStartDate]
-                  ,OrderNo+'_'+f.partno ParentBatch
+                  ,f.[Quantity] InitialQuantity
+                  ,f.[ReleaseDate]  CreationDate
+                  ,f.[DueDate] DueDate
+                  ,f.[Priority] Priority
+                  ,f.[EarliestStartDate]
+                  ,fparent.OrderNo ParentBatch
+                  ,fparent.OrderNo ParentOrder_Name
+                  ,fparent.uid ParentOrder_Id
                   ,f.[uid] as AId
                   ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
                   ,f.[PartNo] as Material_NId
-                  ,[Description] Material_Name
+                  ,f.[Description] Material_Name
                   --,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
                   ,f.UID+'_'+rd.UID as OperationNId 
 				  ,rd.OperationNo as Sequence
                   ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
                    ,'TransferBatch' ProductionType_NId
+
                 FROM [RealData].[FirmOrdersData] f
 			  inner join [RealData].[RoutingData] rd
 			  on rd.PartNo = f.PartNo
+              left join [RealData].[FirmOrdersData] fparent
+			  on fparent.OrderNo = f.ParentOrderNo
+
 		  inner join [RealData].[ItemData] i on i.PartNo = f.PartNo
 
             ";
@@ -1371,32 +1377,36 @@ from(
 
         #region GetWOQueryByNId
         public static string GetWOQueryByNId = $@"
-            SELECT [OrderNo] Name
-                   ,[OrderNo] ERPOrder
+            SELECT f.[OrderNo] Name
+                   ,f.[OrderNo] ERPOrder
 	               ,f.UID NId
-                  ,[Quantity] InitialQuantity
-                  ,[ReleaseDate]  CreationDate
-                  ,[DueDate] DueDate
-                  ,[Priority] Priority
-                  ,[EarliestStartDate]
-                  ,OrderNo+'_'+f.partno ParentBatch
+                  ,f.[Quantity] InitialQuantity
+                  ,f.[ReleaseDate]  CreationDate
+                  ,f.[DueDate] DueDate
+                  ,f.[Priority] Priority
+                  ,f.[EarliestStartDate]
+                  ,fparent.OrderNo ParentBatch
+                  ,fparent.OrderNo ParentOrder_Name
+                  ,fparent.uid ParentOrder_Id
                   ,f.[uid] as AId
                   ,i.Product collate Cyrillic_General_CI_AS+'_' +f.[PartNo] as ProcessNId
 	              ,'Siemens.SimaticIT.U4DM.OperationalData.Runtime.OPModel.DataModel.WorkOrder' EntityType
                   ,f.[PartNo] as Material_NId
-                  ,[Description] Material_Name
-				  ,rd.OperationNo as Sequence
+                  ,f.[Description] Material_Name
                   --,OrderNo+'_'+f.[PartNo] collate Cyrillic_General_CI_AS+'_'+rd.[OperationName]+'_'+Cast(rd.OperationNo as nvarchar(20)) as OperationNId
                   ,f.UID+'_'+rd.UID as OperationNId 
-
-				  ,rd.OperationName OperationName
+				  ,rd.OperationNo as Sequence
+                  ,rd.OperationName OperationName
 				  ,rd.RunTime as EstimatedDuration_Ticks
                    ,'TransferBatch' ProductionType_NId
 
-              FROM [RealData].[FirmOrdersData] f
+                FROM [RealData].[FirmOrdersData] f
 			  inner join [RealData].[RoutingData] rd
 			  on rd.PartNo = f.PartNo
-		  left join [RealData].[ItemData] i on i.PartNo = f.PartNo
+              left join [RealData].[FirmOrdersData] fparent
+			  on fparent.OrderNo = f.ParentOrderNo
+
+		  inner join [RealData].[ItemData] i on i.PartNo = f.PartNo
             where f.UID=@NId
 
         ";

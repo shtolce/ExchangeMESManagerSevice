@@ -179,7 +179,9 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public string Name;
         public int Sequence;
         public string BatchId;
+        public string ParentBatch;
         public string ERPOrder;
+        public DateTimeOffset? DueDate;
 
         public WorkOrderDTOCreateParameter(WorkOrderDTO woEl)
         {
@@ -191,8 +193,11 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
             Plant = "Завод";
             Name = woEl.Name;
             Sequence = 0;//woEl.Sequence.Value;
-            BatchId = woEl.ParentBatch;
+            BatchId = woEl.NId;
             ERPOrder = woEl.ERPOrder;
+            ParentBatch = woEl.ParentOrder_Id;
+            DueDate = woEl.DueDate;
+
             //ProductionTypeNId = "Материал";
         }
     }
@@ -282,10 +287,10 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         {
             NId = woEl.NId;
             Name = woEl.Name;
-            ParentBatch = woEl.ParentBatch;
+            ParentBatch = woEl.ParentOrder_Id;
             ProductionTypeNId = woEl.ProductionType_NId;
             ERPOrder = woEl.ERPOrder;
-            BatchId = woEl.ParentBatch;
+            BatchId = woEl.NId;
             PlannedTargetQuantity = woEl.PlannedTargetQuantity;
             DueDate = woEl.DueDate;
             Id = woEl.Id;
@@ -421,6 +426,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
         public WorkOrderDTO ReworkOfOrder;
         public string FinalMaterial_Id;
         public String ReworkOfOrder_Id;
+        public String ParentOrder_Name;
         public String ParentOrder_Id;
         public string ProductionType_Id;
         public string ProductionType_NId;
@@ -442,7 +448,7 @@ namespace ExchangeMESManagerSevice.Models.DTOModels
             this.CreationDate = woItem.CreationDate;
             this.DueDate = woItem.DueDate;
             this.Priority = woItem.Priority;
-            this.ParentBatch = woItem.ParentBatch;
+            this.ParentBatch = woItem.ParentOrder_Id;
             this.AId = woItem.AId;
             this.ProcessNId = woItem.ProcessNId;
         }
